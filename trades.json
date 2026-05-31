@@ -1,0 +1,30 @@
+{
+  "open": [
+    {
+      "id": "MM-2026-001",
+      "opened": "2026-05-31",
+      "type": "reactive",
+      "asset_class": "FX",
+      "trade": "Short EURAUD spot",
+      "structure": "outright",
+      "entry": 1.6450,
+      "stop": 1.6620,
+      "target": 1.6100,
+      "conviction": 7,
+      "conviction_breakdown": {
+        "gap": 3,
+        "catalyst": 1,
+        "positioning": 1,
+        "confirmation": 1,
+        "stop_quality": 1
+      },
+      "horizon": "weeks",
+      "min_hold_days": 0,
+      "thesis": "EUR rate path repriced dovish into the ECB while AUD carries the terms-of-trade tailwind from firm iron ore; the cross sits a full figure above where the 2yr spread says it belongs.",
+      "history": [
+        {"date": "2026-05-31", "level": 1.6450, "pnl_pct": 0.0, "status": "open"}
+      ]
+    }
+  ],
+  "closed": []
+}
