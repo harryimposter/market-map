@@ -7,9 +7,9 @@
       "asset_class": "FX",
       "trade": "Short EURAUD spot",
       "structure": "outright",
-      "entry": 1.6450,
-      "stop": 1.6620,
-      "target": 1.6100,
+      "entry": 1.645,
+      "stop": 1.662,
+      "target": 1.61,
       "conviction": 7,
       "conviction_breakdown": {
         "gap": 3,
@@ -22,7 +22,148 @@
       "min_hold_days": 0,
       "thesis": "EUR rate path repriced dovish into the ECB while AUD carries the terms-of-trade tailwind from firm iron ore; the cross sits a full figure above where the 2yr spread says it belongs.",
       "history": [
-        {"date": "2026-05-31", "level": 1.6450, "pnl_pct": 0.0, "status": "open"}
+        {
+          "date": "2026-05-31",
+          "level": 1.645,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-05-31",
+          "level": 1.6221,
+          "pnl_pct": 1.39,
+          "status": "open"
+        }
+      ],
+      "current": 1.6221,
+      "current_pnl_pct": 1.39
+    },
+    {
+      "id": "MM-2026-002",
+      "opened": "2026-05-31",
+      "type": "reactive",
+      "asset_class": "Commodity",
+      "trade": "Long Brent crude",
+      "structure": "outright",
+      "entry": 91.0,
+      "stop": 84.0,
+      "target": 104.0,
+      "conviction": 6,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 2,
+        "positioning": 1,
+        "confirmation": 0,
+        "stop_quality": 1
+      },
+      "horizon": "weeks",
+      "min_hold_days": 0,
+      "thesis": "The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book's barbell, not a directional call on peace.",
+      "current": 91.0,
+      "current_pnl_pct": 0.0,
+      "history": [
+        {
+          "date": "2026-05-31",
+          "level": 91.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "MM-2026-003",
+      "opened": "2026-05-31",
+      "type": "reactive",
+      "asset_class": "Commodity",
+      "trade": "Long Brent vs short WTI (spread)",
+      "structure": "spread",
+      "entry": 3.3,
+      "stop": 1.5,
+      "target": 6.5,
+      "conviction": 5,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 1,
+        "positioning": 1,
+        "confirmation": 0,
+        "stop_quality": 1
+      },
+      "horizon": "weeks",
+      "min_hold_days": 0,
+      "thesis": "The Hormuz premium is Brent-specific — it prices the waterway, WTI prices Cushing. If the MoU frays, the Atlantic-basin grade reprices the de-mining risk and the spread widens; if it holds, physical caps the downside near current carry. A cleaner, lower-beta way to own the same re-escalation tail with defined spread risk.",
+      "current": 3.3,
+      "current_pnl_pct": 0.0,
+      "history": [
+        {
+          "date": "2026-05-31",
+          "level": 3.3,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "MM-2026-004",
+      "opened": "2026-05-31",
+      "type": "reactive",
+      "asset_class": "Rates",
+      "trade": "Short US 10Y yield (long duration)",
+      "structure": "outright",
+      "entry": 4.44,
+      "stop": 4.65,
+      "target": 4.1,
+      "conviction": 5,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 1,
+        "positioning": 1,
+        "confirmation": 0,
+        "stop_quality": 1
+      },
+      "horizon": "weeks",
+      "min_hold_days": 0,
+      "thesis": "Brent −17% is a forward CPI cut the FedWatch distribution (67.8% no cuts in 2026) has not booked. Bonds already rallied 26bp off the 4.70% high; the disinflation impulse rolls headline lower into the autumn. Deliberately the opposite macro leg to the Brent longs — the book owns both sides of the MoU binary and gets paid on either resolution.",
+      "current": 4.44,
+      "current_pnl_pct": 0.0,
+      "history": [
+        {
+          "date": "2026-05-31",
+          "level": 4.44,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "MM-2026-005",
+      "opened": "2026-05-31",
+      "type": "pre-position",
+      "asset_class": "Commodity",
+      "trade": "Long gold into the June Fed window",
+      "structure": "outright",
+      "entry": 4523.0,
+      "stop": 4250.0,
+      "target": 5100.0,
+      "conviction": 6,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 2,
+        "positioning": 1,
+        "confirmation": 0,
+        "stop_quality": 1
+      },
+      "horizon": "months",
+      "min_hold_days": 45,
+      "thesis": "Pre-position into the 5 June payrolls / 16–17 June FOMC window. Gold has already decoupled from a 4.98% long bond, which means it is pricing both MoU tails at once. It wins if oil-disinflation forces a dovish Fed and real yields fall, AND it wins if the MoU fails and the geopolitical bid returns. It loses only on the narrow path of strong-growth + stable-oil + hawkish-Fed together. That is the asymmetry pre-positioning is built for; minimum 45-day hold, not an event-day scalp.",
+      "current": 4523.0,
+      "current_pnl_pct": 0.0,
+      "history": [
+        {
+          "date": "2026-05-31",
+          "level": 4523.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
       ]
     }
   ],
