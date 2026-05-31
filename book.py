@@ -79,10 +79,14 @@ def trade_direction(t):
     """Return +1 for long, -1 for short. Infer from the trade text, fall back
     to the geometry of stop/target around entry."""
     txt = (t.get("trade", "") + " " + t.get("structure", "")).lower()
-    if re.search(r"\b(short|sell|fade|bear)\b", txt):
+    has_short = bool(re.search(r"\b(short|sell|fade|bear)\b", txt))
+    has_long = bool(re.search(r"\b(long|buy|bull|own)\b", txt))
+    if has_short and not has_long:
         return -1
-    if re.search(r"\b(long|buy|bull|own)\b", txt):
+    if has_long and not has_short:
         return 1
+    # ambiguous (e.g. a spread "long X vs short Y") or no keyword:
+    # fall back to the geometry of stop/target around entry
     entry, target = t.get("entry"), t.get("target")
     if entry is not None and target is not None:
         return 1 if target >= entry else -1

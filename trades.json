@@ -59,13 +59,13 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book's barbell, not a directional call on peace.",
-      "current": 91.0,
-      "current_pnl_pct": 0.0,
+      "current": 91.1,
+      "current_pnl_pct": 0.11,
       "history": [
         {
           "date": "2026-05-31",
-          "level": 91.0,
-          "pnl_pct": 0.0,
+          "level": 91.1,
+          "pnl_pct": 0.11,
           "status": "open"
         }
       ]
@@ -124,12 +124,12 @@
       "min_hold_days": 0,
       "thesis": "Brent −17% is a forward CPI cut the FedWatch distribution (67.8% no cuts in 2026) has not booked. Bonds already rallied 26bp off the 4.70% high; the disinflation impulse rolls headline lower into the autumn. Deliberately the opposite macro leg to the Brent longs — the book owns both sides of the MoU binary and gets paid on either resolution.",
       "current": 4.44,
-      "current_pnl_pct": 0.0,
+      "current_pnl_pct": -0.0,
       "history": [
         {
           "date": "2026-05-31",
           "level": 4.44,
-          "pnl_pct": 0.0,
+          "pnl_pct": -0.0,
           "status": "open"
         }
       ]
