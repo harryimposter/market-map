@@ -1,27 +1,15 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Borrowed Disinflation, Melt-Up Tape · Market Map</title>
-<style>:root {
-  --bg: #ffffff;
-  --surface: #f7f7f5;
-  --ink: #1a1a1a;
-  --ink-soft: #6b6b6b;
-  --ink-mute: #9a9a9a;
-  --gold: #b8960c;
-  --red: #c0392b;
-  --green: #1a7a45;
-  --line: rgba(0,0,0,0.1);
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --font: -apple-system, "Helvetica Neue", sans-serif;
-  --serif: Georgia, "Times New Roman", serif;
+<title>Melt-Up Versus a Fraying Truce · Market Map</title><style>:root {
+  --bg: #ffffff; --surface: #f7f7f5; --ink: #1a1a1a; --ink-soft: #6b6b6b; --ink-mute: #9a9a9a;
+  --gold: #b8960c; --red: #c0392b; --green: #1a7a45; --line: rgba(0,0,0,0.1);
+  --radius-md: 8px; --radius-lg: 12px; --font: -apple-system, "Helvetica Neue", sans-serif; --serif: Georgia, "Times New Roman", serif;
 }
 body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.65; margin: 0; padding: 0; }
 .page { max-width: 1400px; margin: 0 auto; padding: 2rem 2rem 4rem; }
 .two-col { display: grid; grid-template-columns: 1fr 380px; gap: 2.5rem; align-items: start; }
 @media (max-width: 960px) { .two-col { grid-template-columns: 1fr; } }
-.lhs { min-width: 0; }
-.rhs { min-width: 0; position: sticky; top: 1rem; }
+.lhs { min-width: 0; } .rhs { min-width: 0; position: sticky; top: 1rem; }
 .masthead { border-bottom: 0.5px solid var(--line); padding-bottom: 1rem; margin-bottom: 1.5rem; }
 .article-title { font-family: var(--serif); font-size: 2rem; font-weight: 400; line-height: 1.25; color: var(--ink); margin: 0 0 0.4rem; }
 .meta { font-size: 11px; color: var(--ink-mute); letter-spacing: 0.08em; text-transform: uppercase; }
@@ -32,212 +20,142 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font); font-
 .dash-tile .dlabel { font-size: 10px; color: var(--ink-mute); margin-bottom: 2px; }
 .dash-tile .dval { font-size: 13px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
 .dash-tile .dchg { font-size: 11px; }
-.chg-up { color: var(--green); }
-.chg-dn { color: var(--red); }
+.chg-up { color: var(--green); } .chg-dn { color: var(--red); }
 .theme-line { border-left: 2px solid var(--gold); padding: 0.5rem 0.85rem; background: var(--surface); border-radius: 0 var(--radius-md) var(--radius-md) 0; margin: 1rem 0; font-size: 13px; font-weight: 500; line-height: 1.5; }
 .tile { background: var(--bg); border: 0.5px solid var(--line); border-radius: var(--radius-lg); padding: 1rem 1.1rem; margin-bottom: 8px; }
 .tile-head { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 0.4rem; }
 .tile-claim { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.5; margin-bottom: 0.4rem; }
 .tile-body { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
-.tile-gold { border-top: 2px solid var(--gold); }
-.tile-green { border-top: 2px solid var(--green); }
-.tile-red { border-top: 2px solid var(--red); }
-.tile-muted { border-top: 2px solid var(--line); }
+.tile-gold { border-top: 2px solid var(--gold); } .tile-green { border-top: 2px solid var(--green); }
+.tile-red { border-top: 2px solid var(--red); } .tile-muted { border-top: 2px solid var(--line); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 @media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-.trade-card { background: var(--bg); border: 0.5px solid var(--line); border-radius: var(--radius-lg); padding: 1rem 1.1rem; margin-bottom: 8px; }
-.tc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
-.tc-name { font-size: 13px; font-weight: 500; color: var(--ink); }
-.tc-class { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); margin-top: 2px; }
-.conv-badge { font-size: 11px; font-weight: 500; background: var(--surface); border: 0.5px solid var(--line); border-radius: 20px; padding: 2px 10px; color: var(--ink); white-space: nowrap; }
-.tc-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 0.5px solid var(--line); }
-.tc-row:last-of-type { border-bottom: none; }
-.tc-k { color: var(--ink-mute); }
-.tc-v { font-weight: 500; color: var(--ink); }
 .conv-bar { display: flex; gap: 3px; align-items: center; margin: 0.5rem 0; flex-wrap: wrap; }
-.pip { width: 18px; height: 4px; border-radius: 2px; background: var(--line); }
-.pip.on { background: var(--gold); }
+.pip { width: 18px; height: 4px; border-radius: 2px; background: var(--line); } .pip.on { background: var(--gold); }
 .conv-detail { font-size: 10px; color: var(--ink-mute); margin-left: 6px; }
-.tc-thesis { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 0.5px solid var(--line); }
 .score-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
 .score-tile { background: var(--surface); border-radius: var(--radius-md); padding: 0.5rem 0.6rem; text-align: center; }
-.sval { font-size: 18px; font-weight: 500; color: var(--ink); }
-.sval.pos { color: var(--green); }
-.sval.neg { color: var(--red); }
+.sval { font-size: 18px; font-weight: 500; color: var(--ink); } .sval.pos { color: var(--green); } .sval.neg { color: var(--red); }
 .slabel { font-size: 10px; color: var(--ink-mute); margin-top: 2px; }
 .live-table { width: 100%; font-size: 12px; border-collapse: collapse; }
 .live-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-mute); font-weight: 500; padding: 0 0 6px; text-align: left; border-bottom: 0.5px solid var(--line); }
 .live-table td { padding: 6px 4px 6px 0; border-bottom: 0.5px solid var(--line); color: var(--ink); vertical-align: middle; }
 .live-table tr:last-child td { border-bottom: none; }
-.pnl-pos { color: var(--green); font-weight: 500; }
-.pnl-neg { color: var(--red); font-weight: 500; }
+.pnl-pos { color: var(--green); font-weight: 500; } .pnl-neg { color: var(--red); font-weight: 500; }
 .pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--surface); color: var(--ink-mute); border: 0.5px solid var(--line); }
 .canary { padding: 0.55rem 0; border-bottom: 0.5px solid var(--line); display: flex; gap: 10px; align-items: flex-start; }
 .canary:last-child { border-bottom: none; }
 .cdot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 5px; }
-.ctext { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
-.ctext strong { color: var(--ink); font-weight: 500; }
-.ammo { padding: 0.55rem 0; border-bottom: 0.5px solid var(--line); }
-.ammo:last-child { border-bottom: none; }
+.ctext { font-size: 12px; color: var(--ink-soft); line-height: 1.6; } .ctext strong { color: var(--ink); font-weight: 500; }
+.ammo { padding: 0.55rem 0; border-bottom: 0.5px solid var(--line); } .ammo:last-child { border-bottom: none; }
 .ammo-q { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
 .ammo-a { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
 .yesterday { background: var(--surface); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1rem; }
 .yest-item { font-size: 12px; color: var(--ink-soft); padding: 3px 0; display: flex; gap: 8px; align-items: flex-start; }
-.tick-g { color: var(--green); flex-shrink: 0; }
-.tick-r { color: var(--red); flex-shrink: 0; }
-.tick-n { color: var(--ink-mute); flex-shrink: 0; }
+.tick-g { color: var(--green); flex-shrink: 0; } .tick-r { color: var(--red); flex-shrink: 0; } .tick-n { color: var(--ink-mute); flex-shrink: 0; }
 .stale { font-size: 10px; color: var(--ink-mute); margin-top: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--line); line-height: 1.9; }
 .citation { font-size: 10px; color: var(--ink-mute); margin-top: 0.5rem; line-height: 1.7; }
-.wrap-body { font-family: var(--serif); font-size: 16px; line-height: 1.8; color: var(--ink); }
-.wrap-body p { margin: 0 0 1rem; }
+.wrap-body { font-family: var(--serif); font-size: 16px; line-height: 1.8; color: var(--ink); } .wrap-body p { margin: 0 0 1rem; }
 .vol-surface { background: var(--surface); border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 12px; color: var(--ink-soft); line-height: 1.7; }
 .gold-hr { border: none; border-top: 2px solid var(--gold); margin: 0 0 1.5rem; }
 </style></head><body>
 <div class="page">
 <header class="masthead">
-<div class="regime-tag">Borrowed Disinflation, Melt-Up Tape</div>
-<h1 class="article-title">Borrowed Disinflation, Melt-Up Tape</h1>
-<div class="meta">Pre-market intelligence brief · 2026-05-31 · generated 21:53 local · self-graded book</div>
-</header>
-<hr class="gold-hr">
-<div class="two-col">
-<div class="lhs"><div class="section-label">Yesterday, graded</div><div class="yesterday">
-<div class="yest-item"><span class="tick-g">✓</span><span><strong>#001 Short EURAUD</strong> 1.6450 → 1.6221 · +1.4%, two-thirds to the 1.6100 target. ECB-on-hold plus the AUD rate-differential bid did the work; the oil crash never touched the Aussie.</span></div>
-<div class="yest-item"><span class="tick-n">→</span><span><strong>#002 Long Brent</strong> 91.0 → 91.1 · flat. The MoU still sits unsigned on Trump's desk; the war-premium tail is intact and unpaid.</span></div>
-<div class="yest-item"><span class="tick-n">→</span><span><strong>#003 Brent–WTI</strong> 3.3 → 3.3 · flat. Hormuz premium not yet repriced into the Atlantic basin.</span></div>
-<div class="yest-item"><span class="tick-n">→</span><span><strong>#004 Short 10Y yield</strong> 4.44 → 4.44 · flat. Bonds holding the disinflation rally; waiting on ISM and payrolls.</span></div>
-<div class="yest-item"><span class="tick-n">→</span><span><strong>#005 Long gold (pre-position)</strong> 4,523 → 4,523 · flat. 45-day hold; the binary-hedge thesis is untouched.</span></div>
+<div class="regime-tag">Melt-Up Versus a Fraying Truce</div>
+<h1 class="article-title">Melt-Up Versus a Fraying Truce</h1>
+<div class="meta">Pre-market intelligence brief · 2026-06-01 · generated 06:24 local · self-graded book</div>
+</header><hr class="gold-hr">
+<div class="two-col"><div class="lhs"><div class="section-label">Yesterday, graded</div><div class="yesterday">
+<div class="yest-item"><span class="tick-g">✓</span><span><strong>#001 Short EURAUD</strong> 1.6450 → 1.6220 · +1.4%. AUD firm with Asia risk-on; the cross holds two-thirds of the way to 1.6100.</span></div>
+<div class="yest-item"><span class="tick-g">✓</span><span><strong>#002 Long Brent</strong> 91.0 → 92.0 · +1.1%. The tail paid: talks stalled, the war premium re-bid exactly as the thesis said it would.</span></div>
+<div class="yest-item"><span class="tick-r">✗</span><span><strong>#003 Brent–WTI</strong> 3.3 → 3.1 · −6.1% (a 0.2-pt narrowing; mechanical on a small base). WTI led the bounce — Cushing, not Hormuz, did the work. Watching, not cutting.</span></div>
+<div class="yest-item"><span class="tick-n">→</span><span><strong>#004 Short 10Y yield</strong> 4.44 → 4.44 · flat. No fresh print; the oil bounce is a mild headwind into today's ISM.</span></div>
+<div class="yest-item"><span class="tick-g">✓</span><span><strong>#005 Long gold</strong> 4,523 → 4,550 · +0.6%. The binary hedge works on the re-escalation side; 45-day hold intact.</span></div>
 </div><div class="section-label">The wrap</div><div class="wrap-body">
-<p>The market is buying a disinflation that exists only on a desk in Washington — the Brent collapse everyone is treating as easing is a derivative of a memorandum Trump has not signed, and the second-order effect nobody is pricing is what happens to a 22x multiple when an unsigned document is the only thing holding crude down.</p>
-<p>Decompose the headline. The S&amp;P at 7,580 and a ninth straight up week reads as broad strength until you find the anatomy: the gains belong to the AI-electrification complex — GE Vernova +54% YTD, Quanta +75%, Bloom Energy +109% in a month, Lumentum +121%, Applied Materials +67% — while Nvidia itself is up 12% and the median S&amp;P name is flat. The tape is not nine weeks of breadth. It is one capex theme migrating down its own supply chain, financed by a 26bp bond rally that the front end says is a rate cut. The headline says melt-up. The anatomy says a single trade wearing a diversified costume. So what: own the migration, not the index. Who's wrong: anyone treating this as a healthy broadening. The trade: long the picks-and-shovels layer, short the barrel it is decoupling from.</p>
-<p><strong>L1 — the one driver.</strong> Oil. Brent fell from $116 on 1 May to $91, a 21% collapse, on the Iran ceasefire framework that promises to de-mine and reopen the Strait of Hormuz. That single move dragged the 10-year from a 4.70% high to 4.44%, pushed DXY to a two-week low, and floated equities to records. A 17% energy decline is a disinflation impulse doing the Fed's easing for it. The regime: <strong>borrowed disinflation, melt-up tape</strong> — relief bought on credit, with the bill dated to the MoU.</p>
-<p><strong>L2 — the hook.</strong> Consensus expected a Gulf war to keep an inflation premium in crude into the summer. Instead it got a ceasefire and a 60-day clock — and the clock has not started, because Tehran rejected Trump's Friday terms on Hormuz, the nuclear stockpile and frozen assets, and US forces are staged to resume combat. The risk premium left crude faster than the risk left the Gulf.</p>
-<p><strong>L3 — three buckets.</strong> A) Real economy: core PCE 3.3%, unemployment 4.3%, growth intact — the oil drop has not reached a single CPI print. B) Priced: nine up weeks, IG spreads 80bp and high yield 285bp, VIX 15 — the soft landing and the oil relief, banked together. C) Consensus: 67.8% of the FedWatch distribution says no cuts in 2026, yet bonds rallied. The gap between B and C is the alpha — the rates market is front-running a cut the survey insists will not come, and a sustained Brent in the $80s makes it right by autumn.</p>
-<p><strong>L4 — Bull / Base / Bear.</strong> Mapped to the tiles right. The base case is a grind, not a melt-up or a crash: the MoU drags through its window and nobody gets paid on conviction.</p>
-<p><strong>L5 — priced vs not-priced.</strong> Fully priced: the soft landing, the AI-capex supercycle, the oil relief. Mispriced the wrong way: the MoU's fragility, a payrolls miss read as bad-news-bad, and the carry unwind if the BoJ hikes off a 30-year-high 0.75% into a 6–3 split that already wanted 1%.</p>
-<p><strong>The tell nobody is looking at.</strong> Gold at $4,523 with the 30-year at 4.98% is not a geopolitical hedge — it is the market pricing fiscal dominance it will not name out loud. An asset that should hate a 5% long bond is making records against it. In six months that decoupling resolves into the story: the bid is not Iran, it is the structural debasement that a Fed pinned by 3.3% core and a Treasury pinned by supply cannot stop. That is the Burry tell — own the gold, ignore the rationalisation.</p>
-<p><strong>The plumbing.</strong> Trace the bond rally to the flow, not the narrative: with the reverse-repo facility drained to a residual and reserves still ample, there is no funding stress absorbing the move — the sub-80 MOVE confirms the disinflation rally is real positioning, not a liquidity accident. The one pipe to watch is the AI-capex investment-grade supply wave; data-center and power financing is the wall of issuance that cheapens the front of credit before any macro print says it should.</p>
-<p><strong>The constraint.</strong> Trump owns the oil price now. The political constraint is that he needs the MoU to hold to keep gasoline falling into an election-sensitive autumn, which caps how hard Tehran can be pushed — and Tehran knows it. The ceasefire holds not because the framework is sound but because both sides need the optics. That is the trade: the peace is more durable than the headlines and more fragile than the price.</p>
+<p>The market read falling oil as disinflation and bought the melt-up on it — now oil has turned, the talks that justified the move have stalled, and the second-order miss is that equities are still long a disinflation already reversing in front of them.</p>
+<p>Decompose the tape. S&amp;P futures at 7,596 and Asia bid — Nikkei +0.5%, Kospi +1.3%, Taiwan +6% on the week — reads as risk-on continuation until you find the engine: it is the AI capex bid alone, firing while crude rises 1.5% and the Gulf ceasefire frays. Friday's story was oil down, bonds up, stocks up — one trade in three costumes. Today oil broke ranks. The headline says melt-up intact. The anatomy says the disinflation leg just inverted and only the AI leg is holding the tape up. So what: the correlation that powered nine up weeks is breaking. Who's wrong: anyone still treating the rally as a disinflation trade. The trade: the barbell from Friday — long the war-premium tail, long gold — is the position, and it is already paying.</p>
+<p><strong>L1 — the one driver.</strong> Still oil, but the sign flipped. Brent +1.5% to $92 and WTI +1.8% to $89 on a memorandum that remains unsigned: Iran insists it manages Hormuz traffic with Oman, Trump insists on unhindered navigation, and Iranian state media calls the deal unfinished. The regime: <strong>melt-up versus a fraying truce</strong> — AI floats equities while the geopolitical premium leaks back into crude.</p>
+<p><strong>L2 — the hook.</strong> Consensus spent the weekend pricing a signature. Instead it got Trump saying Iran is "negotiating on fumes" and that the midterms will not move his war strategy — a man in no hurry. Stalled talks, not a deal, met the Monday open.</p>
+<p><strong>L3 — three buckets.</strong> A) Real economy: core PCE 3.3%, unemployment 4.3%, ISM Manufacturing prints today. B) Priced: records, IG spreads 80bp, VIX 15 — the soft landing and a deal that has not happened. C) Consensus: still 67.8% no-cuts-in-2026, but the bond market that rallied on oil's fall has nothing to rally on if oil keeps rising. The gap: B has priced a peace dividend the tape just started taking back.</p>
+<p><strong>L4 — Bull / Base / Bear.</strong> The re-escalation tail fattened overnight; the bear case is no longer the outlier it was Friday. Tiles right.</p>
+<p><strong>L5 — priced vs not-priced.</strong> Fully priced: the AI capex supercycle, the soft landing. Mispriced the wrong way: a signed MoU (the tape still assumes it comes), a hot ISM prices-paid that the oil bounce now makes plausible, and the carry unwind if the BoJ hikes off 0.75%.</p>
+<p><strong>The tell nobody is looking at.</strong> Gold at $4,550 with the 30-year near 5% is not a war hedge — it is fiscal dominance the market will not name. It rose Friday on disinflation and rose again today on re-escalation; an asset that pays in both states is not pricing Iran, it is pricing a Fed pinned by 3.3% core and a Treasury pinned by supply. In six months that is the story, not the sideshow. The Burry tell: own the gold, ignore the daily rationalisation.</p>
+<p><strong>The plumbing.</strong> Trace the calm to the flow: with the reverse-repo facility drained to a residual and reserves ample, the bond market has no funding cushion to absorb an inflation surprise — a sub-80 MOVE today is complacency, not strength, because the next leg is supply plus an oil-driven breakeven widening hitting a market with no slack.</p>
+<p><strong>The constraint.</strong> Yesterday the read was that Trump needs the MoU to hold for gasoline optics. He just removed that constraint himself — "midterms won't affect my strategy" tells Tehran he will let talks drag, which uncaps the oil price and is precisely why crude bounced. The political constraint did not bind; it inverted. That is the trade: the truce is more fragile than the equity tape believes, and the oil bid is the tell.</p>
 </div><div class="grid-3">
-<div class="tile tile-green"><div class="tile-head">Bull · 35%</div><div class="tile-claim">MoU signs, Hormuz reopens</div><div class="tile-body">Brent to mid-$70s, CPI rolls to 3%, Fed cuts by Sept. Risk: higher. Rates: lower, steeper. FX: dollar softer. Cmdty: oil lower, gold consolidates.</div></div>
-<div class="tile tile-gold"><div class="tile-head">Base · 45%</div><div class="tile-claim">MoU drags the 60-day window</div><div class="tile-body">Brent $85–95, Fed holds Jun/Jul, melt-up grinds on rotation down the AI stack. Risk: grind up. Rates: range. FX: dollar soft. Cmdty: oil rangebound.</div></div>
-<div class="tile tile-red"><div class="tile-head">Bear · 20%</div><div class="tile-claim">Demands sink the MoU</div><div class="tile-body">Brent reclaims $100, CPI re-accelerates, hike risk returns. Risk: off, −5/8%. Rates: higher. FX: dollar bid. Cmdty: oil higher, gold higher.</div></div>
+<div class="tile tile-green"><div class="tile-head">Bull · 30%</div><div class="tile-claim">MoU signs this week</div><div class="tile-body">Hormuz reopens, Brent back to mid-$70s, disinflation resumes, Fed cuts by Sept. Risk: higher. Rates: lower. FX: dollar softer. Cmdty: oil lower, gold cools.</div></div>
+<div class="tile tile-gold"><div class="tile-head">Base · 45%</div><div class="tile-claim">Talks drag, oil grinds higher</div><div class="tile-body">Brent $90–98, Fed holds, melt-up narrows to AI. Risk: choppy-up. Rates: drift higher. FX: dollar soft. Cmdty: oil firm, gold bid.</div></div>
+<div class="tile tile-red"><div class="tile-head">Bear · 25%</div><div class="tile-claim">Talks collapse</div><div class="tile-body">Brent through $100, ISM prices-paid hot, hike risk returns. Risk: −5/8%. Rates: higher. FX: dollar bid. Cmdty: oil higher, gold higher.</div></div>
 </div><div class="section-label">What the tape is missing</div><div class="tile">
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>The oil disinflation has not hit one CPI print.</strong> First test ~11 Jun. Core CPI above 0.3% MoM despite Brent −17% kills the long-bond trade outright.</div></div>
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>BoJ at a 30-year-high 0.75%, 6–3 split wanted 1%.</strong> USDJPY through 145 breaks the carry that funds global risk.</div></div>
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Gold at $4,523 vs a 4.98% long bond is fiscal dominance unnamed.</strong> The Burry tell: the bid is structural debasement, not Iran, and it re-rates the whole real-rate framework within six months.</div></div>
-</div><div class="section-label">Correlation regime</div><div class="tile">
-<div class="tile-body" style="line-height:1.7">
-<p style="margin:0 0 .6rem"><strong>One barrel is setting the entire correlation matrix.</strong> Every break below points to the same place — when a correlation snaps, the dominant driver just changed, and right now the driver is one waterway.</p>
-<p style="margin:0 0 .6rem"><strong>Energy equity ⊥ the energy barrel.</strong> Brent −17% on the month, GE Vernova +54%, Bloom +109%. "Energy" stopped meaning crude and started meaning electrons — the bid is data-center demand, not the oil price.</p>
-<p style="margin:0 0 .6rem"><strong>Stocks and bonds rose together.</strong> Ninth up week while the 10-year rallied 26bp. Positive return correlation because both price the same input — oil — and both unwind one way if Brent reclaims $95.</p>
-<p style="margin:0 0 .6rem"><strong>Gold ⊥ real yields.</strong> $4,523 against a 4.98% 30-year. Gold is ignoring the discount rate; the driver is debasement, not real rates.</p>
-<p style="margin:0 0 .6rem"><strong>Nvidia lags its own index.</strong> +12% YTD vs a +74% PHLX Semiconductor index, after printing sales +85%. Leadership broadened down the stack to optical, equipment and power.</p>
-<p style="margin:0"><strong>AUD shrugged the commodity rout.</strong> EURAUD broke to new lows even as the complex fell — AUD trades the rate differential and electrification metals, not its old terms-of-trade link.</p>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>The oil bounce will show up in breakevens before CPI.</strong> 5y breakeven through 2.5% says the disinflation trade is dead and #004 is wrong; first hard CPI test ~11 Jun.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>ISM prices-paid today is the swing.</strong> A sub-index back above 55 with oil rising re-arms the sticky-inflation narrative the melt-up has ignored.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Gold at $4,550 vs a ~5% long bond is fiscal dominance unnamed.</strong> The Burry tell: it pays in both disinflation and re-escalation because the bid is structural debasement, not Iran.</div></div>
+</div><div class="section-label">Correlation regime</div><div class="tile"><div class="tile-body" style="line-height:1.7">
+<p style="margin:0 0 .6rem"><strong>The correlation that powered nine up weeks just broke.</strong> Friday: oil down, bonds up, stocks up — one trade. Today oil reversed and the others have not followed. The driver is changing in real time.</p>
+<p style="margin:0 0 .6rem"><strong>Oil ⊥ the disinflation trade.</strong> Brent +1.5% while equities stay bid. The melt-up is now running on AI alone, not on falling crude — the leg that justified the rally inverted.</p>
+<p style="margin:0 0 .6rem"><strong>WTI led Brent, not the reverse.</strong> WTI +1.8% vs Brent +1.5% — Cushing outran the Hormuz grade, which is why #003 narrowed. The bounce is positioning unwind, not (yet) a pure Hormuz reprice.</p>
+<p style="margin:0 0 .6rem"><strong>Gold rose on opposite drivers two days running.</strong> Up Friday on disinflation, up today on re-escalation. When an asset ignores the switch in narrative, the real driver is neither — it is debasement.</p>
+<p style="margin:0"><strong>Energy equity still ⊥ the barrel.</strong> The electrification complex (GE Vernova, Quanta, Bloom) trades AI electrons; today's crude bounce is noise to it. "Energy" still means two different things.</p>
 </div></div><div class="section-label">Vol &amp; skew</div><div class="vol-surface">
-<p style="margin:0 0 .5rem"><strong>Steep contango, rich tails — own the gap, not the smile.</strong></p>
-<p style="margin:0 0 .4rem"><strong>VIX term:</strong> spot 15.3 vs VIX3M 19.1 (Cboe). Vol sellers own the front; the market pays only for time, with the binary calendar (NFP, FOMC, MoU) beyond the spot window. Read: complacency.</p>
-<p style="margin:0 0 .4rem"><strong>Cboe SKEW 136:</strong> elevated. Crash hedges bid while spot vol sleeps — the convex downside is where the smart money is.</p>
-<p style="margin:0 0 .4rem"><strong>MOVE sub-80:</strong> bond vol calm, no funding tantrum, duration has cover to rally.</p>
-<p style="margin:0 0 .6rem"><strong>Put/call low:</strong> bullish positioning, consistent with the grind.</p>
-<p style="margin:0"><strong>Structure:</strong> buy a 1-month SPX 25-delta put, sell the 1-month 10-delta put against it. A put spread that owns the first leg of an Iran re-escalation and finances the expensive tail with the steep skew. Cap cost ~35–45bp of notional.</p>
+<p style="margin:0 0 .5rem"><strong>Cheap spot vol into a binary week — the gap is mispriced.</strong></p>
+<p style="margin:0 0 .4rem"><strong>VIX term:</strong> spot 15.3 vs VIX3M 19.1 (Cboe, Fri). Steep contango with ISM today, NFP Friday and an unsigned MoU all live — the front is too calm for the calendar.</p>
+<p style="margin:0 0 .4rem"><strong>SKEW 136:</strong> tails bid, spot asleep. The crash hedge is convex downside, not VIX.</p>
+<p style="margin:0 0 .6rem"><strong>MOVE sub-80:</strong> bond vol calm into an oil-driven breakeven risk — complacency, not strength.</p>
+<p style="margin:0"><strong>Structure:</strong> buy a 1-month SPX 25-delta put, sell the 10-delta against it. Owns the first leg of a talks-collapse, financed by the steep skew. ~35–45bp of notional. The cleanest way to be long the bear tile without selling the melt-up.</p>
 </div><div class="section-label">Sector &amp; RV</div><div class="tile"><div class="tile-body" style="line-height:1.7">
-<p style="margin:0 0 .5rem"><strong>Strongest:</strong> AI-power / electrification (GE Vernova +54% YTD, Quanta +75%, Bloom +109%/mo) and semis-ex-Nvidia (Lumentum +121%, Applied Materials +67%). Same fuel — data-center capex needs electrons and equipment before another GPU. Legs, not exhaustion; the financing wave is still ahead of them.</p>
-<p style="margin:0 0 .5rem"><strong>Weakest:</strong> energy producers, hostage to a 17% crude decline, and defensives/staples, with no bid in a beta-led melt-up.</p>
-<p style="margin:0"><strong>RV:</strong> long the electrification complex (GE Vernova, Quanta) vs short integrated oil and E&amp;P. Both sit in "energy"; one prices the electron and compounds, the other the barrel and falls. Zero net energy beta — the cleanest expression of the regime's headline break.</p>
+<p style="margin:0 0 .5rem"><strong>Strongest:</strong> AI-power / electrification (GE Vernova, Quanta, Bloom) and semis-ex-Nvidia (Lumentum, Applied Materials) — the only engine left holding the tape up now that oil has turned. Legs while data-center capex runs.</p>
+<p style="margin:0 0 .5rem"><strong>Turning:</strong> energy producers, bid for the first time in a month as crude bounces — the mirror of the disinflation unwind. Defensives still no bid.</p>
+<p style="margin:0"><strong>RV:</strong> long the electrification complex vs short integrated oil is now less clean with crude rising — trim the short oil leg, keep the electron longs. The break still holds; the hedge ratio just shifted.</p>
 </div></div><div class="section-label">Positioning &amp; flows</div><div class="tile"><div class="tile-body" style="line-height:1.7">
-<p style="margin:0 0 .5rem">Managed-money crude net length fell from 191.9k to 178.8k contracts into early May (CFTC) — specs lightening oil longs into the collapse, not yet pressing shorts. The crowd is leaving, not committed, which leaves squeeze fuel above.</p>
-<p style="margin:0"><strong>The pain trade is Brent back through $100.</strong> A failed MoU bids crude, bids the dollar and lifts yields — torching long-duration, short-dollar and the disinflation-fed multiple in one session. The market is short a war premium it does not control, held by 178.8k contracts already heading for the exit.</p>
+<p style="margin:0 0 .5rem">Managed money cut crude net length to 178.8k contracts into early May (CFTC), lightening into the fall. Today's bounce squeezes exactly that crowd — specs lightened longs and now chase a market turning back up.</p>
+<p style="margin:0"><strong>The pain trade is still Brent through $100,</strong> and it is closer than Friday. A talks-collapse bids crude, the dollar and yields together — torching long-duration and the disinflation-fed multiple. The book is on the right side of it via #002 and #005.</p>
 </div></div><div class="section-label">Funding &amp; plumbing</div><div class="tile"><div class="tile-body" style="line-height:1.7">
-<p style="margin:0">Plumbing is calm. SOFR pins near the floor, the reverse-repo facility is drained to a residual, reserves remain ample, and the sub-80 MOVE confirms no stress is leaking into rate vol. One forward watch: the AI-capex investment-grade supply wave — data-center, power and fiber financing is a wall of high-grade issuance that cheapens the front of credit from 80bp before the macro tape says it should. Calm now; that is the pipe.</p>
+<p style="margin:0">Plumbing calm. SOFR near the floor, reverse-repo drained to a residual, reserves ample, MOVE sub-80. The one tell: with no funding cushion, a bond market that rallied on oil's fall has nothing to absorb an oil-driven breakeven widening — the calm is the setup, not the all-clear. Watch the AI-capex IG supply wave layered on top.</p>
 </div></div><div class="section-label">Consensus · bid / offer</div><div class="grid-2">
-<div class="tile tile-green"><div class="tile-head">Bid · the consensus</div><div class="tile-body">Oil collapse → disinflation → the Fed eases → the melt-up extends, so buy every dip. The most-held view on the desk, and the nine-week tape has paid it.</div></div>
-<div class="tile tile-red"><div class="tile-head">Offer · the other side</div><div class="tile-body">The chain hangs off a 60-day MoU Tehran just rejected, with US forces staged to re-engage. Core PCE 3.3% means no cover to cut if Brent bounces. Consensus is short a war premium it cannot control.</div></div>
+<div class="tile tile-green"><div class="tile-head">Bid · the consensus</div><div class="tile-body">The MoU gets signed, oil resumes falling, disinflation and the melt-up both continue — buy the dip. Still the desk's base case.</div></div>
+<div class="tile tile-red"><div class="tile-head">Offer · the other side</div><div class="tile-body">Trump just said he is in no hurry and oil bounced on it. The signature the consensus assumes is the one thing the tape started un-pricing this morning.</div></div>
 </div><div class="tile tile-gold"><div class="tile-head">Today's one chart that matters</div>
-<div class="tile-claim">Brent crude — and the unsigned US–Iran memorandum under it.</div>
-<div class="tile-body">Brent $91 after −17% on the month, on a framework that de-mines Hormuz but sits unsigned on Trump's desk. The level that changes the story is <strong>Brent $95</strong>. Below it, the disinflation trade extends and the melt-up keeps its bid. A reclaim of $95 says the MoU is fraying, and every position short the war premium — long duration, long the multiple, short dollar — comes off at once. Watch the barrel, not the equity tape.</div></div><div class="section-label">Catalyst calendar · 5 days</div><div class="tile"><table class="live-table">
+<div class="tile-claim">Brent crude — now rising into the line that flips the regime.</div>
+<div class="tile-body">Brent $92 and climbing on stalled talks. <strong>$95 is the level</strong>. Friday it was the ceiling the disinflation trade needed to hold; today the market is walking up toward it from below. A clean break of $95 confirms the truce is fraying, hands #002 and #005 their payoff, and forces the bond market to give back the rally that the whole melt-up multiple rests on. ISM at 10:00 ET is the catalyst that decides whether crude or growth-fear writes the afternoon.</div></div><div class="section-label">Catalyst calendar · 5 days</div><div class="tile"><table class="live-table">
 <thead><tr><th>Day</th><th>Date</th><th>Event</th><th>View</th><th>Asymmetry</th></tr></thead><tbody>
-<tr><td>Mon</td><td>01 Jun</td><td style="color:var(--gold)">ISM Manufacturing</td><td>Oil-relief is good news until a sub-48 flips it to a growth scare with no labour read yet.</td><td class="pnl-neg">Downside — soft print is bad-news-bad</td></tr>
-<tr><td>Wed</td><td>03 Jun</td><td style="color:var(--gold)">ISM Services</td><td>Services is the sticky-inflation engine; a hot prices-paid sub-index undercuts the bond market's disinflation bet.</td><td class="pnl-neg">Two-way — watch prices-paid</td></tr>
-<tr><td>Fri</td><td>05 Jun</td><td style="color:var(--gold)">May Nonfarm Payrolls</td><td>At 4.3% unemployment and a 22x multiple, a weak print is now bad-news-bad — it removes the labour floor under the no-recession melt-up.</td><td class="pnl-neg">Downside on a miss</td></tr>
+<tr><td>Mon</td><td>01 Jun</td><td style="color:var(--gold)">ISM Manufacturing · 10:00 ET</td><td>With oil bouncing, a hot prices-paid sub-index re-arms inflation; a soft headline is now bad-news-bad.</td><td class="pnl-neg">Two-way — prices-paid is the tell</td></tr>
+<tr><td>Wed</td><td>03 Jun</td><td style="color:var(--gold)">ISM Services + Broadcom</td><td>Services prices-paid plus AVGO's AI guide land the same day — the sticky-inflation and AI-capex theses both get tested.</td><td class="pnl-neg">Downside on hot services</td></tr>
+<tr><td>Fri</td><td>05 Jun</td><td style="color:var(--gold)">May Nonfarm Payrolls</td><td>At 4.3% unemployment and a 22x multiple, a weak print removes the labour floor under the no-recession melt-up.</td><td class="pnl-neg">Downside on a miss</td></tr>
 </tbody></table></div><div class="section-label">Earnings · next 10 sessions</div><div class="tile tile-gold">
 <div class="tile-claim">Broadcom <span style="font-family:monospace;color:var(--ink-mute);font-size:11px">AVGO</span> · Wed 03 Jun · after close</div>
 <div class="tile-body" style="margin-top:.4rem">
-<div><strong>Consensus:</strong> Street models continued AI-driven acceleration; precise EPS/revenue estimates <span style="color:var(--ink-mute)">unverified — flag</span>. AI semiconductor revenue is the swing factor.</div>
+<div><strong>Consensus:</strong> Street models continued AI-driven acceleration; precise EPS/revenue estimates <span style="color:var(--ink-mute)">unverified — flag</span>. AI-semiconductor revenue is the swing factor.</div>
 <div style="margin-top:.4rem"><strong>The read:</strong> the tape prices Broadcom as a custom-silicon proxy for hyperscaler capex; the number that matters is the forward AI-revenue guide, not the headline beat.</div>
-<div style="margin-top:.4rem"><strong>What moves it:</strong> a next-quarter AI-semi guide that lifts the run-rate re-rates the stock 5%+ and pulls the whole semis-ex-Nvidia complex with it; an in-line guide sells the news after a +60% cohort run.</div>
+<div style="margin-top:.4rem"><strong>What moves it:</strong> a next-quarter AI-semi guide that lifts the run-rate re-rates the stock 5%+ and pulls the semis-ex-Nvidia complex with it; an in-line guide sells the news after a +60% cohort run.</div>
 <div class="conv-bar" style="margin-top:.6rem"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="conv-detail">Into earnings: BUY · 6/10 · pre-position, hold through print +5 days</span></div>
 </div></div><div class="section-label">What changes my mind</div><div class="tile">
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Long-duration view dies</strong> on core CPI above 0.3% MoM despite Brent −17%. Oil relief not reaching inflation = the bond rally is wrong.</div></div>
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Melt-up view dies</strong> if IG OAS clears 100bp or high yield clears 350bp, or the S&amp;P loses its 50-day. Credit cracks before equities admit it.</div></div>
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Oil-relief view dies — Brent longs pay —</strong> on a reclaim of $100. $95 is the early warning.</div></div>
-<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Carry view dies</strong> on USDJPY through 145: BoJ repatriation pulling the cheapest funding leg from under global risk.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Short-duration / oil-up view dies</strong> if the MoU is signed and Brent breaks back below $88 — disinflation resumes and #002/#005 come off.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Melt-up view dies</strong> if IG OAS clears 100bp or the S&amp;P loses its 50-day. The AI leg is now the only thing holding the tape; credit cracks first.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>The whole regime confirms</strong> on Brent through $100 — talks-collapse, and the barbell pays in full.</div></div>
+<div class="canary"><div class="cdot"></div><div class="ctext"><strong>Carry view dies</strong> on USDJPY through 145: BoJ repatriation pulling global risk funding.</div></div>
 </div><div class="section-label">Talking points today</div><div class="tile">
-<div class="ammo"><div class="ammo-q">Is the oil crash bullish or bearish for my book?</div><div class="ammo-a">Bullish the multiple, bearish the energy tape — it's an unlegislated rate cut — but you're long a 60-day ceasefire, so hedge the re-escalation with cheap Brent calls, not by selling stocks.</div></div>
-<div class="ammo"><div class="ammo-q">Should I add duration here?</div><div class="ammo-a">Yes, modestly: Brent −17% is a forward CPI cut the no-cut consensus hasn't booked. Target 10Y 4.10%, bail above 4.65%.</div></div>
-<div class="ammo"><div class="ammo-q">What's the one thing that ruins June?</div><div class="ammo-a">Tehran rejecting Trump's MoU terms and Brent back through $100 — everything in the melt-up is short that premium.</div></div>
+<div class="ammo"><div class="ammo-q">Oil bounced — is the disinflation trade over?</div><div class="ammo-a">Turning, not over. One day's bounce on stalled talks isn't a trend, but it caps the bond rally — trim duration risk and let gold and Brent longs carry the re-escalation tail.</div></div>
+<div class="ammo"><div class="ammo-q">Do I chase equities at record futures?</div><div class="ammo-a">No. The melt-up is running on AI alone now that oil flipped. Own the AI-power complex, but hedge the binary week with a cheap SPX put spread — don't add naked beta.</div></div>
+<div class="ammo"><div class="ammo-q">What's the one number today?</div><div class="ammo-a">ISM prices-paid at 10:00 ET. Above 55 with oil rising and the disinflation story is dead; the bond market hasn't priced that.</div></div>
 </div><div class="citation"><strong>Citations</strong> (non-primary sources; primary data — Cboe, CFTC, US Treasury, CME, BoJ, Reuters, Bloomberg — cited inline by name):<br>
-· Oil / Iran weekend coverage — CNBC, cnbc.com/2026/05/28/oil-prices-us-strikes-in-iran-revive-strait-of-hormuz-turmoil-fears.html<br>
-· Equity index closes — TheStreet, finance.yahoo.com; Nikkei — Nippon.com<br>
-· Gold / oil daily marks — Fortune, fortune.com; CNBC Select<br>
-· AI / semis single-name moves — The Motley Fool, fool.com; Kiplinger<br>
-· Broadcom report date — SEC EDGAR 8-K (avgo), corroborated MarketBeat / MarketChameleon<br>
-· stooq.com queried for live levels — returned image-only quotes, not machine-readable; levels fell back to search-verified Fri 29-May closes</div><div class="stale"><strong>Staleness check</strong> — today is Sunday 31 May; all marks are Friday 29-May closes (weekend), flagged stale:<br>
-· S&amp;P 7,580 / Nasdaq 26,973 — Bloomberg/Reuters · Fri 29 May close · <span style="color:var(--red)">STALE &gt;6h</span><br>
-· Nikkei 66,424 — Reuters · Fri 29 May close · <span style="color:var(--red)">STALE</span><br>
-· US 10Y 4.44% / 30Y 4.98% — US Treasury / Fed H.15 · Fri 29 May · <span style="color:var(--red)">STALE</span><br>
-· EURUSD 1.1654 / EURAUD 1.6221 — Reuters FX · 29–30 May · <span style="color:var(--red)">STALE</span><br>
-· Brent $91.1 / WTI $87.8 — ICE / Reuters · Fri 29 May · <span style="color:var(--red)">STALE</span><br>
-· Gold $4,523 — Reuters/Bloomberg · Fri 29 May · <span style="color:var(--red)">STALE</span><br>
-· VIX 15.3 / VIX3M 19.1 / SKEW 136 — Cboe · 28–29 May · <span style="color:var(--red)">STALE</span><br>
-· Crude COT net long 178.8k — CFTC · wk of 8 May · <span style="color:var(--red)">STALE</span><br>
-· FedWatch 28% June cut — CME · 29 May · <span style="color:var(--red)">STALE</span><br>
-· Iran MoU (unsigned, fragile) — Reuters / AP / CNBC · 28–30 May · <span style="color:var(--red)">STALE</span></div></div>
-<div class="rhs"><div class="section-label">The open</div><div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P fut</div><span class="dval">7,580</span><div><span class="dchg chg-up">+0.2%</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq fut</div><span class="dval">26,973</span><div><span class="dchg chg-up">+0.2%</span></div></div><div class="dash-tile"><div class="dlabel">DAX</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">Nikkei</div><span class="dval">66,424</span><div><span class="dchg chg-up">+2.7%</span></div></div><div class="dash-tile"><div class="dlabel">FTSE</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">EURUSD</div><span class="dval">1.1654</span><div><span class="dchg ">+0.1%</span></div></div><div class="dash-tile"><div class="dlabel">GBPUSD</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">USDJPY</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">USDCNH</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">DXY</div><span class="dval">99.0</span><div><span class="dchg ">2-wk low</span></div></div><div class="dash-tile"><div class="dlabel">US10Y</div><span class="dval">4.44%</span><div><span class="dchg chg-dn">-1bp</span></div></div><div class="dash-tile"><div class="dlabel">Bund10Y</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">Gilt10Y</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">2s10s</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">WTI</div><span class="dval">87.8</span><div><span class="dchg chg-dn">-1.4%</span></div></div><div class="dash-tile"><div class="dlabel">Brent</div><span class="dval">91.1</span><div><span class="dchg chg-dn">-1.7%</span></div></div><div class="dash-tile"><div class="dlabel">Gold</div><span class="dval">4,523</span><div><span class="dchg chg-up">+0.9%</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><span class="dval">15.3</span><div><span class="dchg chg-dn">-0.4</span></div></div><div class="dash-tile"><div class="dlabel">MOVE</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div></div><div class="theme-line">The oil crash is the only macro story that matters: a 17% Brent collapse is an unlegislated rate cut, and every asset is repricing the Fed it implies — not the Fed it has.</div><div class="section-label">New trade ideas</div><div class="trade-card">
-  <div class="tc-top">
-    <div><div class="tc-name">Long Brent crude</div>
-    <div class="tc-class">Commodity · outright · reactive</div></div>
-    <div class="conv-badge">6/10</div>
-  </div>
-  <div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">91.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">84.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">104.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div>
-  <div class="conv-bar"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="conv-detail">gap(2) · cat(2) · pos(1) · conf(0) · stop(1)</span></div>
-  <div class="tc-thesis">The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book&#x27;s barbell, not a directional call on peace.</div>
-</div><div class="trade-card">
-  <div class="tc-top">
-    <div><div class="tc-name">Long Brent vs short WTI (spread)</div>
-    <div class="tc-class">Commodity · spread · reactive</div></div>
-    <div class="conv-badge">5/10</div>
-  </div>
-  <div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">3.3</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">1.5</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">6.5</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div>
-  <div class="conv-bar"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="conv-detail">gap(2) · cat(1) · pos(1) · conf(0) · stop(1)</span></div>
-  <div class="tc-thesis">The Hormuz premium is Brent-specific — it prices the waterway, WTI prices Cushing. If the MoU frays, the Atlantic-basin grade reprices the de-mining risk and the spread widens; if it holds, physical caps the downside near current carry. A cleaner, lower-beta way to own the same re-escalation tail with defined spread risk.</div>
-</div><div class="trade-card">
-  <div class="tc-top">
-    <div><div class="tc-name">Short US 10Y yield (long duration)</div>
-    <div class="tc-class">Rates · outright · reactive</div></div>
-    <div class="conv-badge">5/10</div>
-  </div>
-  <div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">4.44</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">4.65</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">4.1</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div>
-  <div class="conv-bar"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="conv-detail">gap(2) · cat(1) · pos(1) · conf(0) · stop(1)</span></div>
-  <div class="tc-thesis">Brent −17% is a forward CPI cut the FedWatch distribution (67.8% no cuts in 2026) has not booked. Bonds already rallied 26bp off the 4.70% high; the disinflation impulse rolls headline lower into the autumn. Deliberately the opposite macro leg to the Brent longs — the book owns both sides of the MoU binary and gets paid on either resolution.</div>
-</div><div class="trade-card">
-  <div class="tc-top">
-    <div><div class="tc-name">Long gold into the June Fed window</div>
-    <div class="tc-class">Commodity · outright · pre-position</div></div>
-    <div class="conv-badge">6/10</div>
-  </div>
-  <div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">4523.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">4250.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">5100.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">months</span></div><div class="tc-row"><span class="tc-k">Min hold</span><span class="tc-v">45d</span></div>
-  <div class="conv-bar"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="conv-detail">gap(2) · cat(2) · pos(1) · conf(0) · stop(1)</span></div>
-  <div class="tc-thesis">Pre-position into the 5 June payrolls / 16–17 June FOMC window. Gold has already decoupled from a 4.98% long bond, which means it is pricing both MoU tails at once. It wins if oil-disinflation forces a dovish Fed and real yields fall, AND it wins if the MoU fails and the geopolitical bid returns. It loses only on the narrow path of strong-growth + stable-oil + hawkish-Fed together. That is the asymmetry pre-positioning is built for; minimum 45-day hold, not an event-day scalp.</div>
-</div><div class="section-label">Live book + scoreboard</div><div class="score-row">
-  <div class="score-tile"><div class="sval pos">+1.50%</div><div class="slabel">Open P&amp;L</div></div>
+· Monday futures / oil reversal / Asia — Yahoo Finance markets live (finance.yahoo.com); CNBC Asia markets (cnbc.com)<br>
+· US–Iran MoU terms, Hormuz sticking point — Axios (axios.com/2026/05/28/iran-peace-deal-trump-approval); The Hill (thehill.com); CNN (cnn.com)<br>
+· Trump "negotiating on fumes / midterms" — PBS NewsHour (pbs.org)<br>
+· EURAUD 1.6220 — exchange-rates.org; Gold ~$4,550 — Trading Economics / APMEX<br>
+· DXY 98.94 — TradingView / streetstats.finance<br>
+· stooq.com queried for live levels — returned image-only quotes, not machine-readable; levels fell back to search-verified June-1 marks</div><div class="stale"><strong>Staleness check</strong> — generated pre-market Mon 01 Jun 06:24 local:<br>
+· S&amp;P fut 7,596 / Brent $92 / WTI $88.9 — Yahoo/CNBC · 01 Jun pre-mkt · <span style="color:var(--green)">fresh</span><br>
+· EURAUD 1.6220 — exchange-rates.org · 01 Jun 00:30 UTC · <span style="color:var(--green)">fresh</span><br>
+· Gold ~$4,550 / DXY 98.9 — Trading Economics / TradingView · 01 Jun · <span style="color:var(--green)">fresh</span><br>
+· US 10Y 4.44% / VIX 15.3 — Treasury/Cboe · <span style="color:var(--red)">Fri 29 May close — STALE, no fresh June-1 print</span><br>
+· Crude COT 178.8k — CFTC · wk of 8 May · <span style="color:var(--red)">STALE (weekly)</span><br>
+· Iran MoU (unsigned, talks stalled) — Axios/CNN/PBS · 28 May–01 Jun · <span style="color:var(--green)">fresh</span></div></div><div class="rhs"><div class="section-label">The open</div><div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P fut</div><span class="dval">7,596</span><div><span class="dchg chg-up">+0.2%</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq fut</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">DAX</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">Nikkei</div><span class="dval">~66,750</span><div><span class="dchg chg-up">+0.5%</span></div></div><div class="dash-tile"><div class="dlabel">FTSE</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">EURUSD</div><span class="dval">1.166</span><div><span class="dchg ">+0.1%</span></div></div><div class="dash-tile"><div class="dlabel">GBPUSD</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">USDJPY</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">USDCNH</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">DXY</div><span class="dval">98.9</span><div><span class="dchg chg-dn">-0.1%</span></div></div><div class="dash-tile"><div class="dlabel">US10Y</div><span class="dval">4.44%</span><div><span class="dchg ">Fri</span></div></div><div class="dash-tile"><div class="dlabel">Bund10Y</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">Gilt10Y</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">2s10s</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div><div class="dash-tile"><div class="dlabel">WTI</div><span class="dval">88.9</span><div><span class="dchg chg-up">+1.8%</span></div></div><div class="dash-tile"><div class="dlabel">Brent</div><span class="dval">92.0</span><div><span class="dchg chg-up">+1.5%</span></div></div><div class="dash-tile"><div class="dlabel">Gold</div><span class="dval">4,550</span><div><span class="dchg chg-up">+0.6%</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><span class="dval">15.3</span><div><span class="dchg ">Fri</span></div></div><div class="dash-tile"><div class="dlabel">MOVE</div><span class="dval" style="color:var(--ink-mute)">unverified</span></div></div><div class="theme-line">Oil just reversed — Brent +1.5%, WTI +1.8% on stalled Gulf talks. The disinflation the melt-up is built on is turning, and equities have not repriced it.</div><div class="section-label">New trade ideas</div><div class="tile tile-muted">
+<div class="tile-claim">No new idea today — forcing a trade is the trade.</div>
+<div class="tile-body">The 31-May barbell already owns this move: long Brent (#002, +1.1%) and long gold (#005, +0.6%) are paying as the truce frays, while short-duration risk (#004) and the EURAUD short (#001) carry the other leg. Adding more oil-up exposure here is doubling, not diversifying. The book is positioned; today is about letting it work into ISM.</div></div><div class="section-label">Live book + scoreboard</div><div class="score-row">
+  <div class="score-tile"><div class="sval neg">-2.96%</div><div class="slabel">Open P&amp;L (Σ)</div></div>
   <div class="score-tile"><div class="sval">—</div><div class="slabel">Hit rate</div></div>
   <div class="score-tile"><div class="sval">0</div><div class="slabel">Closed</div></div>
-  <div class="score-tile"><div class="sval pos">Short +1.4%</div><div class="slabel">Best</div></div>
-</div><table class="live-table">
-<thead><tr><th>ID</th><th>Trade</th><th>Init</th><th>Entry</th><th>Now</th><th>P&amp;L</th><th>Horizon</th><th>Left</th><th>→Tgt</th></tr></thead>
-<tbody><tr><td><span class="pill">#001</span></td><td>Short EURAUD spot</td><td>05-31</td><td>1.645</td><td>1.6221</td><td class="pnl-pos">+1.39%</td><td>weeks</td><td>21d</td><td>65%</td></tr><tr><td><span class="pill">#002</span></td><td>Long Brent crude</td><td>05-31</td><td>91.0</td><td>91.1</td><td class="pnl-pos">+0.11%</td><td>weeks</td><td>21d</td><td>0%</td></tr><tr><td><span class="pill">#003</span></td><td>Long Brent vs short WTI (spread)</td><td>05-31</td><td>3.3</td><td>3.3</td><td class="">+0.00%</td><td>weeks</td><td>21d</td><td>0%</td></tr><tr><td><span class="pill">#004</span></td><td>Short US 10Y yield (long duration)</td><td>05-31</td><td>4.44</td><td>4.44</td><td class="">-0.00%</td><td>weeks</td><td>21d</td><td>0%</td></tr><tr><td><span class="pill">#005</span></td><td>Long gold into the June Fed window</td><td>05-31</td><td>4523.0</td><td>4523.0</td><td class="">+0.00%</td><td>months</td><td>90d</td><td>0%</td></tr></tbody></table><div class="tile-body" style="margin-top:8px;color:var(--ink-mute)">Book opened today — 2026-05-31. First ideas logged above. No closed trades yet.</div></div>
-</div>
-</div>
-</body></html>
+  <div class="score-tile"><div class="sval pos">EURAUD +1.4%</div><div class="slabel">Best</div></div>
+</div><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Init</th><th>Entry</th><th>Now</th><th>P&amp;L</th><th>Horizon</th><th>Left</th><th>→Tgt</th></tr></thead><tbody><tr><td><span class="pill">#001</span></td><td>Short EURAUD spot</td><td>05-31</td><td>1.645</td><td>1.622</td><td class="pnl-pos">+1.40%</td><td>weeks</td><td>20d</td><td>65%</td></tr><tr><td><span class="pill">#002</span></td><td>Long Brent crude</td><td>05-31</td><td>91.0</td><td>92.0</td><td class="pnl-pos">+1.10%</td><td>weeks</td><td>20d</td><td>7%</td></tr><tr><td><span class="pill">#003</span></td><td>Long Brent vs short WTI (spread)</td><td>05-31</td><td>3.3</td><td>3.1</td><td class="pnl-neg">-6.06%</td><td>weeks</td><td>20d</td><td>0%</td></tr><tr><td><span class="pill">#004</span></td><td>Short US 10Y yield (long duration)</td><td>05-31</td><td>4.44</td><td>4.44</td><td class="">-0.00%</td><td>weeks</td><td>20d</td><td>0%</td></tr><tr><td><span class="pill">#005</span></td><td>Long gold into the June Fed window</td><td>05-31</td><td>4523.0</td><td>4550.0</td><td class="pnl-pos">+0.60%</td><td>months</td><td>89d</td><td>4%</td></tr></tbody></table><div class="tile-body" style="margin-top:8px;color:var(--ink-mute)">Book opened 2026-05-31. No closed trades yet — all five positions live into the June binary calendar.</div></div></div>
+</div></body></html>

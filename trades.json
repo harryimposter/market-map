@@ -33,10 +33,16 @@
           "level": 1.6221,
           "pnl_pct": 1.39,
           "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 1.622,
+          "pnl_pct": 1.4,
+          "status": "open"
         }
       ],
-      "current": 1.6221,
-      "current_pnl_pct": 1.39
+      "current": 1.622,
+      "current_pnl_pct": 1.4
     },
     {
       "id": "MM-2026-002",
@@ -59,13 +65,19 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book's barbell, not a directional call on peace.",
-      "current": 91.1,
-      "current_pnl_pct": 0.11,
+      "current": 92.0,
+      "current_pnl_pct": 1.1,
       "history": [
         {
           "date": "2026-05-31",
           "level": 91.1,
           "pnl_pct": 0.11,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 92.0,
+          "pnl_pct": 1.1,
           "status": "open"
         }
       ]
@@ -91,13 +103,19 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The Hormuz premium is Brent-specific — it prices the waterway, WTI prices Cushing. If the MoU frays, the Atlantic-basin grade reprices the de-mining risk and the spread widens; if it holds, physical caps the downside near current carry. A cleaner, lower-beta way to own the same re-escalation tail with defined spread risk.",
-      "current": 3.3,
-      "current_pnl_pct": 0.0,
+      "current": 3.1,
+      "current_pnl_pct": -6.06,
       "history": [
         {
           "date": "2026-05-31",
           "level": 3.3,
           "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 3.1,
+          "pnl_pct": -6.06,
           "status": "open"
         }
       ]
@@ -131,6 +149,12 @@
           "level": 4.44,
           "pnl_pct": -0.0,
           "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 4.44,
+          "pnl_pct": -0.0,
+          "status": "open"
         }
       ]
     },
@@ -155,13 +179,19 @@
       "horizon": "months",
       "min_hold_days": 45,
       "thesis": "Pre-position into the 5 June payrolls / 16–17 June FOMC window. Gold has already decoupled from a 4.98% long bond, which means it is pricing both MoU tails at once. It wins if oil-disinflation forces a dovish Fed and real yields fall, AND it wins if the MoU fails and the geopolitical bid returns. It loses only on the narrow path of strong-growth + stable-oil + hawkish-Fed together. That is the asymmetry pre-positioning is built for; minimum 45-day hold, not an event-day scalp.",
-      "current": 4523.0,
-      "current_pnl_pct": 0.0,
+      "current": 4550.0,
+      "current_pnl_pct": 0.6,
       "history": [
         {
           "date": "2026-05-31",
           "level": 4523.0,
           "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 4550.0,
+          "pnl_pct": 0.6,
           "status": "open"
         }
       ]
