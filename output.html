@@ -5,154 +5,110 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Market Map &middot; 2026-06-02</title>
   <style>
-:root{--bg:#f0eee6;--surface:#e9e0d2;--panel:#e9e0d2;--card:#fbfaf6;
---black:#141413;--cream:#f0eee6;--peach:#e8c7a0;
---ink:#191917;--ink-soft:#5c574f;--ink-mute:#8a8378;
---gold:#cc785c;--coral:#cc785c;--red:#bf4a3c;--green:#1a7a45;
---line:rgba(20,20,19,0.12);--line-soft:rgba(20,20,19,0.07);
---radius-md:10px;--radius-lg:16px;--radius-xl:26px;
---font:"Styrene B","Helvetica Neue",Helvetica,Arial,sans-serif;
---serif:"Tiempos",Georgia,"Times New Roman",serif}
+:root{--bg:#ffffff;--surface:#f7f7f5;--ink:#1a1a1a;--ink-soft:#6b6b6b;
+--ink-mute:#9a9a9a;--gold:#b8960c;--red:#c0392b;--green:#1a7a45;
+--line:rgba(0,0,0,0.1);--radius-md:8px;--radius-lg:12px;
+--font:-apple-system,"Helvetica Neue",sans-serif;
+--serif:Georgia,"Times New Roman",serif}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:var(--coral);color:#fff}
-::-webkit-scrollbar{width:11px}::-webkit-scrollbar-thumb{background:#cfc6b5;border-radius:6px;border:3px solid var(--bg)}
-.page{max-width:1320px;margin:0 auto;padding:2.5rem 2rem 5rem}
-.two-col{display:grid;grid-template-columns:1fr 392px;gap:1.5rem;align-items:start}
-@media(max-width:980px){.two-col{grid-template-columns:1fr}}
-.lhs{min-width:0;display:flex;flex-direction:column;gap:1.5rem}
-.rhs{min-width:0;display:flex;flex-direction:column;gap:1.5rem}
-.masthead{margin-bottom:.5rem}
-.article-title{font-family:var(--font);font-size:3.9rem;font-weight:700;line-height:1.0;letter-spacing:-.025em;color:var(--ink);margin:0 0 1rem;max-width:20ch}
-.meta{font-size:11.5px;color:var(--ink-mute);letter-spacing:.09em;text-transform:uppercase;margin-top:.6rem}
-.meta::before{content:"";display:block;width:54px;height:3px;background:var(--coral);border-radius:2px;margin-bottom:.85rem}
-.regime-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--cream);background:var(--coral);border-radius:30px;padding:6px 15px;margin-bottom:1.3rem}
-.gold-rule{display:none}
-.panel{background:var(--panel);border-radius:var(--radius-xl);padding:1.7rem 1.8rem}
-.rhs .panel{padding:1.45rem 1.5rem}
-.banner{background:var(--black);color:var(--cream);border-radius:var(--radius-xl);padding:2.1rem 2rem;transform:scale(.9);opacity:.5;transform-origin:center;will-change:transform,opacity}
-.banner .section-label{color:var(--peach)}
-.banner .cal-table th{color:rgba(240,238,230,.5);border-color:rgba(255,255,255,.16)}
-.banner .cal-table td{color:var(--cream);border-color:rgba(255,255,255,.12)}
-.banner .cal-event{color:var(--peach);font-weight:600}
-.banner .asym-up{color:#7fe0b0}.banner .asym-dn{color:#ff9c8a}
-.banner .tile{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
-.banner .tile-claim,.banner .tile-head{color:var(--cream)}
-.banner .tile-body{color:rgba(240,238,230,.74)}
-.banner .wrap-body{color:rgba(240,238,230,.86)}
-.banner .wrap-body strong{color:var(--peach)}
-.banner .wrap-body em{color:var(--cream)}
-.banner .earnings-tile{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);border-left-color:var(--peach)}
-.banner .earn-name{color:var(--cream)}.banner .earn-ticker{color:rgba(240,238,230,.6)}
-.banner .earn-k{color:rgba(240,238,230,.6)}.banner .earn-v{color:var(--cream)}
-.banner .earn-row{border-color:rgba(255,255,255,.12)}
-.banner .earn-read{color:rgba(240,238,230,.78)}.banner .earn-read strong{color:var(--peach)}
-.banner .earn-v[style]{color:#7fe0b0 !important}
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.banner{opacity:1;transform:none}}
-.btn{display:inline-flex;align-items:center;gap:7px;background:var(--black);color:var(--cream);border:none;border-radius:9px;padding:9px 15px;font-family:var(--font);font-size:12.5px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
-.btn:hover{background:#2c2b27}.btn:active{transform:scale(.97)}
-.btn .arw{display:inline-block;transition:transform .25s}.btn:hover .arw{transform:translateX(4px)}
-.section-label{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin:0 0 1.1rem;display:flex;align-items:center;gap:9px}
-.section-label::before{content:"";width:16px;height:2px;background:var(--coral);border-radius:2px;flex-shrink:0}
-.panel .section-label:not(:first-child),.banner .section-label:not(:first-child){margin-top:1.7rem}
-.stale-alert{background:rgba(191,74,60,.1);border:1px solid rgba(191,74,60,.35);border-radius:var(--radius-md);padding:.7rem 1rem;font-size:12px;color:#7a2a20;margin-bottom:1.1rem;line-height:1.55}
-.stale-alert strong{font-weight:700;color:#5c1a10}
-.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:1rem}
-.dash-tile{background:var(--card);border-radius:var(--radius-md);padding:.55rem .8rem;border:1px solid var(--line-soft)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.65}
+.page{max-width:1400px;margin:0 auto;padding:2rem 2rem 4rem}
+.two-col{display:grid;grid-template-columns:1fr 380px;gap:2.5rem;align-items:start}
+@media(max-width:960px){.two-col{grid-template-columns:1fr}}
+.lhs{min-width:0}.rhs{min-width:0;position:sticky;top:1rem}
+.masthead{border-bottom:.5px solid var(--line);padding-bottom:1rem;margin-bottom:1.5rem}
+.article-title{font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1.25;color:var(--ink);margin:0 0 .4rem}
+.meta{font-size:11px;color:var(--ink-mute);letter-spacing:.08em;text-transform:uppercase;margin-top:.35rem}
+.regime-tag{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:.5px solid var(--gold);border-radius:20px;padding:2px 10px;margin-bottom:.75rem}
+.gold-rule{border:none;border-top:1px solid var(--gold);margin:1rem 0 0;opacity:.4}
+.section-label{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin:1.75rem 0 .75rem}
+.section-label:first-child{margin-top:0}
+.stale-alert{background:rgba(191,74,60,.07);border:.5px solid rgba(191,74,60,.3);border-radius:var(--radius-md);padding:.6rem .85rem;font-size:12px;color:#7a2a20;margin-bottom:.85rem;line-height:1.55}
+.stale-alert strong{font-weight:600;color:#5c1a10}
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-bottom:1rem}
+.dash-tile{background:var(--surface);border-radius:var(--radius-md);padding:.5rem .75rem;border:.5px solid var(--line)}
 .dlabel{font-size:10px;color:var(--ink-mute);margin-bottom:2px}
 .dval{font-size:13px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
 .dchg{font-size:11px}
 .chg-up{color:var(--green)}.chg-dn{color:var(--red)}.chg-flat{color:var(--ink-mute)}
-.theme-line{border-left:3px solid var(--coral);padding:.65rem .9rem;background:var(--card);border-radius:0 var(--radius-md) var(--radius-md) 0;margin:1rem 0 0;font-size:13px;font-weight:500;line-height:1.5}
-.tile{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:8px}
-.tile-head{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.4rem}
-.tile-claim{font-size:14px;font-weight:600;color:var(--ink);line-height:1.45;margin-bottom:.4rem}
+.theme-line{border-left:2px solid var(--gold);padding:.5rem .85rem;background:var(--surface);border-radius:0 var(--radius-md) var(--radius-md) 0;margin:1rem 0;font-size:13px;font-weight:500;line-height:1.5}
+.tile{background:var(--bg);border:.5px solid var(--line);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:8px}
+.tile-head{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.4rem}
+.tile-claim{font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;margin-bottom:.4rem}
 .tile-body{font-size:12px;color:var(--ink-soft);line-height:1.6}
-.tile-gold{border-top:2px solid var(--coral)}.tile-green{border-top:2px solid var(--green)}
+.tile-gold{border-top:2px solid var(--gold)}.tile-green{border-top:2px solid var(--green)}
 .tile-red{border-top:2px solid var(--red)}.tile-muted{border-top:2px solid var(--line)}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
 @media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr}}
-.trade-card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1.1rem 1.15rem;margin-bottom:10px;transition:box-shadow .25s,transform .25s}
-.trade-card:hover{box-shadow:0 10px 30px rgba(20,20,19,.07);transform:translateY(-1px)}
+.trade-card{background:var(--bg);border:.5px solid var(--line);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:8px}
 .tc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem}
-.tc-name{font-size:13.5px;font-weight:600;color:var(--ink)}
+.tc-name{font-size:13px;font-weight:500;color:var(--ink)}
 .tc-class{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-top:2px}
-.conv-badge{font-size:11px;font-weight:600;background:var(--panel);border:1px solid var(--line-soft);border-radius:20px;padding:3px 11px;color:var(--ink);white-space:nowrap}
-.tc-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--line-soft)}
+.conv-badge{font-size:11px;font-weight:500;background:var(--surface);border:.5px solid var(--line);border-radius:20px;padding:2px 10px;color:var(--ink);white-space:nowrap}
+.tc-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:.5px solid var(--line)}
 .tc-row:last-of-type{border-bottom:none}
 .tc-k{color:var(--ink-mute)}.tc-v{font-weight:500;color:var(--ink)}
-.conv-bar{display:flex;gap:3px;align-items:center;margin:.6rem 0 .2rem}
-.pip{width:17px;height:4px;border-radius:2px;background:var(--line)}
-.pip.on{background:var(--coral)}
+.conv-bar{display:flex;gap:3px;align-items:center;margin:.5rem 0}
+.pip{width:18px;height:4px;border-radius:2px;background:var(--line)}
+.pip.on{background:var(--gold)}
 .conv-detail{font-size:10px;color:var(--ink-mute);margin-left:6px}
-.tc-actions{margin-top:.85rem}
-.tc-thesis-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
-.trade-card.open .tc-thesis-wrap{grid-template-rows:1fr;margin-top:.2rem}
-.tc-thesis-inner{overflow:hidden}
-.tc-thesis{font-size:12px;color:var(--ink-soft);line-height:1.62;padding-top:.75rem;border-top:1px solid var(--line-soft)}
-.trade-card.open .btn .arw{transform:rotate(90deg)}
+.tc-thesis{font-size:12px;color:var(--ink-soft);line-height:1.6;margin-top:.6rem;padding-top:.6rem;border-top:.5px solid var(--line)}
 .score-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
-.score-tile{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius-md);padding:.55rem .6rem;text-align:center}
-.sval{font-size:18px;font-weight:600;color:var(--ink)}
+.score-tile{background:var(--surface);border-radius:var(--radius-md);padding:.5rem .6rem;text-align:center}
+.sval{font-size:18px;font-weight:500;color:var(--ink)}
 .sval.pos{color:var(--green)}.sval.neg{color:var(--red)}
 .slabel{font-size:10px;color:var(--ink-mute);margin-top:2px}
 .live-table{width:100%;font-size:12px;border-collapse:collapse}
-.live-table th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:600;padding:0 0 6px;text-align:left;border-bottom:1px solid var(--line)}
-.live-table td{padding:6px 0;border-bottom:1px solid var(--line-soft);color:var(--ink);vertical-align:middle}
+.live-table th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:500;padding:0 0 6px;text-align:left;border-bottom:.5px solid var(--line)}
+.live-table td{padding:6px 0;border-bottom:.5px solid var(--line);color:var(--ink);vertical-align:middle}
 .live-table tr:last-child td{border-bottom:none}
-.pnl-pos{color:var(--green);font-weight:600}.pnl-neg{color:var(--red);font-weight:600}
-.pill{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--panel);color:var(--ink-soft);border:1px solid var(--line-soft)}
+.pnl-pos{color:var(--green);font-weight:500}.pnl-neg{color:var(--red);font-weight:500}
+.pill{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--surface);color:var(--ink-mute);border:.5px solid var(--line)}
 .prog-bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;min-width:48px;margin-top:3px}
-.prog-bar>span{display:block;height:100%;background:var(--coral)}
-.canary{padding:.6rem 0;border-bottom:1px solid var(--line-soft);display:flex;gap:10px;align-items:flex-start}
+.prog-bar>span{display:block;height:100%;background:var(--gold)}
+.canary{padding:.55rem 0;border-bottom:.5px solid var(--line);display:flex;gap:10px;align-items:flex-start}
 .canary:last-child{border-bottom:none}
-.cdot{width:7px;height:7px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:5px}
-.ctext{font-size:12.5px;color:var(--ink-soft);line-height:1.62}
-.ctext strong{color:var(--ink);font-weight:600}
-.ammo{padding:.6rem 0;border-bottom:1px solid var(--line-soft)}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px}
+.ctext{font-size:12px;color:var(--ink-soft);line-height:1.6}
+.ctext strong{color:var(--ink);font-weight:500}
+.ammo{padding:.55rem 0;border-bottom:.5px solid var(--line)}
 .ammo:last-child{border-bottom:none}
-.ammo-q{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.ammo-a{font-size:12px;color:var(--ink-soft);line-height:1.55}
-.yesterday{display:flex;flex-direction:column;gap:2px}
-.yest-item{font-size:12.5px;color:var(--ink-soft);padding:7px 0;display:flex;gap:9px;align-items:flex-start;border-bottom:1px solid var(--line-soft)}
+.ammo-q{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.ammo-a{font-size:12px;color:var(--ink-soft);line-height:1.5}
+.yesterday{background:var(--surface);border-radius:var(--radius-md);padding:.75rem 1rem;margin-bottom:1rem}
+.yest-item{font-size:12px;color:var(--ink-soft);padding:4px 0;display:flex;gap:8px;align-items:flex-start;border-bottom:.5px solid var(--line)}
 .yest-item:last-child{border-bottom:none}
-.yest-item strong{color:var(--ink);font-weight:600}
-.tick-g{color:var(--green);flex-shrink:0;font-weight:700}
-.tick-r{color:var(--red);flex-shrink:0;font-weight:700}
+.tick-g{color:var(--green);flex-shrink:0;font-weight:600}
+.tick-r{color:var(--red);flex-shrink:0;font-weight:600}
 .tick-n{color:var(--ink-mute);flex-shrink:0}
 .stale-tbl{width:100%;font-size:11px;border-collapse:collapse}
-.stale-tbl th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:600;padding:0 0 4px;text-align:left;border-bottom:1px solid var(--line)}
-.stale-tbl td{padding:5px 0;border-bottom:1px solid var(--line-soft);color:var(--ink-soft)}
+.stale-tbl th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:500;padding:0 0 4px;text-align:left;border-bottom:.5px solid var(--line)}
+.stale-tbl td{padding:4px 0;border-bottom:.5px solid var(--line);color:var(--ink-soft)}
 .stale-tbl tr:last-child td{border-bottom:none}
-.fresh{color:var(--green);font-weight:600}.stale-flag{color:var(--red);font-weight:600}
-.citation{font-size:10.5px;color:var(--ink-mute);line-height:1.95}
-.wrap-body{font-family:var(--serif);font-size:17.5px;line-height:1.72;color:var(--ink)}
+.fresh{color:var(--green);font-weight:500}.stale-flag{color:var(--red);font-weight:500}
+.citation{font-size:10px;color:var(--ink-mute);line-height:1.9}
+.wrap-body{font-family:var(--serif);font-size:16px;line-height:1.85;color:var(--ink)}
 .wrap-body p{margin-bottom:1.1rem}
-.wrap-body p:last-child{margin-bottom:0}
 .wrap-body strong{font-weight:600}
-.vol-surface{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius-md);padding:.85rem 1rem;font-size:12px;color:var(--ink-soft);line-height:1.7}
-.vol-surface strong{color:var(--ink)}
+.vol-surface{background:var(--surface);border-radius:var(--radius-md);padding:.75rem 1rem;font-size:12px;color:var(--ink-soft);line-height:1.7}
 .cal-table{width:100%;font-size:12px;border-collapse:collapse}
-.cal-table th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:600;padding:0 6px 8px 0;text-align:left;border-bottom:1px solid var(--line)}
-.cal-table td{padding:9px 6px 9px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.cal-table th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);font-weight:500;padding:0 6px 6px 0;text-align:left;border-bottom:.5px solid var(--line)}
+.cal-table td{padding:7px 6px 7px 0;border-bottom:.5px solid var(--line);vertical-align:top}
 .cal-table tr:last-child td{border-bottom:none}
-.cal-event{color:var(--coral);font-weight:600}
+.cal-event{color:var(--gold);font-weight:500}
 .asym-up{color:var(--green)}.asym-dn{color:var(--red)}
-.earnings-tile{background:var(--card);border:1px solid var(--line-soft);border-left:3px solid var(--coral);border-radius:var(--radius-lg);padding:1.1rem 1.15rem}
-.earn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.7rem}
-.earn-name{font-size:14px;font-weight:600;color:var(--ink)}
+.earnings-tile{background:var(--bg);border:.5px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:8px}
+.earn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.6rem}
+.earn-name{font-size:14px;font-weight:500;color:var(--ink)}
 .earn-ticker{font-size:11px;color:var(--ink-mute);font-family:monospace}
-.earn-row{display:flex;justify-content:space-between;gap:1rem;font-size:12px;padding:4px 0;border-bottom:1px solid var(--line-soft)}
+.earn-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:.5px solid var(--line)}
 .earn-row:last-of-type{border-bottom:none}
-.earn-k{color:var(--ink-mute);white-space:nowrap}.earn-v{font-weight:500;text-align:right}
-.earn-read{font-size:12px;color:var(--ink-soft);margin-top:.6rem;line-height:1.6}
-.mind-item{font-size:12.5px;color:var(--ink-soft);padding:7px 0;border-bottom:1px solid var(--line-soft);line-height:1.6}
+.earn-k{color:var(--ink-mute)}.earn-v{font-weight:500}
+.earn-read{font-size:12px;color:var(--ink-soft);margin-top:.5rem;line-height:1.6}
+.mind-item{font-size:12px;color:var(--ink-soft);padding:4px 0;border-bottom:.5px solid var(--line);line-height:1.6}
 .mind-item:last-child{border-bottom:none}
-.mind-item strong{color:var(--ink);font-weight:600}
+.mind-item strong{color:var(--ink);font-weight:500}
 </style>
 </head>
 <body>
@@ -161,11 +117,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
 <div class="masthead">
   <div class="regime-tag">AI Vertical Meets Hormuz Binary</div>
   <h1 class="article-title">The Print That Prices the Cycle</h1>
-  <p class="meta">Pre-market intelligence brief &middot; 2026-06-02 &middot; generated 13:24 local &middot; self-graded book &middot; <span style="color:var(--red)">data carried from 2026-06-01</span></p>
+  <p class="meta">Pre-market intelligence brief &middot; 2026-06-02 &middot; generated 13:37 local &middot; self-graded book &middot; <span style="color:var(--red)">data carried from 2026-06-01</span></p>
   <hr class="gold-rule">
 </div>
   <div class="two-col">
-    <div class="lhs"><section class="panel reveal"><div class="stale-alert"><strong>Data outage — eyeball before trading.</strong> Search API returned 529 (overloaded) for all queries on 2026-06-02. All market prices, yields, and FX rates are carried from 2026-06-01 last-good values. Prices may have moved materially overnight. Verify live before acting on any level cited here.</div>
+    <div class="lhs"><div class="stale-alert"><strong>Data outage — eyeball before trading.</strong> Search API returned 529 (overloaded) for all queries on 2026-06-02. All market prices, yields, and FX rates are carried from 2026-06-01 last-good values. Prices may have moved materially overnight. Verify live before acting on any level cited here.</div>
 <div class="section-label">Yesterday (Jun 1), graded</div>
 <div class="yesterday">
   <div class="yest-item">
@@ -204,8 +160,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
     <span class="tick-n">→</span>
     <span><strong>MM-2026-009</strong> · 2s10s UST steepener (pre-pos) · +15bp → +15bp · flat · Holding. Payrolls Friday is the first meaningful catalyst. Min-hold 45 days.</span>
   </div>
-</div></section>
-<section class="banner">
+</div>
+
 <div class="section-label">The Wrap</div>
 <div class="wrap-body">
 <p>The market has made a bet. Broadcom reports tomorrow after the close, and the consensus
@@ -288,8 +244,8 @@ to China. AVGO's custom ASIC business does not have China exposure — but the r
 precedent is being set in a direction that constrains the total addressable market for
 the next generation of ASIC programs. If the administration tightens further in June,
 the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Correlation Regime</div>
 <div class="tile tile-muted">
   <div class="tile-claim">AVGO vs S&P 500 — the AI trade is more concentrated than the index implies</div>
@@ -306,8 +262,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="tile tile-muted">
   <div class="tile-claim">Brent-WTI spread at $2.81 — Iran binary unchanged, deal still unsigned</div>
   <div class="tile-body">Carried from June 1. The spread is the Hormuz probability machine: at $2.81 the market prices ~65% deal probability. No news today due to search outage. The political constraint (Trump needs a deal before June 11) is unchanged. If AVGO dominates market attention tomorrow, Iran news could move the spread with less market reaction than usual — a window for a surprise.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Vol &amp; Skew</div>
 <div class="vol-surface">
   <strong>VIX term structure — contango (risk-on, data from Jun 1):</strong> VIX9D ~13.5 · VIX ~15.32 · VIX3M ~17.2 · VIX6M ~18.5<br>
@@ -322,8 +278,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="tile tile-muted">
   <div class="tile-head">MOVE (rates vol) — unverified today</div>
   <div class="tile-body">Data unavailable (search outage). Expected elevated into ECB Jun 11 and FOMC Jun 16-17. If MOVE is above 100, rates vol is flagging ECB risk beyond what equity vol is pricing.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Sector &amp; RV</div>
 <div class="tile tile-green">
   <div class="tile-head">Computex Day 2 — AMD Lisa Su keynote</div>
@@ -337,8 +293,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="tile tile-gold">
   <div class="tile-head">RV: Hold the NVDA vs SOX pair thesis</div>
   <div class="tile-body">NVDA +12% YTD vs SOX +74%. Day 1 of Computex (Nemotron 3 Ultra) and Day 2 (AMD EPYC Venice) are both feeding the infrastructure layer. NVDA's software-layer pivot gets its first market test tomorrow via AVGO. If AVGO beats strongly and NVDA outperforms the SOX the next day, the model-layer value rotation has started.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Positioning &amp; Flows</div>
 <div class="tile tile-muted">
   <div class="tile-head">COT data — carried from May 27 (latest available)</div>
@@ -347,14 +303,14 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="tile tile-muted">
   <div class="tile-head">Positioning into AVGO print</div>
   <div class="tile-body">The AI equity trade is crowded long. This is the setup where a miss doesn't just move AVGO — it triggers simultaneous de-risking across NVDA, AMD, TSMC, ASML, and the broader SOX. Crowded long + single binary event + 41x multiple = tail risk is asymmetric to the downside. MM-2026-008 (put spread) is the portfolio-level hedge for exactly this.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Funding &amp; Plumbing</div>
 <div class="tile tile-muted">
   <div class="tile-claim">SOFR 3.62% — clean (data carried from Jun 1). SEC repo clearing deadline: today.</div>
   <div class="tile-body">June 2, 2026 is the SEC's deadline for repo market central clearing compliance. This is the Pozsar-layer event of the day — not the AVGO print. If SOFR spikes today, it is a clearing-transition plumbing signal, not a credit event. The repo market has been restructuring toward central clearing for months; execution risk is concentrated at the deadline. If SOFR spikes above 3.75% intraday, that is the signal, not the narrative. Currently carrying at 3.62% from June 1 — verify live.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">What the Tape Is Missing</div>
 <div class="canary">
   <div class="cdot"></div>
@@ -367,8 +323,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="canary">
   <div class="cdot"></div>
   <div class="ctext"><strong>June 2 is the SEC repo clearing deadline — a plumbing risk that is completely under-watched.</strong> The SEC's rule requiring central clearing of bilateral repo transactions is effective today. The repo market has been structuring toward this for months, but execution risk is concentrated at the compliance date. A SOFR spike above 3.75% today is not a credit signal — it is a clearing-transition artifact. But if it persists, it tightens dollar funding conditions at exactly the moment the market needs liquidity to manage AVGO event risk tomorrow. Watch SOFR alongside the AVGO print.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Consensus: Bid / Offer</div>
 <div class="tile tile-muted">
   <div class="tile-head">Consensus BID</div>
@@ -377,14 +333,14 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="tile tile-gold">
   <div class="tile-head">Strongest argument against — the OFFER</div>
   <div class="tile-body">The consensus bid requires AVGO to not just beat but beat-and-raise at 41x. "In-line" is the hidden bear case: $10.9B AI revenue vs $10.7B expected, Q3 guide at $11.0B. The market calls that a beat; the 41x multiple calls it a deceleration. Nobody is positioned for careful guidance from a company at these valuations. The pain trade is a technically-positive print that the multiple punishes.</div>
-</div></section>
-<section class="banner">
+</div>
+
 <div class="section-label">Today's One Chart That Matters</div>
 <div class="tile tile-gold">
   <div class="tile-claim">AVGO implied volatility going into tomorrow's print</div>
   <div class="tile-body">Data unavailable today (search outage), but the framework matters: AVGO at 41x forward earnings pricing a continued AI capex cycle. If implied vol for the June 6 expiry (capturing tomorrow's print) is below 12%, vol is mispriced — the stock should move 10–15% on a beat-or-miss binary at this valuation. If IV is above 15%, the market is already pricing the event correctly. Check AVGO options chain live before the close today: that number tells you whether the consensus is complacent or appropriately hedged. The SECOND chart that matters: SOFR intraday (SEC repo clearing deadline is today).</div>
-</div></section>
-<section class="banner">
+</div>
+
 <div class="section-label">Catalyst Calendar — next 5 trading days</div>
 <table class="cal-table">
 <thead><tr><th>Day</th><th>Date</th><th>Event</th><th>Consensus</th><th>View</th><th>Asymmetry</th></tr></thead>
@@ -425,8 +381,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
   <td class="asym-dn">0-cut: DXY +0.7%, 10Y +8bp; 2-cut: DXY −1.2%, 10Y −20bp</td>
 </tr>
 </tbody>
-</table></section>
-<section class="banner">
+</table>
+
 <div class="section-label">Earnings Calendar</div>
 <div class="earnings-tile">
   <div class="earn-head">
@@ -440,8 +396,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
   <div class="earn-read">
     D-1. The market is positioned for a beat. The pain trade is in-line guidance at 41x forward earnings. <strong>What moves it:</strong> Q3 FY2026 AI revenue guide. Above $11.5B = +15%. In-line ($10.8–11.4B) = −5–8%. Below $10B = −10%+. Listen to Q&A: customer naming confidence, backlog commentary, Q4 linearity. Exit same day if the guide disappoints.
   </div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">What Changes My Mind</div>
 <div class="mind-item"><strong>MM-2026-001 · Short EURAUD:</strong> Close if EURAUD holds above 1.640 post-ECB June 11. Currently 1.1% from target (1.610). Holding.</div>
 <div class="mind-item"><strong>MM-2026-002 · Long Brent:</strong> Exit below $87 weekly close. No new Iran data today — thesis unchanged. Watching the Brent-WTI spread as the primary signal.</div>
@@ -450,8 +406,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="mind-item"><strong>MM-2026-005 · Long gold (pre-position):</strong> Min hold until July 15. Stop $4,250. No discretionary close permitted. FOMC dot plot June 17 is the first structural test.</div>
 <div class="mind-item"><strong>MM-2026-006 · Long AVGO:</strong> <strong>Tomorrow is the exit event.</strong> Exit same day if AI revenue guide below $10.7B or stock closes &gt;8.8% lower. Hold through print + 5 days if a genuine beat-and-raise. Do not hold a miss.</div>
 <div class="mind-item"><strong>MM-2026-007 · Short USDJPY:</strong> Stop 163.00. 160.00 is the intervention trigger — above that, exit immediately. Finance Ministry is actively watching.</div>
-<div class="mind-item"><strong>MM-2026-008 · SPX put spread:</strong> Hold through the event window. Max loss = $35 premium. This is the hedge on the AVGO binary — do not exit pre-print.</div></section>
-<section class="panel reveal">
+<div class="mind-item"><strong>MM-2026-008 · SPX put spread:</strong> Hold through the event window. Max loss = $35 premium. This is the hedge on the AVGO binary — do not exit pre-print.</div>
+
 <div class="section-label">Talking Points Today</div>
 <div class="ammo">
   <div class="ammo-q">Should I add to AVGO before the print tomorrow?</div>
@@ -464,8 +420,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <div class="ammo">
   <div class="ammo-q">Why is the June 2 SEC repo clearing deadline important?</div>
   <div class="ammo-a">Because it is the Pozsar layer that nobody is watching today. The SEC's requirement for central clearing of bilateral repo transactions takes effect today. The repo market has been structuring toward this for months, but the compliance date concentrates execution risk. If SOFR spikes above 3.75% intraday today — verify this live — it tightens dollar funding conditions at exactly the moment the market needs liquidity for AVGO event positioning tomorrow. It's a plumbing event, not a credit event, but the timing with AVGO is uncomfortable.</div>
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Citations</div>
 <div class="citation">
 <strong>Note: No fresh searches completed today (search API 529 outage).</strong> All market data carried from 2026-06-01 sources:<br>
@@ -476,8 +432,8 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 · StoneX — COT oil net −9.2k, gold 154.3k (May 27 CFTC data)<br>
 · CryptoBriefing — Nemotron 3 Ultra announcement (Jun 1)<br>
 · CME FedWatch — 96.9% June hold probability (Jun 1)
-</div></section>
-<section class="panel reveal">
+</div>
+
 <div class="section-label">Staleness Check</div>
 <table class="stale-tbl">
 <thead><tr><th>Datum</th><th>Source</th><th>As of</th><th>Status</th></tr></thead>
@@ -492,45 +448,12 @@ the constraint lands in Q4 2026 guidance, not tomorrow's print.</p>
 <tr><td>AVGO implied vol pre-print</td><td>Not available (search outage)</td><td>unavailable</td><td class="stale-flag">Missing — check CBOE/options chain</td></tr>
 <tr><td>Narrative / news (Iran, Fed speak, Computex Day 2)</td><td>Constructed from known context</td><td>2026-06-01 last known</td><td class="stale-flag">Unverified — no fresh search</td></tr>
 </tbody>
-</table></section></div>
-    <div class="rhs"><section class="panel reveal"><div class="section-label">The Open</div><div class="stale-alert" style="margin-bottom:.75rem"><strong>All prices carried from 2026-06-01.</strong> Search API unavailable today. Verify live before trading.</div><div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P 500 ⚠</div><div class="dval">~7,580 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq ⚠</div><div class="dval">~27,200 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">DAX</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">Nikkei</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">FTSE 100</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">EURUSD ⚠</div><div class="dval">1.1644 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">GBPUSD</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">USDJPY ⚠</div><div class="dval">159.37 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">USDCNH</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">DXY ⚠</div><div class="dval">~99.0 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">US 10Y ⚠</div><div class="dval">4.47% <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Bund 10Y</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">Gilt 10Y</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">2s10s</div><div class="dval">~+15bp <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">WTI ⚠</div><div class="dval">$89.69 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Brent ⚠</div><div class="dval">~$92.50 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Gold ⚠</div><div class="dval">$4,541.80 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><div class="dval">~15.32 <span class="chg-flat">May 29</span></div></div><div class="dash-tile"><div class="dlabel">SOFR</div><div class="dval">3.62% <span class="chg-flat">May 28</span></div></div><div class="dash-tile"><div class="dlabel">MOVE</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div></div><div class="theme-line">AVGO prints tomorrow night. Everything in the AI trade is positioned for the seventh consecutive beat. The pain trade is careful guidance at 41&times; earnings.</div></section>
-<section class="panel reveal"><div class="section-label">New Trade Ideas (carried from Jun 1)</div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Long Broadcom (AVGO) into Q2 earnings</div><div class="tc-class">reactive · Equity</div></div><div class="conv-badge">8/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Equity</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">cash equity</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">250.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">228.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">285.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">2 weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(2/2) · stop(1/1)</span></div><div class="tc-actions"><button class="btn" onclick="toggleThesis(this)">View thesis <span class="arw">&rarr;</span></button></div><div class="tc-thesis-wrap"><div class="tc-thesis-inner"><div class="tc-thesis">AVGO Q2 reports June 3. AI revenue guide 0.7B (+140% YoY) is the proof-of-concept for hyperscaler capex. Six consecutive AI revenue beats. Computex tailwind. Beat-and-raise moves stock 10-15%; in-line exits same day.</div></div></div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Short USDJPY</div><div class="tc-class">reactive · FX</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">FX</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spot</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">159.37</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">163.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">150.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-actions"><button class="btn" onclick="toggleThesis(this)">View thesis <span class="arw">&rarr;</span></button></div><div class="tc-thesis-wrap"><div class="tc-thesis-inner"><div class="tc-thesis">USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike &gt;50% priced vs Fed on hold. 3.63 pts downside to stop, 9.37 pts to target. Intervention is the backstop.</div></div></div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Buy SPX Jun-27 7300/7000 put spread (hedge)</div><div class="tc-class">reactive · Derivatives</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Derivatives</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">put spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">35.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">0.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">265.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">26 days</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(2/2) · confirm(0/2) · stop(1/1)</span></div><div class="tc-actions"><button class="btn" onclick="toggleThesis(this)">View thesis <span class="arw">&rarr;</span></button></div><div class="tc-thesis-wrap"><div class="tc-thesis-inner"><div class="tc-thesis">VIX at 15.3 is cheap for 4 non-trivial events in 15 days: AVGO Jun 3, payrolls Jun 5, ECB Jun 11, FOMC Jun 16-17. 0.5% notional cost; 7x payoff if SPX draws down 6%. Insurance on a portfolio long AI equities.</div></div></div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">2s10s UST curve steepener</div><div class="tc-class">pre-position · Rates</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Rates</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">0.15</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">-0.1</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">0.6</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">3 months</span></div><div class="tc-row"><span class="tc-k">Min hold</span><span class="tc-v">45d</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-actions"><button class="btn" onclick="toggleThesis(this)">View thesis <span class="arw">&rarr;</span></button></div><div class="tc-thesis-wrap"><div class="tc-thesis-inner"><div class="tc-thesis">2s10s at +15bp after 18-month inversion. Buy 2Y (own cut optionality) vs short 10Y (short fiscal supply risk). June 5 payrolls at 89k + Fed pause re-prices front-end. ECB hiking cycle lifts global long rates. Steepener delivers whether Fed cuts or back-end sells off on supply. Late-cycle steepeners outperform after prolonged inversions.</div></div></div></div></section>
-<section class="panel reveal"><div class="section-label">Live Book + Scoreboard</div><p style="font-size:12px;color:var(--ink-mute);margin-bottom:.75rem">Book opened 2026-06-01 — scoreboard builds as trades close.</p><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Opened</th><th>Current</th><th>P&L</th><th>Window</th><th>&rarr; Target</th></tr></thead><tbody><tr><td><span class="pill">MM-2026-001</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short EURAUD spot</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">1.621</td><td><span class="pnl-pos">+1.46%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:68%"></span></div></td></tr><tr><td><span class="pill">MM-2026-002</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent crude</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">92.5</td><td><span class="pnl-pos">+1.65%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:11%"></span></div></td></tr><tr><td><span class="pill">MM-2026-003</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent vs short WTI (spread)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">2.81</td><td><span class="pnl-neg">-14.85%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-004</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short US 10Y yield (long duration)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4.47</td><td><span class="pnl-neg">-0.68%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-005</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long gold into the June Fed window</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4541.8</td><td><span class="pnl-pos">+0.42%</span></td><td><span style="color:var(--ink-mute)">88d</span></td><td><div class="prog-bar"><span style="width:3%"></span></div></td></tr><tr><td><span class="pill">MM-2026-006</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Broadcom (AVGO) into Q2 earnings</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">252.0</td><td><span class="pnl-pos">+0.80%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:5%"></span></div></td></tr><tr><td><span class="pill">MM-2026-007</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short USDJPY</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">159.37</td><td><span class="">-0.00%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-008</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Buy SPX Jun-27 7300/7000 put spread (hedge)</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">35.0</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">25d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-009</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">2s10s UST curve steepener</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">0.15</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">89d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr></tbody></table><p style="font-size:11px;color:var(--ink-mute);margin-top:.5rem">No closed trades yet.</p></section>
-<section class="panel reveal"><div class="section-label">Charts</div><div style="margin-bottom:10px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">equity curve: no closed trades yet</text></svg></div><div style="margin-bottom:10px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">calibration: 10 more closed trade(s) needed</text></svg></div><div style="margin-bottom:10px"><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">VIX TERM STRUCTURE  ·  CONTANGO</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">12.6</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">14.3</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">16.0</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">17.7</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">19.4</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX9D</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX3M</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX6M</text><polyline points="52.0,246.4 242.0,178.4 432.0,108.2 622.0,59.6" fill="none" stroke="#1a7a45" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="246.4" r="2.6" fill="#1a7a45"/><circle cx="242.0" cy="178.4" r="2.6" fill="#1a7a45"/><circle cx="432.0" cy="108.2" r="2.6" fill="#1a7a45"/><circle cx="622.0" cy="59.6" r="2.6" fill="#1a7a45"/></svg></div><div><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">UST YIELD CURVE  ·  2S / 5S / 10S / 30S (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">4.25</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">4.36</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">4.47</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">4.58</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">4.69</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">2Y</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">5Y</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">10Y</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">30Y</text><polyline points="52.0,241.2 242.0,194.2 432.0,153.0 622.0,64.8" fill="none" stroke="#191917" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="241.2" r="2.6" fill="#191917"/><circle cx="242.0" cy="194.2" r="2.6" fill="#191917"/><circle cx="432.0" cy="153.0" r="2.6" fill="#191917"/><circle cx="622.0" cy="64.8" r="2.6" fill="#191917"/></svg></div></section></div>
+</table></div>
+    <div class="rhs"><div class="section-label">The Open</div><div class="stale-alert" style="margin-bottom:.75rem"><strong>All prices carried from 2026-06-01.</strong> Search API unavailable today. Verify live before trading.</div><div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P 500 ⚠</div><div class="dval">~7,580 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq ⚠</div><div class="dval">~27,200 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">DAX</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">Nikkei</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">FTSE 100</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">EURUSD ⚠</div><div class="dval">1.1644 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">GBPUSD</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">USDJPY ⚠</div><div class="dval">159.37 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">USDCNH</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">DXY ⚠</div><div class="dval">~99.0 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">US 10Y ⚠</div><div class="dval">4.47% <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Bund 10Y</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">Gilt 10Y</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">2s10s</div><div class="dval">~+15bp <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">WTI ⚠</div><div class="dval">$89.69 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Brent ⚠</div><div class="dval">~$92.50 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">Gold ⚠</div><div class="dval">$4,541.80 <span class="chg-flat">Jun 1</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><div class="dval">~15.32 <span class="chg-flat">May 29</span></div></div><div class="dash-tile"><div class="dlabel">SOFR</div><div class="dval">3.62% <span class="chg-flat">May 28</span></div></div><div class="dash-tile"><div class="dlabel">MOVE</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div></div><div class="theme-line">AVGO prints tomorrow night. Everything in the AI trade is positioned for the seventh consecutive beat. The pain trade is careful guidance at 41&times; earnings.</div>
+<div class="section-label">New Trade Ideas (carried from Jun 1)</div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Long Broadcom (AVGO) into Q2 earnings</div><div class="tc-class">reactive · Equity</div></div><div class="conv-badge">8/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Equity</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">cash equity</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">250.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">228.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">285.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">2 weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(2/2) · stop(1/1)</span></div><div class="tc-thesis">AVGO Q2 reports June 3. AI revenue guide 0.7B (+140% YoY) is the proof-of-concept for hyperscaler capex. Six consecutive AI revenue beats. Computex tailwind. Beat-and-raise moves stock 10-15%; in-line exits same day.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Short USDJPY</div><div class="tc-class">reactive · FX</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">FX</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spot</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">159.37</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">163.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">150.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-thesis">USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike &gt;50% priced vs Fed on hold. 3.63 pts downside to stop, 9.37 pts to target. Intervention is the backstop.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Buy SPX Jun-27 7300/7000 put spread (hedge)</div><div class="tc-class">reactive · Derivatives</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Derivatives</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">put spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">35.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">0.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">265.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">26 days</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(2/2) · confirm(0/2) · stop(1/1)</span></div><div class="tc-thesis">VIX at 15.3 is cheap for 4 non-trivial events in 15 days: AVGO Jun 3, payrolls Jun 5, ECB Jun 11, FOMC Jun 16-17. 0.5% notional cost; 7x payoff if SPX draws down 6%. Insurance on a portfolio long AI equities.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">2s10s UST curve steepener</div><div class="tc-class">pre-position · Rates</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Rates</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">0.15</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">-0.1</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">0.6</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">3 months</span></div><div class="tc-row"><span class="tc-k">Min hold</span><span class="tc-v">45d</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-thesis">2s10s at +15bp after 18-month inversion. Buy 2Y (own cut optionality) vs short 10Y (short fiscal supply risk). June 5 payrolls at 89k + Fed pause re-prices front-end. ECB hiking cycle lifts global long rates. Steepener delivers whether Fed cuts or back-end sells off on supply. Late-cycle steepeners outperform after prolonged inversions.</div></div>
+<div class="section-label">Live Book + Scoreboard</div><p style="font-size:12px;color:var(--ink-mute);margin-bottom:.75rem">Book opened 2026-06-01 — scoreboard builds as trades close.</p><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Opened</th><th>Current</th><th>P&L</th><th>Window</th><th>&rarr; Target</th></tr></thead><tbody><tr><td><span class="pill">MM-2026-001</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short EURAUD spot</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">1.621</td><td><span class="pnl-pos">+1.46%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:68%"></span></div></td></tr><tr><td><span class="pill">MM-2026-002</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent crude</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">92.5</td><td><span class="pnl-pos">+1.65%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:11%"></span></div></td></tr><tr><td><span class="pill">MM-2026-003</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent vs short WTI (spread)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">2.81</td><td><span class="pnl-neg">-14.85%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-004</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short US 10Y yield (long duration)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4.47</td><td><span class="pnl-neg">-0.68%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-005</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long gold into the June Fed window</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4541.8</td><td><span class="pnl-pos">+0.42%</span></td><td><span style="color:var(--ink-mute)">88d</span></td><td><div class="prog-bar"><span style="width:3%"></span></div></td></tr><tr><td><span class="pill">MM-2026-006</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Broadcom (AVGO) into Q2 earnings</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">252.0</td><td><span class="pnl-pos">+0.80%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:5%"></span></div></td></tr><tr><td><span class="pill">MM-2026-007</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short USDJPY</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">159.37</td><td><span class="">-0.00%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-008</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Buy SPX Jun-27 7300/7000 put spread (hedge)</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">35.0</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">25d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-009</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">2s10s UST curve steepener</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">0.15</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">89d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr></tbody></table><p style="font-size:11px;color:var(--ink-mute);margin-top:.5rem">No closed trades yet.</p>
+<div class="section-label">Charts</div><div style="margin-bottom:10px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">equity curve: no closed trades yet</text></svg></div><div style="margin-bottom:10px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">calibration: 10 more closed trade(s) needed</text></svg></div><div style="margin-bottom:10px"><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">VIX TERM STRUCTURE  ·  CONTANGO</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">12.6</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">14.3</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">16.0</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">17.7</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">19.4</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX9D</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX3M</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX6M</text><polyline points="52.0,246.4 242.0,178.4 432.0,108.2 622.0,59.6" fill="none" stroke="#1a7a45" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="246.4" r="2.6" fill="#1a7a45"/><circle cx="242.0" cy="178.4" r="2.6" fill="#1a7a45"/><circle cx="432.0" cy="108.2" r="2.6" fill="#1a7a45"/><circle cx="622.0" cy="59.6" r="2.6" fill="#1a7a45"/></svg></div><div><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">UST YIELD CURVE  ·  2S / 5S / 10S / 30S (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">4.25</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">4.36</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">4.47</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">4.58</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">4.69</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">2Y</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">5Y</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">10Y</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">30Y</text><polyline points="52.0,241.2 242.0,194.2 432.0,153.0 622.0,64.8" fill="none" stroke="#191917" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="241.2" r="2.6" fill="#191917"/><circle cx="242.0" cy="194.2" r="2.6" fill="#191917"/><circle cx="432.0" cy="153.0" r="2.6" fill="#191917"/><circle cx="622.0" cy="64.8" r="2.6" fill="#191917"/></svg></div></div>
   </div>
 </div>
-
-<script>
-function toggleThesis(b){
-  var c=b.closest('.trade-card');c.classList.toggle('open');
-  b.firstChild.nodeValue=c.classList.contains('open')?'Hide thesis ':'View thesis ';
-}
-(function(){
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
-  },{threshold:0.12});
-  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-  var banners=[].slice.call(document.querySelectorAll('.banner'));
-  var ticking=false;
-  function frame(){
-    var vh=window.innerHeight;
-    banners.forEach(function(el){
-      var r=el.getBoundingClientRect();
-      var c=r.top+r.height/2;
-      var d=Math.abs(c-vh/2)/(vh/2+r.height/2);
-      var p=Math.max(0,Math.min(1,1-d));
-      var ease=p*p*(3-2*p);
-      el.style.transform='scale('+(0.9+0.1*ease).toFixed(4)+')';
-      el.style.opacity=(0.5+0.5*ease).toFixed(3);
-      el.style.boxShadow='0 '+(40*ease).toFixed(0)+'px '+(80*ease).toFixed(0)+'px rgba(20,20,19,'+(0.16*ease).toFixed(3)+')';
-    });
-    ticking=false;
-  }
-  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
-  window.addEventListener('scroll',onScroll,{passive:true});
-  window.addEventListener('resize',onScroll);
-  frame();
-})();
-</script>
 </body>
 </html>
