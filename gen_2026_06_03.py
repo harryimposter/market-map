@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Market Map &middot; 2026-06-02</title>
-  <style>
+#!/usr/bin/env python3
+"""Market Map — 2026-06-03. Full refresh + dedicated AVGO earnings section.
+Format: flat-white two-column Shark Tank / render_v2.py (Format 2).
+"""
+import os, sys, html as _html
+from datetime import date, datetime
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import book, charts
+
+TODAY = date.today().isoformat()
+NOW   = datetime.now().strftime("%H:%M")
+HERE  = os.path.dirname(os.path.abspath(__file__))
+
+def e(s):
+    return _html.escape(str(s)) if s is not None else ""
+
+# ── CSS — flat white Shark Tank / render_v2.py ────────────────────────────────
+CSS = """
 :root{--bg:#ffffff;--surface:#f7f7f5;--ink:#1a1a1a;--ink-soft:#6b6b6b;
 --ink-mute:#9a9a9a;--gold:#b8960c;--red:#c0392b;--green:#1a7a45;
 --line:rgba(0,0,0,0.1);--radius-md:8px;--radius-lg:12px;
@@ -123,59 +135,175 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
 .mind-item:last-child{border-bottom:none}
 .mind-item strong{color:var(--ink);font-weight:500}
 .unverified-note{font-size:11px;color:var(--ink-mute);background:var(--surface);border-radius:var(--radius-md);padding:.5rem .75rem;margin:.5rem 0;line-height:1.5}
-</style>
-</head>
-<body>
-<div class="page">
-  
-<div class="masthead">
-  <div class="regime-tag">Iran Escalates; AVGO Reports Tonight</div>
-  <h1 class="article-title">The Hormuz Shock Returns</h1>
-  <p class="meta">Pre-market intelligence brief &middot; 2026-06-02 &middot; generated 22:27 local &middot; self-graded book</p>
-  <hr class="gold-rule">
-</div>
-  <div class="two-col">
-    <div class="lhs">
-<div class="section-label">Yesterday, graded</div>
-<div class="yesterday">
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-001</strong> · Short EURAUD · 1.6349 → 1.6200 · <span class="pnl-pos">+1.52%</span> · Working. ECB June 11 hike fully priced; Iran escalation bid AUD briefly but EUR weakness on growth concerns took over. Approaching target 1.610.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-002</strong> · Long Brent · $91.00 → $94.80 · <span class="pnl-pos">+4.18%</span> · Strong. Iran halted ceasefire talks and vowed to keep Hormuz closed — the war premium is repricing. Thesis fully confirmed.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-003</strong> · Long Brent / Short WTI spread · 3.30 → 3.40 · <span class="pnl-pos">+3.03%</span> · Working. Brent outperforming WTI as Iran threatens Hormuz specifically (Atlantic-basin premium). Spread holding above entry.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-n">→</span>
-    <span><strong>MM-2026-004</strong> · Short US 10Y yield · 4.44% → 4.46% · <span class="pnl-neg">−0.45%</span> · Near flat. Yield stable — Iran risk-off bid bonds slightly but ISM 54% keeps yields elevated. ADP May report released today (April was 109k). Watch payrolls Friday.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-005</strong> · Long gold (pre-pos) · $4,529 → $4,540 · <span class="pnl-pos">+0.38%</span> · Moving. Gold climbed back above $4,500 as Iran escalation bid safe-haven assets. Dual-tail thesis (geopolitical + Fed cut optionality) intact.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-006</strong> · Long AVGO (entry $460) · $460 → $483 · <span class="pnl-pos">+5.00%</span> · Positioned. AVGO opened +4.90% on June 2, pre-earnings momentum. Reports tonight after close. Stop $422, target $528. See AVGO Earnings Brief section.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-g">✓</span>
-    <span><strong>MM-2026-007</strong> · Short USDJPY · 159.37 → 158.90 · <span class="pnl-pos">+0.29%</span> · Working. Yen strengthened slightly on Iran risk-off. 160.00 intervention trigger less imminent now. Thesis intact.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-n">→</span>
-    <span><strong>MM-2026-008</strong> · SPX put spread · 35 → 35 · flat · Holding. Iran escalation + AVGO binary tonight — this is the portfolio hedge. Do not exit pre-print.</span>
-  </div>
-  <div class="yest-item">
-    <span class="tick-n">→</span>
-    <span><strong>MM-2026-009</strong> · 2s10s UST steepener (pre-pos) · +15bp → +15bp · flat · Payrolls Friday is the catalyst. Iran risk-off competes with ISM 54% on the direction of 2Y vs 10Y.</span>
-  </div>
-</div>
+"""
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
+def pnl_span(p):
+    if p is None: return '<span style="color:var(--ink-mute)">—</span>'
+    cls = "pnl-pos" if p > 0 else ("pnl-neg" if p < 0 else "")
+    return f'<span class="{cls}">{p:+.2f}%</span>'
+
+def pips(conviction, cb):
+    n = int(conviction)
+    dots = "".join(f'<div class="pip{"  on" if i < n else ""}"></div>' for i in range(10))
+    detail = (
+        f'gap({cb.get("gap",0)}/3) · catalyst({cb.get("catalyst",0)}/2) · '
+        f'pos({cb.get("positioning",0)}/2) · confirm({cb.get("confirmation",0)}/2) · '
+        f'stop({cb.get("stop_quality",0)}/1)'
+    )
+    return f'<div class="conv-bar">{dots}<span class="conv-detail">{e(detail)}</span></div>'
+
+def prog_pct(t, level):
+    entry, target = t.get("entry"), t.get("target")
+    if not entry or not target or target == entry: return 0
+    d = 1 if target >= entry else -1
+    return max(0, min(100, int(d * (level - entry) / abs(target - entry) * 100)))
+
+def trade_card(t):
+    cb = t.get("conviction_breakdown", {})
+    rows = [
+        ("Asset",     t.get("asset_class", "")),
+        ("Structure", t.get("structure", "")),
+        ("Entry",     t.get("entry", "")),
+        ("Stop",      t.get("stop", "")),
+        ("Target",    t.get("target", "")),
+        ("Horizon",   t.get("horizon", "")),
+    ]
+    if t.get("min_hold_days"):
+        rows.append(("Min hold", f'{t["min_hold_days"]}d'))
+    rows_html = "".join(
+        f'<div class="tc-row"><span class="tc-k">{e(k)}</span>'
+        f'<span class="tc-v">{e(v)}</span></div>'
+        for k, v in rows
+    )
+    return (
+        f'<div class="trade-card">'
+        f'<div class="tc-top"><div>'
+        f'<div class="tc-name">{e(t.get("trade",""))}</div>'
+        f'<div class="tc-class">{e(t.get("type","reactive"))} · {e(t.get("asset_class",""))}</div>'
+        f'</div><div class="conv-badge">{e(t.get("conviction","?"))}/10</div></div>'
+        f'{rows_html}{pips(t.get("conviction",0), cb)}'
+        f'<div class="tc-thesis">{e(t.get("thesis",""))}</div>'
+        f'</div>'
+    )
+
+def live_book(trades):
+    closed = trades.get("closed", [])
+    open_t = trades.get("open", [])
+    graded = [t for t in closed if "pnl_pct" in t.get("exit", {})]
+    if graded:
+        pnls = [t["exit"]["pnl_pct"] for t in graded]
+        wins = [p for p in pnls if p > 0]
+        best = max(graded, key=lambda t: t["exit"]["pnl_pct"])
+        score = (
+            f'<div class="score-row">'
+            f'<div class="score-tile"><div class="sval">{len(graded)}</div><div class="slabel">Closed</div></div>'
+            f'<div class="score-tile"><div class="sval">{100*len(wins)/len(graded):.0f}%</div><div class="slabel">Hit rate</div></div>'
+            f'<div class="score-tile"><div class="sval {"pos" if sum(pnls)>=0 else "neg"}">{sum(pnls):+.1f}%</div><div class="slabel">Sum P&L</div></div>'
+            f'<div class="score-tile"><div class="sval pos">{e(best["id"])}</div><div class="slabel">Best</div></div>'
+            f'</div>'
+        )
+    else:
+        score = '<p style="font-size:12px;color:var(--ink-mute);margin-bottom:.75rem">Book opened 2026-06-01 — scoreboard builds as trades close.</p>'
+    h_map = {"weeks": 14, "months": 90, "2 weeks": 14, "3 months": 90, "26 days": 26}
+    rows = []
+    for t in open_t:
+        cur  = t.get("current", t.get("entry"))
+        pl   = t.get("current_pnl_pct")
+        prog = prog_pct(t, cur) if cur else 0
+        try:
+            held = (date.today() - date.fromisoformat(t.get("opened","2026-06-01"))).days
+            rem  = max(0, h_map.get(t.get("horizon",""), 30) - held)
+            rc   = "var(--red)" if rem < 5 else "var(--ink-mute)"
+            rem_s = f'<span style="color:{rc}">{rem}d</span>'
+        except Exception:
+            rem_s = "—"
+        rows.append(
+            f'<tr><td><span class="pill">{e(t.get("id",""))}</span></td>'
+            f'<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{e(t.get("trade",""))}</td>'
+            f'<td>{e(t.get("opened",""))}</td>'
+            f'<td style="font-variant-numeric:tabular-nums">{e(cur)}</td>'
+            f'<td>{pnl_span(pl)}</td><td>{rem_s}</td>'
+            f'<td><div class="prog-bar"><span style="width:{prog}%"></span></div></td></tr>'
+        )
+    open_tbl = (
+        '<table class="live-table"><thead><tr>'
+        '<th>ID</th><th>Trade</th><th>Opened</th><th>Current</th>'
+        '<th>P&L</th><th>Window</th><th>&rarr; Target</th>'
+        '</tr></thead><tbody>'
+        + ("".join(rows) or '<tr><td colspan="7" style="color:var(--ink-mute)">no open trades</td></tr>')
+        + '</tbody></table>'
+    )
+    if closed:
+        cl = "".join(
+            f'<tr><td><span class="pill">{e(t.get("id",""))}</span></td>'
+            f'<td>{e(t.get("trade",""))}</td>'
+            f'<td>{e(t.get("exit",{}).get("result",""))}</td>'
+            f'<td>{pnl_span(t.get("exit",{}).get("pnl_pct"))}</td>'
+            f'<td style="color:var(--ink-mute)">{e(t.get("exit",{}).get("days_held",""))}d</td></tr>'
+            for t in closed
+        )
+        closed_tbl = (
+            '<div class="section-label" style="margin-top:1rem">Closed ledger</div>'
+            '<table class="live-table"><thead><tr>'
+            '<th>ID</th><th>Trade</th><th>Result</th><th>P&L</th><th>Held</th>'
+            '</tr></thead><tbody>' + cl + '</tbody></table>'
+        )
+    else:
+        closed_tbl = '<p style="font-size:11px;color:var(--ink-mute);margin-top:.5rem">No closed trades yet.</p>'
+    return score + open_tbl + closed_tbl
+
+# ── Load & mark to market ─────────────────────────────────────────────────────
+trades     = book.load_trades()
+regime_log = book.load_json(book.REGIME_PATH, [])
+
+# Fresh levels — 2026-06-03
+# Sources: TradingEconomics, OilPrice, Capital.com, TheHill/Iran news
+levels = {
+    "MM-2026-001": 1.620,    # EURAUD: ~1.620 — ECB June 11 approaching, Iran risk bid AUD
+    "MM-2026-002": 94.80,    # Brent: ~$94.80 — Iran halted talks, Hormuz escalation risk (TheHill)
+    "MM-2026-003": 3.40,     # Brent-WTI spread: ~94.80 − 91.40 (Iran threatens Hormuz, Brent outperforms)
+    "MM-2026-004": 4.46,     # US 10Y: 4.46% — carried, yield unchanged June 3
+    "MM-2026-005": 4540.0,   # Gold: ~$4,540 — gold climbed back above $4,500, Iran risk bid (Capital.com)
+    "MM-2026-006": 483.0,    # AVGO: ~$483 — opened +4.90% on June 2, pre-earnings
+    "MM-2026-007": 158.90,   # USDJPY: ~158.90 — slight yen strength on risk-off Iran news
+    "MM-2026-008": 35.0,     # SPX put spread: unchanged
+    "MM-2026-009": 0.15,     # 2s10s: unchanged
+}
+book.mark_to_market(trades, levels)
+
+regime      = "Iran Escalates; AVGO Reports Tonight"
+regime_note = (
+    "Iran halted ceasefire talks and vowed to keep Hormuz closed — the disinflation trade "
+    "is reversing. AVGO reports after close tonight: the AI capex proof point. "
+    "Two tails, one evening."
+)
+regime_log = book.update_regime_log(regime_log, regime, regime_note)
+
+# Charts
+eq_svg  = charts.equity_curve(trades["closed"])
+cal_svg = charts.calibration(trades["closed"])
+vix_svg = charts.vix_term_structure([
+    {"label": "VIX9D", "value": 14.8},
+    {"label": "VIX",   "value": 16.50},
+    {"label": "VIX3M", "value": 18.2},
+    {"label": "VIX6M", "value": 19.1},
+])
+yc_svg  = charts.yield_curve([
+    {"label": "2Y",  "value": 4.31},
+    {"label": "5Y",  "value": 4.39},
+    {"label": "10Y", "value": 4.46},
+    {"label": "30Y", "value": 4.64},
+])
+
+# ── AVGO Dedicated Section ────────────────────────────────────────────────────
+# NOTE: Search results as of this run returned only pre-earnings preview data.
+# AVGO Q2 FY2026 results report after close on June 3.
+# This section covers: Q1 actuals, Q2 consensus, what to watch, MM-2026-006
+# management, and post-earnings setup recommendations for each scenario.
+# Verify actual results against this framework once released.
+
+AVGO_SECTION = """
 <div class="section-label">Broadcom (AVGO) — Full Earnings Brief</div>
 <div class="avgo-banner">
 
@@ -327,8 +455,59 @@ street consensus.
   </div>
 </div>
 
-</div>
+</div>"""
 
+# ── Sections ──────────────────────────────────────────────────────────────────
+MASTHEAD = f"""
+<div class="masthead">
+  <div class="regime-tag">Iran Escalates; AVGO Reports Tonight</div>
+  <h1 class="article-title">The Hormuz Shock Returns</h1>
+  <p class="meta">Pre-market intelligence brief &middot; {TODAY} &middot; generated {NOW} local &middot; self-graded book</p>
+  <hr class="gold-rule">
+</div>"""
+
+YESTERDAY = """
+<div class="section-label">Yesterday, graded</div>
+<div class="yesterday">
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-001</strong> · Short EURAUD · 1.6349 → 1.6200 · <span class="pnl-pos">+1.52%</span> · Working. ECB June 11 hike fully priced; Iran escalation bid AUD briefly but EUR weakness on growth concerns took over. Approaching target 1.610.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-002</strong> · Long Brent · $91.00 → $94.80 · <span class="pnl-pos">+4.18%</span> · Strong. Iran halted ceasefire talks and vowed to keep Hormuz closed — the war premium is repricing. Thesis fully confirmed.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-003</strong> · Long Brent / Short WTI spread · 3.30 → 3.40 · <span class="pnl-pos">+3.03%</span> · Working. Brent outperforming WTI as Iran threatens Hormuz specifically (Atlantic-basin premium). Spread holding above entry.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-n">→</span>
+    <span><strong>MM-2026-004</strong> · Short US 10Y yield · 4.44% → 4.46% · <span class="pnl-neg">−0.45%</span> · Near flat. Yield stable — Iran risk-off bid bonds slightly but ISM 54% keeps yields elevated. ADP May report released today (April was 109k). Watch payrolls Friday.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-005</strong> · Long gold (pre-pos) · $4,529 → $4,540 · <span class="pnl-pos">+0.38%</span> · Moving. Gold climbed back above $4,500 as Iran escalation bid safe-haven assets. Dual-tail thesis (geopolitical + Fed cut optionality) intact.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-006</strong> · Long AVGO (entry $460) · $460 → $483 · <span class="pnl-pos">+5.00%</span> · Positioned. AVGO opened +4.90% on June 2, pre-earnings momentum. Reports tonight after close. Stop $422, target $528. See AVGO Earnings Brief section.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-g">✓</span>
+    <span><strong>MM-2026-007</strong> · Short USDJPY · 159.37 → 158.90 · <span class="pnl-pos">+0.29%</span> · Working. Yen strengthened slightly on Iran risk-off. 160.00 intervention trigger less imminent now. Thesis intact.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-n">→</span>
+    <span><strong>MM-2026-008</strong> · SPX put spread · 35 → 35 · flat · Holding. Iran escalation + AVGO binary tonight — this is the portfolio hedge. Do not exit pre-print.</span>
+  </div>
+  <div class="yest-item">
+    <span class="tick-n">→</span>
+    <span><strong>MM-2026-009</strong> · 2s10s UST steepener (pre-pos) · +15bp → +15bp · flat · Payrolls Friday is the catalyst. Iran risk-off competes with ISM 54% on the direction of 2Y vs 10Y.</span>
+  </div>
+</div>"""
+
+WRAP = """
 <div class="section-label">The Wrap</div>
 <div class="wrap-body">
 <p>The ceasefire is off. Iran halted talks with the United States and announced it will keep
@@ -410,8 +589,9 @@ calendar — they know the pressure on Trump is highest between now and June 11.
 The Papic constraint for Iran is the reverse: their internal political economy demands
 they be seen winning something before any MoU is signed. The "we halted talks" move is
 a public negotiating position, not a final decision. Watch for back-channel signals
-in the next 48–72 hours.</p>
+in the next 48–72 hours.</p>"""
 
+CORRELATION = """
 <div class="section-label">Correlation Regime</div>
 <div class="tile tile-muted">
   <div class="tile-claim">Iran halts talks → Brent +$0.22 and Brent-WTI spread widens — Hormuz premium re-pricing in real time</div>
@@ -428,8 +608,9 @@ in the next 48–72 hours.</p>
 <div class="tile tile-muted">
   <div class="tile-claim">USDJPY at 158.90 — yen strengthening on Iran risk-off, intervention risk diminishing slightly</div>
   <div class="tile-body">The yen strengthened 47 pips on Iran news. Finance Minister Katayama's 160.00 intervention trigger is now further away. MM-2026-007 (short USDJPY) is working in the right direction — +0.29% P&L. Iran escalation and risk-off sentiment is the unexpected accelerant for this trade.</div>
-</div>
+</div>"""
 
+VOL_SKEW = """
 <div class="section-label">Vol &amp; Skew</div>
 <div class="vol-surface">
   <strong>VIX rising into the dual binary:</strong> VIX9D ~14.8 · VIX ~16.50 · VIX3M ~18.2 · VIX6M ~19.1.
@@ -442,8 +623,9 @@ in the next 48–72 hours.</p>
   <div class="tile-head">AVGO implied vol</div>
   <div class="tile-claim">±8% implied — correctly priced; options market is not complacent on this binary</div>
   <div class="tile-body">At $483, ±8% = $444–$521. The options market has correctly calibrated this as a high-stakes event. MM-2026-008 (SPX put spread) captures broad market downside if AVGO misses and Iran stays closed simultaneously — the two-tail scenario.</div>
-</div>
+</div>"""
 
+SECTOR_RV = """
 <div class="section-label">Sector &amp; RV</div>
 <div class="tile tile-green">
   <div class="tile-head">Energy — Iran halt is a direct catalyst</div>
@@ -456,8 +638,9 @@ in the next 48–72 hours.</p>
 <div class="tile tile-red">
   <div class="tile-head">European equities — ECB hike in 8 days, Iran makes it worse</div>
   <div class="tile-body">DAXK −0.5% YTD. ECB hiking June 11 into 3.2% eurozone inflation while Hormuz closure keeps energy costs elevated. This is the Papic constraint on Europe: monetary tightening AND supply-side inflation simultaneously. Short EURAUD (MM-2026-001) is the most direct expression.</div>
-</div>
+</div>"""
 
+POSITIONING = """
 <div class="section-label">Positioning &amp; Flows</div>
 <div class="tile tile-muted">
   <div class="tile-head">Oil: managed funds added net-long 3 consecutive weeks; Iran halt is a squeeze catalyst</div>
@@ -466,14 +649,16 @@ in the next 48–72 hours.</p>
 <div class="tile tile-muted">
   <div class="tile-head">AVGO: options traders bet on strong earnings (CNBC); implied move ±8% absorbed in stock price</div>
   <div class="tile-body">Pre-earnings, options traders were positioned for a positive outcome. AVGO's +4.9% on June 2 means some of the upside was pulled forward. A genuine beat-and-raise still delivers +8–12% from $483; an in-line print now hurts more (the stock is already pricing optimism). The asymmetry to the downside has increased.</div>
-</div>
+</div>"""
 
+FUNDING = """
 <div class="section-label">Funding &amp; Plumbing</div>
 <div class="tile tile-muted">
   <div class="tile-claim">SOFR 3.63% — stable. ADP May report released today (April: 109k vs 99k consensus).</div>
   <div class="tile-body">No funding stress. The Pozsar layer today: ADP May is the first concrete payroll signal before Friday's BLS print. April ADP beat 99k consensus with 109k. If May ADP is 120k+, the Friday payrolls market will be on edge for a 130k+ print that triggers Fed hike discussion. ADP and payrolls are not perfectly correlated, but the directional read matters. Verify the May ADP number released this morning.</div>
-</div>
+</div>"""
 
+TAPE_MISSING = """
 <div class="section-label">What the Tape Is Missing</div>
 <div class="canary">
   <div class="cdot"></div>
@@ -486,8 +671,9 @@ in the next 48–72 hours.</p>
 <div class="canary">
   <div class="cdot"></div>
   <div class="ctext"><strong>ADP May + ISM 54% + payrolls Friday = three consecutive strong labor signals heading into FOMC June 17.</strong> If ADP today comes in above 120k, the FOMC dot plot on June 17 becomes a live event where a hike dot is possible. Nobody in the market is positioned for a hike. IG at 80bp, HY at 285bp, SPX at 30x — these are all priced for a benign hold. A hike dot would be the largest repricing event of the quarter, larger than AVGO. The level that changes the conversation: ADP May above 125k today.</div>
-</div>
+</div>"""
 
+CONSENSUS = """
 <div class="section-label">Consensus: Bid / Offer</div>
 <div class="tile tile-muted">
   <div class="tile-head">Consensus BID</div>
@@ -496,14 +682,16 @@ in the next 48–72 hours.</p>
 <div class="tile tile-gold">
   <div class="tile-head">Strongest argument against — the OFFER</div>
   <div class="tile-body">The consensus requires three things to go right simultaneously: AVGO beats tonight, Iran reverses in the next 72 hours, and payrolls Friday stay below 130k. Any one of these three outcomes going wrong causes a repricing. All three going wrong simultaneously creates a stagflation narrative for the US (oil up, growth hot, Fed hike risk) that no current position in the market is hedged against. The put spread (MM-2026-008) is the only hedge we have on that three-tail-risk scenario.</div>
-</div>
+</div>"""
 
+ONE_CHART = """
 <div class="section-label">Today's One Chart That Matters</div>
 <div class="tile tile-gold">
   <div class="tile-claim">Brent crude intraday — the Hormuz risk premium in real time</div>
   <div class="tile-body">Brent at $94.80 after Iran halted talks. The war was already partly priced; this is the market correcting the "deal is imminent" discount that never should have been applied. The Brent-WTI spread at $3.40 (above entry 3.30) tells you physical traders believe the Hormuz premium is real. Watch Brent's close today: above $96 signals full Hormuz closure re-pricing; below $93 signals the market thinks Iran will reverse quickly. Our oil positions (MM-2026-002, MM-2026-003) want a close above $95. AVGO dominates attention but Brent is the silent tell on whether the brief's macro framework survives the week intact.</div>
-</div>
+</div>"""
 
+CAT_CAL = """
 <div class="section-label">Catalyst Calendar</div>
 <table class="cal-table">
 <thead><tr><th>Day</th><th>Date</th><th>Event</th><th>Consensus</th><th>View</th><th>Asymmetry</th></tr></thead>
@@ -544,8 +732,9 @@ in the next 48–72 hours.</p>
   <td class="asym-dn">Hike dot: DXY +1.5%, 10Y +20bp; 0-cut: DXY +0.7%; 2-cut: DXY −1.2%</td>
 </tr>
 </tbody>
-</table>
+</table>"""
 
+MIND = """
 <div class="section-label">What Changes My Mind</div>
 <div class="mind-item"><strong>MM-2026-001 · Short EURAUD (1.620, P&L +1.52%):</strong> Close if EURAUD holds above 1.640 post-ECB June 11. Currently 0.6% from target 1.610. Iran escalation bid AUD temporarily but ECB hike thesis is dominant. Hold.</div>
 <div class="mind-item"><strong>MM-2026-002 · Long Brent ($94.80, P&L +4.18%):</strong> Exit below $87 weekly close (deal signed and Hormuz fully open). Iran halting talks moves this scenario much further away. Raise mental stop to $90 if Iran signs a deal. Current trajectory: $100+ if Hormuz stays closed through June 11.</div>
@@ -554,8 +743,9 @@ in the next 48–72 hours.</p>
 <div class="mind-item"><strong>MM-2026-005 · Long gold ($4,540, P&L +0.38%):</strong> Min hold until July 15. Stop $4,250. Gold is working on both tails (Iran bid + Fed cut optionality). Iran halt is a near-term catalyst; FOMC dot plot June 17 is the structural catalyst. Hold.</div>
 <div class="mind-item"><strong>MM-2026-006 · Long AVGO ($483, P&L +5.00%) — TONIGHT is the exit event:</strong> See AVGO section above. Beat-and-raise: hold through print + 5 days, raise stop to $490 once stock opens above $520. In-line: exit same day. Miss: exit at market open Thursday.</div>
 <div class="mind-item"><strong>MM-2026-007 · Short USDJPY (158.90, P&L +0.29%):</strong> Working. Iran risk-off bid yen 47 pips. Stop 163.00 — further away now. BoJ September hike thesis intact. Hold.</div>
-<div class="mind-item"><strong>MM-2026-008 · SPX put spread:</strong> Do NOT exit. AVGO tonight + payrolls Friday + Iran escalation = three concurrent catalysts. The premium is the cheapest portfolio hedge available right now.</div>
+<div class="mind-item"><strong>MM-2026-008 · SPX put spread:</strong> Do NOT exit. AVGO tonight + payrolls Friday + Iran escalation = three concurrent catalysts. The premium is the cheapest portfolio hedge available right now.</div>"""
 
+CLIENT_AMMO = """
 <div class="section-label">Talking Points Today</div>
 <div class="ammo">
   <div class="ammo-q">Iran just halted talks. What does that mean for our oil trades?</div>
@@ -568,8 +758,9 @@ in the next 48–72 hours.</p>
 <div class="ammo">
   <div class="ammo-q">Can stocks stay at records if Iran keeps Hormuz closed?</div>
   <div class="ammo-a">They have so far. The reason: the market believes AI earnings growth can outrun the oil price shock. At SPX 7,600 with Brent at $94.80, equities are saying the AI growth premium is larger than the energy cost headwind. That calculus holds only if AVGO confirms it tonight. A miss from AVGO tonight plus Hormuz closed would simultaneously remove the growth premium and add the cost headwind. That scenario is not priced — VIX at 16.5 doesn't reflect two simultaneous bear cases.</div>
-</div>
+</div>"""
 
+CITATIONS = """
 <div class="section-label">Citations</div>
 <div class="citation">
 Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:<br>
@@ -584,8 +775,9 @@ Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:
 · Rio Times / Euronews — Eurozone CPI 3.2% May, services 3.5% (riotimesonline.com)<br>
 · Broadcom Investor Relations — Q2 FY2026 guidance: $22B revenue, $10.7B AI revenue (investors.broadcom.com)<br>
 · TIKR / PRNewswire — Hock Tan: "$100 billion AI chip revenue in 2027" (tikr.com)
-</div>
+</div>"""
 
+STALENESS = """
 <div class="section-label">Staleness Check</div>
 <table class="stale-tbl">
 <thead><tr><th>Datum</th><th>Source</th><th>As of</th><th>Status</th></tr></thead>
@@ -604,16 +796,111 @@ Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:
 <tr><td>VIX ~16.50</td><td>Estimated from Jun 1 close 16.05 + Iran premium</td><td>est.</td><td class="stale-flag">Approximate</td></tr>
 <tr><td>Bund, Gilt, MOVE, USDCNH</td><td>Not sourced this refresh</td><td>unavailable</td><td class="stale-flag">Unavailable</td></tr>
 </tbody>
-</table></div>
-    <div class="rhs"><div class="section-label">The Open</div>
-<div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P 500</div><div class="dval">7,599.96 <span class="chg-up">+0.26% (Jun 1 record)</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq</div><div class="dval">27,086.81 <span class="chg-up">+0.42% (Jun 1 record)</span></div></div><div class="dash-tile"><div class="dlabel">Nikkei 225</div><div class="dval">66,934 <span class="chg-up">+31.8% YTD</span></div></div><div class="dash-tile"><div class="dlabel">DAX</div><div class="dval">~25,200 <span class="chg-flat">−0.5% YTD</span></div></div><div class="dash-tile"><div class="dlabel">FTSE 100</div><div class="dval">~10,350 <span class="chg-flat"></span></div></div><div class="dash-tile"><div class="dlabel">EURUSD</div><div class="dval">~1.165 <span class="chg-flat"></span></div></div><div class="dash-tile"><div class="dlabel">GBPUSD</div><div class="dval"><span style="color:var(--ink-mute)">unverified</span></div></div><div class="dash-tile"><div class="dlabel">USDJPY</div><div class="dval">~158.90 <span class="chg-dn">yen bid on Iran</span></div></div><div class="dash-tile"><div class="dlabel">EURAUD</div><div class="dval">~1.620 <span class="chg-dn">ECB→short thesis</span></div></div><div class="dash-tile"><div class="dlabel">DXY</div><div class="dval">~99.1 <span class="chg-up">+0.1%</span></div></div><div class="dash-tile"><div class="dlabel">US 10Y</div><div class="dval">4.46% <span class="chg-flat"></span></div></div><div class="dash-tile"><div class="dlabel">2s10s</div><div class="dval">~+15bp <span class="chg-flat"></span></div></div><div class="dash-tile"><div class="dlabel">WTI Crude</div><div class="dval">~$91.40 <span class="chg-up">Iran halt bid</span></div></div><div class="dash-tile"><div class="dlabel">Brent Crude</div><div class="dval">~$94.80 <span class="chg-up">Hormuz closure risk</span></div></div><div class="dash-tile"><div class="dlabel">Brent-WTI</div><div class="dval">~$3.40 <span class="chg-up">+0.10 vs entry</span></div></div><div class="dash-tile"><div class="dlabel">Gold (XAU)</div><div class="dval">~$4,540 <span class="chg-up">+$11 Iran bid</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><div class="dval">~16.50 <span class="chg-up">rising into AVGO</span></div></div><div class="dash-tile"><div class="dlabel">AVGO</div><div class="dval">~$483 <span class="chg-up">+4.9% pre-earnings</span></div></div><div class="dash-tile"><div class="dlabel">SOFR</div><div class="dval">3.63% <span class="chg-flat"></span></div></div><div class="dash-tile"><div class="dlabel">ISM Mfg May</div><div class="dval">54.0% <span class="chg-up">highest since May 2022</span></div></div></div>
-<div class="theme-line">Iran halted talks; Hormuz stays closed. AVGO reports tonight. Two tails, one evening — the brief holds if both resolve; breaks on either one.</div>
-<div class="section-label" style="margin-top:1.5rem">New Trade Ideas</div>
-<div class="trade-card"><div class="tc-top"><div><div class="tc-name">Buy SPX Jun-27 7300/7000 put spread (hedge)</div><div class="tc-class">reactive · Derivatives</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Derivatives</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">put spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">35.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">0.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">265.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">26 days</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(2/2) · confirm(0/2) · stop(1/1)</span></div><div class="tc-thesis">VIX at 15.3 is cheap for 4 non-trivial events in 15 days: AVGO Jun 3, payrolls Jun 5, ECB Jun 11, FOMC Jun 16-17. 0.5% notional cost; 7x payoff if SPX draws down 6%. Insurance on a portfolio long AI equities.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">2s10s UST curve steepener</div><div class="tc-class">pre-position · Rates</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Rates</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">0.15</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">-0.1</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">0.6</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">3 months</span></div><div class="tc-row"><span class="tc-k">Min hold</span><span class="tc-v">45d</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-thesis">2s10s at +15bp after 18-month inversion. Buy 2Y (own cut optionality) vs short 10Y (short fiscal supply risk). June 5 payrolls at 89k + Fed pause re-prices front-end. ECB hiking cycle lifts global long rates. Steepener delivers whether Fed cuts or back-end sells off on supply. Late-cycle steepeners outperform after prolonged inversions.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Long Broadcom (AVGO) into Q2 earnings</div><div class="tc-class">reactive · Equity</div></div><div class="conv-badge">8/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Equity</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">cash equity</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">460.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">422.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">528.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">2 weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(2/2) · stop(1/1)</span></div><div class="tc-thesis">AVGO Q2 reports tonight after close. AI revenue guide is the only number that matters. Entry corrected to 60 (original 50 was an estimate error). Stop 22 (−8.3% from corrected entry); target 28 (+15%). Exit same day if AI revenue guide below .8B or stock closes &gt;8.3% lower.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">Short USDJPY</div><div class="tc-class">reactive · FX</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">FX</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spot</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">159.37</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">163.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">150.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">weeks</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-thesis">USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike &gt;50% priced vs Fed on hold. 3.63 pts to stop (163.00), 9.37 pts to target (150.00). Intervention is the backstop.</div></div>
-<div class="section-label" style="margin-top:1.5rem">Live Book + Scoreboard</div>
-<p style="font-size:12px;color:var(--ink-mute);margin-bottom:.75rem">Book opened 2026-06-01 — scoreboard builds as trades close.</p><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Opened</th><th>Current</th><th>P&L</th><th>Window</th><th>&rarr; Target</th></tr></thead><tbody><tr><td><span class="pill">MM-2026-001</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short EURAUD spot</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">1.62</td><td><span class="pnl-pos">+1.52%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:71%"></span></div></td></tr><tr><td><span class="pill">MM-2026-002</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent crude</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">94.8</td><td><span class="pnl-pos">+4.18%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:29%"></span></div></td></tr><tr><td><span class="pill">MM-2026-003</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent vs short WTI (spread)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">3.4</td><td><span class="pnl-pos">+3.03%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:3%"></span></div></td></tr><tr><td><span class="pill">MM-2026-004</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short US 10Y yield (long duration)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4.46</td><td><span class="pnl-neg">-0.45%</span></td><td><span style="color:var(--ink-mute)">12d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-005</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long gold into the June Fed window</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4540.0</td><td><span class="pnl-pos">+0.38%</span></td><td><span style="color:var(--ink-mute)">88d</span></td><td><div class="prog-bar"><span style="width:2%"></span></div></td></tr><tr><td><span class="pill">MM-2026-008</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Buy SPX Jun-27 7300/7000 put spread (hedge)</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">35.0</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">25d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-009</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">2s10s UST curve steepener</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">0.15</td><td><span class="">+0.00%</span></td><td><span style="color:var(--ink-mute)">89d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-006</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Broadcom (AVGO) into Q2 earnings</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">483.0</td><td><span class="pnl-pos">+5.00%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:33%"></span></div></td></tr><tr><td><span class="pill">MM-2026-007</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short USDJPY</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">158.9</td><td><span class="pnl-pos">+0.29%</span></td><td><span style="color:var(--ink-mute)">13d</span></td><td><div class="prog-bar"><span style="width:5%"></span></div></td></tr></tbody></table><p style="font-size:11px;color:var(--ink-mute);margin-top:.5rem">No closed trades yet.</p>
-<div class="section-label" style="margin-top:1.5rem">Charts</div><div style="margin-bottom:8px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">equity curve: no closed trades yet</text></svg></div><div style="margin-bottom:8px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">calibration: 10 more closed trade(s) needed</text></svg></div><div style="margin-bottom:8px"><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">VIX TERM STRUCTURE  ·  CONTANGO</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">14.0</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">15.5</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">17.0</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">18.4</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">19.9</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX9D</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX3M</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX6M</text><polyline points="52.0,246.4 242.0,172.5 432.0,98.7 622.0,59.6" fill="none" stroke="#1a7a45" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="246.4" r="2.6" fill="#1a7a45"/><circle cx="242.0" cy="172.5" r="2.6" fill="#1a7a45"/><circle cx="432.0" cy="98.7" r="2.6" fill="#1a7a45"/><circle cx="622.0" cy="59.6" r="2.6" fill="#1a7a45"/></svg></div><div><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">UST YIELD CURVE  ·  2S / 5S / 10S / 30S (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">4.24</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">4.36</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">4.47</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">4.59</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">4.71</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">2Y</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">5Y</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">10Y</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">30Y</text><polyline points="52.0,241.2 242.0,198.4 432.0,161.0 622.0,64.8" fill="none" stroke="#191917" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="241.2" r="2.6" fill="#191917"/><circle cx="242.0" cy="198.4" r="2.6" fill="#191917"/><circle cx="432.0" cy="161.0" r="2.6" fill="#191917"/><circle cx="622.0" cy="64.8" r="2.6" fill="#191917"/></svg></div></div>
+</table>"""
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+DASH = [
+    ("S&P 500",      "7,599.96",  "+0.26% (Jun 1 record)", "up"),
+    ("Nasdaq",       "27,086.81", "+0.42% (Jun 1 record)", "up"),
+    ("Nikkei 225",   "66,934",    "+31.8% YTD",            "up"),
+    ("DAX",          "~25,200",   "−0.5% YTD",             "flat"),
+    ("FTSE 100",     "~10,350",   "",                      "flat"),
+    ("EURUSD",       "~1.165",    "",                      "flat"),
+    ("GBPUSD",       "—",         "",                      "unverified"),
+    ("USDJPY",       "~158.90",   "yen bid on Iran",       "down"),
+    ("EURAUD",       "~1.620",    "ECB→short thesis",      "down"),
+    ("DXY",          "~99.1",     "+0.1%",                 "up"),
+    ("US 10Y",       "4.46%",     "",                      "flat"),
+    ("2s10s",        "~+15bp",    "",                      "flat"),
+    ("WTI Crude",    "~$91.40",   "Iran halt bid",         "up"),
+    ("Brent Crude",  "~$94.80",   "Hormuz closure risk",   "up"),
+    ("Brent-WTI",    "~$3.40",    "+0.10 vs entry",        "up"),
+    ("Gold (XAU)",   "~$4,540",   "+$11 Iran bid",         "up"),
+    ("VIX",          "~16.50",    "rising into AVGO",      "up"),
+    ("AVGO",         "~$483",     "+4.9% pre-earnings",    "up"),
+    ("SOFR",         "3.63%",     "",                      "flat"),
+    ("ISM Mfg May",  "54.0%",     "highest since May 2022","up"),
+]
+
+def dash_tile(name, val, chg, d):
+    if d == "unverified" or val == "—":
+        body = '<span style="color:var(--ink-mute)">unverified</span>'
+    else:
+        cls = {"up": "chg-up", "down": "chg-dn", "flat": "chg-flat"}.get(d, "chg-flat")
+        body = f'{e(val)} <span class="{cls}">{e(chg)}</span>'
+    return f'<div class="dash-tile"><div class="dlabel">{e(name)}</div><div class="dval">{body}</div></div>'
+
+dashboard_html = '<div class="dash-grid">' + "".join(dash_tile(*r) for r in DASH) + '</div>'
+
+theme_line = (
+    '<div class="theme-line">Iran halted talks; Hormuz stays closed. '
+    'AVGO reports tonight. Two tails, one evening — '
+    'the brief holds if both resolve; breaks on either one.</div>'
+)
+
+# Trade cards
+new_today = [t for t in trades["open"] if t["id"] in
+             ("MM-2026-006", "MM-2026-007", "MM-2026-008", "MM-2026-009")]
+idea_cards = "".join(trade_card(t) for t in new_today) or (
+    '<p style="font-size:12px;color:var(--ink-mute)">No new ideas today.</p>'
+)
+
+charts_html = (
+    '<div class="section-label" style="margin-top:1.5rem">Charts</div>'
+    f'<div style="margin-bottom:8px">{eq_svg}</div>'
+    f'<div style="margin-bottom:8px">{cal_svg}</div>'
+    f'<div style="margin-bottom:8px">{vix_svg}</div>'
+    f'<div>{yc_svg}</div>'
+)
+
+# ── Assemble ──────────────────────────────────────────────────────────────────
+LHS = "\n".join([
+    YESTERDAY, AVGO_SECTION, WRAP,
+    CORRELATION, VOL_SKEW, SECTOR_RV, POSITIONING, FUNDING,
+    TAPE_MISSING, CONSENSUS, ONE_CHART, CAT_CAL, MIND,
+    CLIENT_AMMO, CITATIONS, STALENESS,
+])
+
+RHS = "\n".join([
+    '<div class="section-label">The Open</div>',
+    dashboard_html, theme_line,
+    '<div class="section-label" style="margin-top:1.5rem">New Trade Ideas</div>',
+    idea_cards,
+    '<div class="section-label" style="margin-top:1.5rem">Live Book + Scoreboard</div>',
+    live_book(trades),
+    charts_html,
+])
+
+HTML = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Market Map &middot; {TODAY}</title>
+  <style>{CSS}</style>
+</head>
+<body>
+<div class="page">
+  {MASTHEAD}
+  <div class="two-col">
+    <div class="lhs">{LHS}</div>
+    <div class="rhs">{RHS}</div>
   </div>
 </div>
 </body>
-</html>
+</html>"""
+
+out = os.path.join(HERE, "output.html")
+with open(out, "w", encoding="utf-8") as f:
+    f.write(HTML)
+
+book.save_json(book.TRADES_PATH, trades)
+book.save_json(book.REGIME_PATH, regime_log)
+
+print(f"output.html: {len(HTML):,} bytes")
+print(f"Open: {len(trades['open'])} | Closed: {len(trades['closed'])}")
+for t in trades["open"]:
+    print(f"  {t['id']} | {t['trade'][:38]:38} | pnl {t.get('current_pnl_pct',0):+.2f}%")
+
+import subprocess
+subprocess.Popen(["start", out], shell=True)
