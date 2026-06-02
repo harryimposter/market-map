@@ -75,10 +75,34 @@
           "level": 1.621,
           "pnl_pct": 1.46,
           "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 1.621,
+          "pnl_pct": 1.46,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 1.621,
+          "pnl_pct": 1.46,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 1.6349,
+          "pnl_pct": 0.61,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 1.6349,
+          "pnl_pct": 0.61,
+          "status": "open"
         }
       ],
-      "current": 1.621,
-      "current_pnl_pct": 1.46
+      "current": 1.6349,
+      "current_pnl_pct": 0.61
     },
     {
       "id": "MM-2026-002",
@@ -101,8 +125,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book's barbell, not a directional call on peace.",
-      "current": 92.5,
-      "current_pnl_pct": 1.65,
+      "current": 94.58,
+      "current_pnl_pct": 3.93,
       "history": [
         {
           "date": "2026-05-31",
@@ -151,6 +175,30 @@
           "level": 92.5,
           "pnl_pct": 1.65,
           "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 92.5,
+          "pnl_pct": 1.65,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 92.5,
+          "pnl_pct": 1.65,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 94.58,
+          "pnl_pct": 3.93,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 94.58,
+          "pnl_pct": 3.93,
+          "status": "open"
         }
       ]
     },
@@ -175,8 +223,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The Hormuz premium is Brent-specific — it prices the waterway, WTI prices Cushing. If the MoU frays, the Atlantic-basin grade reprices the de-mining risk and the spread widens; if it holds, physical caps the downside near current carry. A cleaner, lower-beta way to own the same re-escalation tail with defined spread risk.",
-      "current": 2.81,
-      "current_pnl_pct": -14.85,
+      "current": 3.58,
+      "current_pnl_pct": 8.48,
       "history": [
         {
           "date": "2026-05-31",
@@ -225,6 +273,30 @@
           "level": 2.81,
           "pnl_pct": -14.85,
           "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 2.81,
+          "pnl_pct": -14.85,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 2.81,
+          "pnl_pct": -14.85,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 3.58,
+          "pnl_pct": 8.48,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 3.58,
+          "pnl_pct": 8.48,
+          "status": "open"
         }
       ]
     },
@@ -249,8 +321,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "Brent −17% is a forward CPI cut the FedWatch distribution (67.8% no cuts in 2026) has not booked. Bonds already rallied 26bp off the 4.70% high; the disinflation impulse rolls headline lower into the autumn. Deliberately the opposite macro leg to the Brent longs — the book owns both sides of the MoU binary and gets paid on either resolution.",
-      "current": 4.47,
-      "current_pnl_pct": -0.68,
+      "current": 4.46,
+      "current_pnl_pct": -0.45,
       "history": [
         {
           "date": "2026-05-31",
@@ -299,6 +371,30 @@
           "level": 4.47,
           "pnl_pct": -0.68,
           "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 4.47,
+          "pnl_pct": -0.68,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 4.47,
+          "pnl_pct": -0.68,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 4.46,
+          "pnl_pct": -0.45,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 4.46,
+          "pnl_pct": -0.45,
+          "status": "open"
         }
       ]
     },
@@ -323,8 +419,8 @@
       "horizon": "months",
       "min_hold_days": 45,
       "thesis": "Pre-position into the 5 June payrolls / 16–17 June FOMC window. Gold has already decoupled from a 4.98% long bond, which means it is pricing both MoU tails at once. It wins if oil-disinflation forces a dovish Fed and real yields fall, AND it wins if the MoU fails and the geopolitical bid returns. It loses only on the narrow path of strong-growth + stable-oil + hawkish-Fed together. That is the asymmetry pre-positioning is built for; minimum 45-day hold, not an event-day scalp.",
-      "current": 4541.8,
-      "current_pnl_pct": 0.42,
+      "current": 4529.54,
+      "current_pnl_pct": 0.14,
       "history": [
         {
           "date": "2026-05-31",
@@ -373,129 +469,29 @@
           "level": 4541.8,
           "pnl_pct": 0.42,
           "status": "open"
-        }
-      ]
-    },
-    {
-      "id": "MM-2026-006",
-      "opened": "2026-06-01",
-      "type": "reactive",
-      "asset_class": "Equity",
-      "trade": "Long Broadcom (AVGO) into Q2 earnings",
-      "structure": "cash equity",
-      "entry": 250.0,
-      "stop": 228.0,
-      "target": 285.0,
-      "conviction": 8,
-      "conviction_breakdown": {
-        "gap": 2,
-        "catalyst": 2,
-        "positioning": 1,
-        "confirmation": 2,
-        "stop_quality": 1
-      },
-      "horizon": "2 weeks",
-      "min_hold_days": 0,
-      "thesis": "AVGO Q2 reports June 3. AI revenue guide 0.7B (+140% YoY) is the proof-of-concept for hyperscaler capex. Six consecutive AI revenue beats. Computex tailwind. Beat-and-raise moves stock 10-15%; in-line exits same day.",
-      "current": 252.0,
-      "current_pnl_pct": 0.8,
-      "history": [
-        {
-          "date": "2026-06-01",
-          "level": 250.0,
-          "pnl_pct": 0.0,
-          "status": "open"
         },
         {
-          "date": "2026-06-01",
-          "level": 252.0,
-          "pnl_pct": 0.8,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-01",
-          "level": 252.0,
-          "pnl_pct": 0.8,
+          "date": "2026-06-02",
+          "level": 4541.8,
+          "pnl_pct": 0.42,
           "status": "open"
         },
         {
           "date": "2026-06-02",
-          "level": 252.0,
-          "pnl_pct": 0.8,
+          "level": 4541.8,
+          "pnl_pct": 0.42,
           "status": "open"
         },
         {
           "date": "2026-06-02",
-          "level": 252.0,
-          "pnl_pct": 0.8,
+          "level": 4529.54,
+          "pnl_pct": 0.14,
           "status": "open"
         },
         {
           "date": "2026-06-02",
-          "level": 252.0,
-          "pnl_pct": 0.8,
-          "status": "open"
-        }
-      ]
-    },
-    {
-      "id": "MM-2026-007",
-      "opened": "2026-06-01",
-      "type": "reactive",
-      "asset_class": "FX",
-      "trade": "Short USDJPY",
-      "structure": "spot",
-      "entry": 159.37,
-      "stop": 163.0,
-      "target": 150.0,
-      "conviction": 7,
-      "conviction_breakdown": {
-        "gap": 2,
-        "catalyst": 2,
-        "positioning": 1,
-        "confirmation": 1,
-        "stop_quality": 1
-      },
-      "horizon": "weeks",
-      "min_hold_days": 0,
-      "thesis": "USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike >50% priced vs Fed on hold. 3.63 pts downside to stop, 9.37 pts to target. Intervention is the backstop.",
-      "current": 159.37,
-      "current_pnl_pct": -0.0,
-      "history": [
-        {
-          "date": "2026-06-01",
-          "level": 159.37,
-          "pnl_pct": 0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-01",
-          "level": 159.37,
-          "pnl_pct": -0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-01",
-          "level": 159.37,
-          "pnl_pct": -0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-02",
-          "level": 159.37,
-          "pnl_pct": -0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-02",
-          "level": 159.37,
-          "pnl_pct": -0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-02",
-          "level": 159.37,
-          "pnl_pct": -0.0,
+          "level": 4529.54,
+          "pnl_pct": 0.14,
           "status": "open"
         }
       ]
@@ -532,6 +528,30 @@
         },
         {
           "date": "2026-06-01",
+          "level": 35.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 35.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 35.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 35.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
           "level": 35.0,
           "pnl_pct": 0.0,
           "status": "open"
@@ -608,6 +628,160 @@
           "date": "2026-06-02",
           "level": 0.15,
           "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 0.15,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 0.15,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 0.15,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 0.15,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "MM-2026-006",
+      "opened": "2026-06-01",
+      "type": "reactive",
+      "asset_class": "Equity",
+      "trade": "Long Broadcom (AVGO) into Q2 earnings",
+      "structure": "cash equity",
+      "entry": 460.0,
+      "stop": 422.0,
+      "target": 528.0,
+      "conviction": 8,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 2,
+        "positioning": 1,
+        "confirmation": 2,
+        "stop_quality": 1
+      },
+      "horizon": "2 weeks",
+      "min_hold_days": 0,
+      "thesis": "AVGO Q2 reports tonight after close. AI revenue guide is the only number that matters. Entry corrected to 60 (original 50 was an estimate error). Stop 22 (−8.3% from corrected entry); target 28 (+15%). Exit same day if AI revenue guide below .8B or stock closes >8.3% lower.",
+      "current": 460.0,
+      "current_pnl_pct": 0.0,
+      "history": [
+        {
+          "date": "2026-06-01",
+          "level": 250.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-01",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 252.0,
+          "pnl_pct": 0.8,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 460.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 460.0,
+          "pnl_pct": 0.0,
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "MM-2026-007",
+      "opened": "2026-06-01",
+      "type": "reactive",
+      "asset_class": "FX",
+      "trade": "Short USDJPY",
+      "structure": "spot",
+      "entry": 159.37,
+      "stop": 163.0,
+      "target": 150.0,
+      "conviction": 7,
+      "conviction_breakdown": {
+        "gap": 2,
+        "catalyst": 2,
+        "positioning": 1,
+        "confirmation": 1,
+        "stop_quality": 1
+      },
+      "horizon": "weeks",
+      "min_hold_days": 0,
+      "thesis": "USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike >50% priced vs Fed on hold. 3.63 pts to stop (163.00), 9.37 pts to target (150.00). Intervention is the backstop.",
+      "current": 159.4,
+      "current_pnl_pct": -0.02,
+      "history": [
+        {
+          "date": "2026-06-01",
+          "level": 159.37,
+          "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 159.4,
+          "pnl_pct": -0.02,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-02",
+          "level": 159.4,
+          "pnl_pct": -0.02,
           "status": "open"
         }
       ]
