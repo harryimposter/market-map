@@ -111,10 +111,16 @@
           "level": 1.623,
           "pnl_pct": 1.34,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 1.615,
+          "pnl_pct": 1.82,
+          "status": "open"
         }
       ],
-      "current": 1.623,
-      "current_pnl_pct": 1.34
+      "current": 1.615,
+      "current_pnl_pct": 1.82
     },
     {
       "id": "MM-2026-002",
@@ -137,8 +143,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The war premium has been removed from crude before the war risk has been removed from the Gulf. Tehran rejected the Friday MoU terms, US forces are staged to re-engage, and specs have cut net length from 191.9k to 178.8k — leaving squeeze fuel. Asymmetric: $7 of downside to the recent floor against $13 to a re-escalation reprice. This is the right-tail hedge on the book's barbell, not a directional call on peace.",
-      "current": 97.8,
-      "current_pnl_pct": 7.47,
+      "current": 93.09,
+      "current_pnl_pct": 2.3,
       "history": [
         {
           "date": "2026-05-31",
@@ -223,6 +229,12 @@
           "level": 97.8,
           "pnl_pct": 7.47,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 93.09,
+          "pnl_pct": 2.3,
+          "status": "open"
         }
       ]
     },
@@ -247,8 +259,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "The Hormuz premium is Brent-specific — it prices the waterway, WTI prices Cushing. If the MoU frays, the Atlantic-basin grade reprices the de-mining risk and the spread widens; if it holds, physical caps the downside near current carry. A cleaner, lower-beta way to own the same re-escalation tail with defined spread risk.",
-      "current": 2.6,
-      "current_pnl_pct": -21.21,
+      "current": 2.55,
+      "current_pnl_pct": -22.73,
       "history": [
         {
           "date": "2026-05-31",
@@ -333,6 +345,12 @@
           "level": 2.6,
           "pnl_pct": -21.21,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 2.55,
+          "pnl_pct": -22.73,
+          "status": "open"
         }
       ]
     },
@@ -357,8 +375,8 @@
       "horizon": "weeks",
       "min_hold_days": 0,
       "thesis": "Brent −17% is a forward CPI cut the FedWatch distribution (67.8% no cuts in 2026) has not booked. Bonds already rallied 26bp off the 4.70% high; the disinflation impulse rolls headline lower into the autumn. Deliberately the opposite macro leg to the Brent longs — the book owns both sides of the MoU binary and gets paid on either resolution.",
-      "current": 4.45,
-      "current_pnl_pct": -0.23,
+      "current": 4.53,
+      "current_pnl_pct": -2.03,
       "history": [
         {
           "date": "2026-05-31",
@@ -443,6 +461,12 @@
           "level": 4.45,
           "pnl_pct": -0.23,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 4.53,
+          "pnl_pct": -2.03,
+          "status": "open"
         }
       ]
     },
@@ -467,8 +491,8 @@
       "horizon": "months",
       "min_hold_days": 45,
       "thesis": "Pre-position into the 5 June payrolls / 16–17 June FOMC window. Gold has already decoupled from a 4.98% long bond, which means it is pricing both MoU tails at once. It wins if oil-disinflation forces a dovish Fed and real yields fall, AND it wins if the MoU fails and the geopolitical bid returns. It loses only on the narrow path of strong-growth + stable-oil + hawkish-Fed together. That is the asymmetry pre-positioning is built for; minimum 45-day hold, not an event-day scalp.",
-      "current": 4494.0,
-      "current_pnl_pct": -0.64,
+      "current": 4328.0,
+      "current_pnl_pct": -4.31,
       "history": [
         {
           "date": "2026-05-31",
@@ -553,6 +577,12 @@
           "level": 4494.0,
           "pnl_pct": -0.64,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 4328.0,
+          "pnl_pct": -4.31,
+          "status": "open"
         }
       ]
     },
@@ -577,8 +607,8 @@
       "horizon": "26 days",
       "min_hold_days": 0,
       "thesis": "VIX at 15.3 is cheap for 4 non-trivial events in 15 days: AVGO Jun 3, payrolls Jun 5, ECB Jun 11, FOMC Jun 16-17. 0.5% notional cost; 7x payoff if SPX draws down 6%. Insurance on a portfolio long AI equities.",
-      "current": 35.0,
-      "current_pnl_pct": 0.0,
+      "current": 70.0,
+      "current_pnl_pct": 100.0,
       "history": [
         {
           "date": "2026-06-01",
@@ -644,6 +674,12 @@
           "date": "2026-06-03",
           "level": 35.0,
           "pnl_pct": 0.0,
+          "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 70.0,
+          "pnl_pct": 100.0,
           "status": "open"
         }
       ]
@@ -669,8 +705,8 @@
       "horizon": "3 months",
       "min_hold_days": 45,
       "thesis": "2s10s at +15bp after 18-month inversion. Buy 2Y (own cut optionality) vs short 10Y (short fiscal supply risk). June 5 payrolls at 89k + Fed pause re-prices front-end. ECB hiking cycle lifts global long rates. Steepener delivers whether Fed cuts or back-end sells off on supply. Late-cycle steepeners outperform after prolonged inversions.",
-      "current": 0.15,
-      "current_pnl_pct": 0.0,
+      "current": 0.38,
+      "current_pnl_pct": 153.33,
       "history": [
         {
           "date": "2026-06-01",
@@ -737,9 +773,17 @@
           "level": 0.15,
           "pnl_pct": 0.0,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 0.38,
+          "pnl_pct": 153.33,
+          "status": "open"
         }
       ]
-    },
+    }
+  ],
+  "closed": [
     {
       "id": "MM-2026-006",
       "opened": "2026-06-01",
@@ -761,8 +805,8 @@
       "horizon": "2 weeks",
       "min_hold_days": 0,
       "thesis": "AVGO Q2 reports tonight after close. AI revenue guide is the only number that matters. Entry corrected to 60 (original 50 was an estimate error). Stop 22 (−8.3% from corrected entry); target 28 (+15%). Exit same day if AI revenue guide below .8B or stock closes >8.3% lower.",
-      "current": 462.36,
-      "current_pnl_pct": 0.51,
+      "current": 385.73,
+      "current_pnl_pct": -16.15,
       "history": [
         {
           "date": "2026-06-01",
@@ -835,65 +879,21 @@
           "level": 462.36,
           "pnl_pct": 0.51,
           "status": "open"
+        },
+        {
+          "date": "2026-06-07",
+          "level": 385.73,
+          "pnl_pct": -16.15,
+          "status": "stopped"
         }
-      ]
-    },
-    {
-      "id": "MM-2026-007",
-      "opened": "2026-06-01",
-      "type": "reactive",
-      "asset_class": "FX",
-      "trade": "Short USDJPY",
-      "structure": "spot",
-      "entry": 159.37,
-      "stop": 163.0,
-      "target": 150.0,
-      "conviction": 7,
-      "conviction_breakdown": {
-        "gap": 2,
-        "catalyst": 2,
-        "positioning": 1,
-        "confirmation": 1,
-        "stop_quality": 1
-      },
-      "horizon": "weeks",
-      "min_hold_days": 0,
-      "thesis": "USDJPY at 159.37 with Finance Minister Katayama threatening intervention. BoJ September hike >50% priced vs Fed on hold. 3.63 pts to stop (163.00), 9.37 pts to target (150.00). Intervention is the backstop.",
-      "current": 159.2,
-      "current_pnl_pct": 0.11,
-      "history": [
-        {
-          "date": "2026-06-01",
-          "level": 159.37,
-          "pnl_pct": 0.0,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-02",
-          "level": 159.4,
-          "pnl_pct": -0.02,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-02",
-          "level": 159.4,
-          "pnl_pct": -0.02,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-03",
-          "level": 158.8,
-          "pnl_pct": 0.36,
-          "status": "open"
-        },
-        {
-          "date": "2026-06-03",
-          "level": 159.2,
-          "pnl_pct": 0.11,
-          "status": "open"
-        }
-      ]
+      ],
+      "exit": {
+        "date": "2026-06-07",
+        "level": 385.73,
+        "result": "STOPPED",
+        "pnl_pct": -16.15,
+        "days_held": 6
+      }
     }
-  ],
-  "closed": []
+  ]
 }

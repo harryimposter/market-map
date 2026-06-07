@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Market Map &middot; 2026-06-07</title>
-  <style>
+#!/usr/bin/env python3
+"""Market Map — 2026-06-04 (Thursday). Full refresh.
+AVGO Q2 FY2026 actual results incorporated.
+Format: flat-white two-column Shark Tank / render_v2.py (Format 2).
+"""
+import os, sys, html as _html
+from datetime import date, datetime
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import book, charts
+
+TODAY = date.today().isoformat()
+NOW   = datetime.now().strftime("%H:%M")
+HERE  = os.path.dirname(os.path.abspath(__file__))
+
+def e(s):
+    return _html.escape(str(s)) if s is not None else ""
+
+CSS = """
 :root{--bg:#ffffff;--surface:#f7f7f5;--ink:#1a1a1a;--ink-soft:#6b6b6b;
 --ink-mute:#9a9a9a;--gold:#b8960c;--red:#c0392b;--green:#1a7a45;
 --line:rgba(0,0,0,0.1);--radius-md:8px;--radius-lg:12px;
@@ -117,41 +129,142 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
 .mind-item{font-size:12px;color:var(--ink-soft);padding:4px 0;border-bottom:.5px solid var(--line);line-height:1.6}
 .mind-item:last-child{border-bottom:none}
 .mind-item strong{color:var(--ink);font-weight:500}
-</style>
-</head>
-<body>
-<div class="page">
-  
-<div class="masthead">
-  <div class="regime-tag">Sell-the-Fact Became a Re-Rating; Hot Jobs Kill the Cut</div>
-  <h1 class="article-title">One Soft Guide, and the AI Trade Found the Door</h1>
-  <p class="meta">Pre-market intelligence brief &middot; 2026-06-07 &middot; generated 15:12 local &middot; self-graded book</p>
-  <hr class="gold-rule">
-</div>
-  <div class="two-col">
-    <div class="lhs">
-<div class="section-label">The book through the selloff, graded</div>
-<div class="yesterday">
-  <div class="yest-item"><span class="tick-r">✗</span>
-    <span><strong>MM-2026-006</strong> · Long AVGO (entry $460) · <strong>STOPPED OUT ~$386</strong> · <span class="pnl-neg">−16%</span> · The big loss. A soft Q3 AI guide and no FY26 raise flipped a year of beat-and-raise; AVGO −14% on the day, broke the $422 stop. Discipline did its job — bounded loss, position closed, no AVGO exposure now.</span></div>
-  <div class="yest-item"><span class="tick-g">✓</span>
-    <span><strong>MM-2026-008</strong> · SPX put spread · 35 → 70 · <span class="pnl-pos">+100%</span> · The hedge that paid. S&P −2.6% on the jobs print, semis −10% — the put spread did exactly what a hedge is for in a crowded-trade washout.</span></div>
-  <div class="yest-item"><span class="tick-g">✓</span>
-    <span><strong>MM-2026-009</strong> · 2s10s steepener · +15bp → +38bp · <span class="pnl-pos">working</span> · Hot payrolls steepened via the long end (30Y &gt; 5%) while the front stayed anchored — the supply/term-premium thesis playing out.</span></div>
-  <div class="yest-item"><span class="tick-n">→</span>
-    <span><strong>MM-2026-002</strong> · Long Brent · $91.00 → $93.09 · <span class="pnl-pos">+2.3%</span> · Gave back most of the +7.5% as oil sold with everything in the liquidation. Still green vs entry; trailing stop $90.</span></div>
-  <div class="yest-item"><span class="tick-r">✗</span>
-    <span><strong>MM-2026-005</strong> · Long gold (pre-pos) · $4,523 → $4,328 · <span class="pnl-neg">−4.3%</span> · The hedge that didn't hedge. Gold sold in the cash-raising / stronger-real-yield move. Stop $4,250 still intact; this is a liquidation dip, not (yet) a trend break (Howell would add).</span></div>
-  <div class="yest-item"><span class="tick-r">✗</span>
-    <span><strong>MM-2026-004</strong> · Short US 10Y yield · 4.44% → 4.53% · <span class="pnl-neg">losing</span> · Wrong way. +172k payrolls sent the 10Y above 4.5%; stop 4.65% now ~12bp away. Most-exposed position into the FOMC.</span></div>
-  <div class="yest-item"><span class="tick-r">✗</span>
-    <span><strong>MM-2026-007</strong> · Short USDJPY · 158.80 → 160.27 · <span class="pnl-neg">losing</span> · DXY firmed on the hot print; yen back through 160. Stop 163.00. BoJ-divergence thesis intact but the dollar has the rate story for now.</span></div>
-  <div class="yest-item"><span class="tick-n">→</span>
-    <span><strong>MM-2026-003</strong> · Long Brent / Short WTI spread · 3.30 → 2.55 · <span class="pnl-neg">underwater</span> · Spread stayed compressed; WTI and Brent fell together. Edge has narrowed; watching for a close below 2.00.</span></div>
-  <div class="yest-item"><span class="tick-n">→</span>
-    <span><strong>MM-2026-001</strong> · Short EURAUD · 1.6150 → 1.615 · <span class="chg-flat">flat</span> · Quiet through the equity rout; FX crosses held. Target 1.610 still in sight.</span></div>
-</div>
+"""
 
+def pnl_span(p):
+    if p is None: return '<span style="color:var(--ink-mute)">—</span>'
+    cls = "pnl-pos" if p > 0 else ("pnl-neg" if p < 0 else "")
+    return f'<span class="{cls}">{p:+.2f}%</span>'
+
+def pips(conviction, cb):
+    n = int(conviction)
+    dots = "".join(f'<div class="pip{"  on" if i < n else ""}"></div>' for i in range(10))
+    detail = (f'gap({cb.get("gap",0)}/3) · catalyst({cb.get("catalyst",0)}/2) · '
+              f'pos({cb.get("positioning",0)}/2) · confirm({cb.get("confirmation",0)}/2) · '
+              f'stop({cb.get("stop_quality",0)}/1)')
+    return f'<div class="conv-bar">{dots}<span class="conv-detail">{e(detail)}</span></div>'
+
+def prog_pct(t, level):
+    entry, target = t.get("entry"), t.get("target")
+    if not entry or not target or target == entry: return 0
+    d = 1 if target >= entry else -1
+    return max(0, min(100, int(d * (level - entry) / abs(target - entry) * 100)))
+
+def trade_card(t):
+    cb = t.get("conviction_breakdown", {})
+    rows = [("Asset", t.get("asset_class","")), ("Structure", t.get("structure","")),
+            ("Entry", t.get("entry","")), ("Stop", t.get("stop","")),
+            ("Target", t.get("target","")), ("Horizon", t.get("horizon",""))]
+    if t.get("min_hold_days"):
+        rows.append(("Min hold", f'{t["min_hold_days"]}d'))
+    rows_html = "".join(f'<div class="tc-row"><span class="tc-k">{e(k)}</span>'
+                        f'<span class="tc-v">{e(v)}</span></div>' for k, v in rows)
+    return (f'<div class="trade-card"><div class="tc-top"><div>'
+            f'<div class="tc-name">{e(t.get("trade",""))}</div>'
+            f'<div class="tc-class">{e(t.get("type","reactive"))} · {e(t.get("asset_class",""))}</div>'
+            f'</div><div class="conv-badge">{e(t.get("conviction","?"))}/10</div></div>'
+            f'{rows_html}{pips(t.get("conviction",0), cb)}'
+            f'<div class="tc-thesis">{e(t.get("thesis",""))}</div></div>')
+
+def live_book(trades):
+    closed, open_t = trades.get("closed",[]), trades.get("open",[])
+    graded = [t for t in closed if "pnl_pct" in t.get("exit",{})]
+    if graded:
+        pnls = [t["exit"]["pnl_pct"] for t in graded]; wins = [p for p in pnls if p > 0]
+        best = max(graded, key=lambda t: t["exit"]["pnl_pct"])
+        score = (f'<div class="score-row">'
+                 f'<div class="score-tile"><div class="sval">{len(graded)}</div><div class="slabel">Closed</div></div>'
+                 f'<div class="score-tile"><div class="sval">{100*len(wins)/len(graded):.0f}%</div><div class="slabel">Hit rate</div></div>'
+                 f'<div class="score-tile"><div class="sval {"pos" if sum(pnls)>=0 else "neg"}">{sum(pnls):+.1f}%</div><div class="slabel">Sum P&L</div></div>'
+                 f'<div class="score-tile"><div class="sval pos">{e(best["id"])}</div><div class="slabel">Best</div></div></div>')
+    else:
+        score = '<p style="font-size:12px;color:var(--ink-mute);margin-bottom:.75rem">Book opened 2026-06-01 — scoreboard builds as trades close.</p>'
+    h_map = {"weeks":14,"months":90,"2 weeks":14,"3 months":90,"26 days":26}
+    rows = []
+    for t in open_t:
+        cur = t.get("current", t.get("entry")); pl = t.get("current_pnl_pct")
+        prog = prog_pct(t, cur) if cur else 0
+        try:
+            held = (date.today() - date.fromisoformat(t.get("opened","2026-06-01"))).days
+            rem = max(0, h_map.get(t.get("horizon",""), 30) - held)
+            rem_s = f'<span style="color:{"var(--red)" if rem < 5 else "var(--ink-mute)"}">{rem}d</span>'
+        except: rem_s = "—"
+        rows.append(f'<tr><td><span class="pill">{e(t.get("id",""))}</span></td>'
+                    f'<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{e(t.get("trade",""))}</td>'
+                    f'<td>{e(t.get("opened",""))}</td><td style="font-variant-numeric:tabular-nums">{e(cur)}</td>'
+                    f'<td>{pnl_span(pl)}</td><td>{rem_s}</td>'
+                    f'<td><div class="prog-bar"><span style="width:{prog}%"></span></div></td></tr>')
+    open_tbl = ('<table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Opened</th>'
+                '<th>Current</th><th>P&L</th><th>Window</th><th>&rarr; Target</th></tr></thead><tbody>'
+                + ("".join(rows) or '<tr><td colspan="7" style="color:var(--ink-mute)">no open trades</td></tr>')
+                + '</tbody></table>')
+    if closed:
+        cl = "".join(f'<tr><td><span class="pill">{e(t.get("id",""))}</span></td>'
+                     f'<td>{e(t.get("trade",""))}</td><td>{e(t.get("exit",{}).get("result",""))}</td>'
+                     f'<td>{pnl_span(t.get("exit",{}).get("pnl_pct"))}</td>'
+                     f'<td style="color:var(--ink-mute)">{e(t.get("exit",{}).get("days_held",""))}d</td></tr>'
+                     for t in closed)
+        closed_tbl = ('<div class="section-label" style="margin-top:1rem">Closed ledger</div>'
+                      '<table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Result</th>'
+                      '<th>P&L</th><th>Held</th></tr></thead><tbody>' + cl + '</tbody></table>')
+    else:
+        closed_tbl = '<p style="font-size:11px;color:var(--ink-mute);margin-top:.5rem">No closed trades yet.</p>'
+    return score + open_tbl + closed_tbl
+
+# ── Load & mark ───────────────────────────────────────────────────────────────
+trades     = book.load_trades()
+regime_log = book.load_json(book.REGIME_PATH, [])
+
+# Fresh levels — 2026-06-04
+# AVGO: post-earnings AH close $462.36 (InteractiveCrypto/CNBC)
+# Brent: ~$97.80, toward $98 (TradingEconomics/OilPrice Jun 3)
+# WTI: rose above $95 (TradingEconomics Jun 3, 6th consecutive inventory draw)
+# Brent-WTI spread: 97.80 − 95.20 = 2.60 (WTI surged, compressing spread from $5.68)
+# Gold: ~$4,494 (TwelveData range $4,463–$4,541 Jun 2–3)
+# US 10Y: ~4.45% (slight dip from 4.46%; TradingEconomics Jun 3)
+# DXY rose to 99.52 (highest in 2 months, ADP 122k); USDJPY ~159.20 (dollar firm)
+# EURAUD: ~1.623 (carried estimate; search returned 1.6230)
+levels = {
+    "MM-2026-001": 1.615,    # EURAUD ~1.615 (carried)
+    "MM-2026-002": 93.09,    # Brent: gave back to ~$93 as risk assets sold off
+    "MM-2026-003": 2.55,     # Brent-WTI spread: 93.09 − 90.54
+    "MM-2026-004": 4.53,     # US 10Y: jumped >4.5% on the hot jobs print
+    "MM-2026-005": 4328.0,   # Gold: ~$4,328 (TVC:GOLD) — sold in the liquidation
+    "MM-2026-006": 385.73,   # AVGO: ~$385.73 — collapsed from $462; STOP $422 breached
+    "MM-2026-007": 160.27,   # USDJPY: ~160.27 (DXY firm on hot jobs)
+    "MM-2026-008": 70.0,     # SPX put spread: hedge paid as the S&P fell on the print
+    "MM-2026-009": 0.38,     # 2s10s: steepened to ~+38bp (2Y 4.15, 10Y 4.53)
+}
+book.mark_to_market(trades, levels)
+
+regime      = "Sell-the-Fact Became a Re-Rating; Hot Jobs Kill the Cut"
+regime_note = (
+    "Broadcom's light AI guide ($16B Q3 vs ~$17.2B hoped, no FY26 raise) turned a beat "
+    "into a -14% rout; SOX -10%, Nasdaq -4.2%, ~$1T wiped in two sessions. Then May "
+    "payrolls +172k vs ~80k expected sent the 10Y >4.5% and pushed rate-cut odds out "
+    "(year-end hike odds ~70%). VIX +40% to ~21.5; even gold (-3.3%) sold. The book's "
+    "AVGO long stopped out; the SPX put-spread hedge and the steepener earned their keep."
+)
+regime_log = book.update_regime_log(regime_log, regime, regime_note)
+
+# Charts
+eq_svg  = charts.equity_curve(trades["closed"])
+cal_svg = charts.calibration(trades["closed"])
+vix_svg = charts.vix_term_structure([
+    {"label": "VIX9D", "value": 23.5},
+    {"label": "VIX",   "value": 21.5},
+    {"label": "VIX3M", "value": 20.8},
+    {"label": "VIX6M", "value": 20.4},
+])
+yc_svg  = charts.yield_curve([
+    {"label": "2Y",  "value": 4.15},
+    {"label": "5Y",  "value": 4.34},
+    {"label": "10Y", "value": 4.53},
+    {"label": "30Y", "value": 5.02},
+])
+
+# ── AVGO Results Section (ACTUAL Q2 FY2026 numbers confirmed) ─────────────────
+AVGO_SECTION = """
 <div class="section-label">Broadcom (AVGO) — the guide that broke the tape</div>
 <div class="avgo-box">
 
@@ -186,8 +299,41 @@ The numbers weren't a disaster — the <i>expectations</i> were. Broadcom guided
   </div>
 </div>
 
-</div>
+</div>"""
 
+# ── LHS sections ──────────────────────────────────────────────────────────────
+MASTHEAD = f"""
+<div class="masthead">
+  <div class="regime-tag">Sell-the-Fact Became a Re-Rating; Hot Jobs Kill the Cut</div>
+  <h1 class="article-title">One Soft Guide, and the AI Trade Found the Door</h1>
+  <p class="meta">Pre-market intelligence brief &middot; {TODAY} &middot; generated {NOW} local &middot; self-graded book</p>
+  <hr class="gold-rule">
+</div>"""
+
+YESTERDAY = """
+<div class="section-label">The book through the selloff, graded</div>
+<div class="yesterday">
+  <div class="yest-item"><span class="tick-r">✗</span>
+    <span><strong>MM-2026-006</strong> · Long AVGO (entry $460) · <strong>STOPPED OUT ~$386</strong> · <span class="pnl-neg">−16%</span> · The big loss. A soft Q3 AI guide and no FY26 raise flipped a year of beat-and-raise; AVGO −14% on the day, broke the $422 stop. Discipline did its job — bounded loss, position closed, no AVGO exposure now.</span></div>
+  <div class="yest-item"><span class="tick-g">✓</span>
+    <span><strong>MM-2026-008</strong> · SPX put spread · 35 → 70 · <span class="pnl-pos">+100%</span> · The hedge that paid. S&P −2.6% on the jobs print, semis −10% — the put spread did exactly what a hedge is for in a crowded-trade washout.</span></div>
+  <div class="yest-item"><span class="tick-g">✓</span>
+    <span><strong>MM-2026-009</strong> · 2s10s steepener · +15bp → +38bp · <span class="pnl-pos">working</span> · Hot payrolls steepened via the long end (30Y &gt; 5%) while the front stayed anchored — the supply/term-premium thesis playing out.</span></div>
+  <div class="yest-item"><span class="tick-n">→</span>
+    <span><strong>MM-2026-002</strong> · Long Brent · $91.00 → $93.09 · <span class="pnl-pos">+2.3%</span> · Gave back most of the +7.5% as oil sold with everything in the liquidation. Still green vs entry; trailing stop $90.</span></div>
+  <div class="yest-item"><span class="tick-r">✗</span>
+    <span><strong>MM-2026-005</strong> · Long gold (pre-pos) · $4,523 → $4,328 · <span class="pnl-neg">−4.3%</span> · The hedge that didn't hedge. Gold sold in the cash-raising / stronger-real-yield move. Stop $4,250 still intact; this is a liquidation dip, not (yet) a trend break (Howell would add).</span></div>
+  <div class="yest-item"><span class="tick-r">✗</span>
+    <span><strong>MM-2026-004</strong> · Short US 10Y yield · 4.44% → 4.53% · <span class="pnl-neg">losing</span> · Wrong way. +172k payrolls sent the 10Y above 4.5%; stop 4.65% now ~12bp away. Most-exposed position into the FOMC.</span></div>
+  <div class="yest-item"><span class="tick-r">✗</span>
+    <span><strong>MM-2026-007</strong> · Short USDJPY · 158.80 → 160.27 · <span class="pnl-neg">losing</span> · DXY firmed on the hot print; yen back through 160. Stop 163.00. BoJ-divergence thesis intact but the dollar has the rate story for now.</span></div>
+  <div class="yest-item"><span class="tick-n">→</span>
+    <span><strong>MM-2026-003</strong> · Long Brent / Short WTI spread · 3.30 → 2.55 · <span class="pnl-neg">underwater</span> · Spread stayed compressed; WTI and Brent fell together. Edge has narrowed; watching for a close below 2.00.</span></div>
+  <div class="yest-item"><span class="tick-n">→</span>
+    <span><strong>MM-2026-001</strong> · Short EURAUD · 1.6150 → 1.615 · <span class="chg-flat">flat</span> · Quiet through the equity rout; FX crosses held. Target 1.610 still in sight.</span></div>
+</div>"""
+
+WRAP = """
 <div class="section-label">The Wrap</div>
 <div class="wrap-body">
 <p>It took one soft sentence to end a year-long spell. Broadcom's quarter was fine —
@@ -261,8 +407,9 @@ but it's the system working: a hard stop converted a thesis-breaker into a bound
 loss while the put-spread hedge and the steepener offset much of it. The lesson logged —
 into a name that's been beat-and-raise for a year, "in-line, no raise" is a sell catalyst,
 and we were long the wrong side of that asymmetry into the print.
-</div>
+</div>"""
 
+CORRELATION = """
 <div class="section-label">Correlation Regime</div>
 <div class="tile tile-muted">
   <div class="tile-claim">Everything-AI sold as one — correlation-to-1 is the unwind signature</div>
@@ -279,8 +426,9 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="tile tile-muted">
   <div class="tile-claim">Defensives &amp; cash outperformed — first rotation, or just less-bad?</div>
   <div class="tile-body">Quality/low-beta and cash held up as the crowded growth trade unwound (Berkshire was actually green). It's too early to call it a durable rotation; into the FOMC it's more "where you hide" than "where you add." The week ahead tells us if money rotates or just de-risks.</div>
-</div>
+</div>"""
 
+VOL_SKEW = """
 <div class="section-label">Vol &amp; Skew</div>
 <div class="vol-surface">
   <strong>VIX ~21.5, +40% on the move — and the term structure inverted (backwardation):</strong>
@@ -295,8 +443,9 @@ and we were long the wrong side of that asymmetry into the print.
   <div class="tile-head">The hedge worked</div>
   <div class="tile-claim">MM-2026-008 SPX put spread doubled (35 → 70) as the index fell on the print</div>
   <div class="tile-body">This is the entire point of carrying a defined-cost hedge into a crowded, expensive tape: it pays when the unwind comes. With VIX still elevated, the remaining time value is worth more — consider monetising part of the gain into the spike rather than round-tripping it if the market stabilises this week.</div>
-</div>
+</div>"""
 
+SECTOR_RV = """
 <div class="section-label">Sector &amp; RV</div>
 <div class="tile tile-red">
   <div class="tile-head">AI semis — the epicentre, SOX −10% in two sessions</div>
@@ -309,8 +458,9 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="tile tile-red">
   <div class="tile-head">Rate-sensitives — duration &amp; gold pressured; steepener the bright spot</div>
   <div class="tile-body">10Y &gt; 4.5% pressured the short-yield trade (MM-2026-004, stop ~12bp away) and gold (−4.3% vs entry). The clean winner is the 2s10s steepener (+38bp) as the long end leads. Into the FOMC, the long end is where the action is.</div>
-</div>
+</div>"""
 
+POSITIONING = """
 <div class="section-label">Positioning &amp; Flows</div>
 <div class="tile tile-muted">
   <div class="tile-head">The most-crowded trade got flushed — partway</div>
@@ -319,14 +469,16 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="tile tile-muted">
   <div class="tile-head">Jobs flipped the macro positioning — cuts priced out</div>
   <div class="tile-body">+172k vs ~80k expected pushed traders to price out cuts and lift year-end hike odds toward ~70% (a December hike now the base case). That repriced the whole curve and the dollar in hours. The week ahead is about whether that pricing holds into the FOMC, or fades if data softens.</div>
-</div>
+</div>"""
 
+FUNDING = """
 <div class="section-label">Funding &amp; Plumbing</div>
 <div class="tile tile-muted">
   <div class="tile-claim">No funding stress — this is an equity-positioning event, not a plumbing event</div>
   <div class="tile-body">Despite the equity air-pocket, money markets are orderly; this is risk being repriced, not dollars being hoarded. The thing to watch over the week: a firmer dollar + 30Y &gt; 5% tightens global financial conditions at the margin, and credit spreads are tight — any widening in IG/HY would be the signal that the equity unwind is becoming a credit event. Not there yet.</div>
-</div>
+</div>"""
 
+TAPE_MISSING = """
 <div class="section-label">What the Tape Is Missing</div>
 <div class="canary">
   <div class="cdot"></div>
@@ -339,8 +491,9 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="canary">
   <div class="cdot"></div>
   <div class="ctext"><strong>Gold and silver selling with stocks is a liquidity tell, not a macro reversal.</strong> In forced de-grossing, everything that can be sold for cash gets sold. Howell's framework — liquidity peaking but monetary debasement structural — argues the gold dip is for buying once the forced selling clears. The week-ahead signal: metals re-decoupling from equities = the flush is done.</div>
-</div>
+</div>"""
 
+CONSENSUS = """
 <div class="section-label">Consensus: Bid / Offer</div>
 <div class="tile tile-muted">
   <div class="tile-head">Consensus BID (it's a dip to buy)</div>
@@ -349,14 +502,16 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="tile tile-gold">
   <div class="tile-head">Strongest argument against — the OFFER</div>
   <div class="tile-body">This is the first time in the cycle a marquee AI name guided "in-line, no raise" — and the macro now wants hikes, not cuts. If hyperscaler capex commentary softens this week and the FOMC pencils a hike dot, the multiple reset has further to run, the crowded long keeps unwinding, and tight credit spreads start to widen. Don't confuse the first −10% with the last.</div>
-</div>
+</div>"""
 
+ONE_CHART = """
 <div class="section-label">This Week's One Chart That Matters</div>
 <div class="tile tile-gold">
   <div class="tile-claim">The US 10-year yield — the master variable into the FOMC</div>
   <div class="tile-body">With cuts priced out and the 30Y &gt; 5%, the 10Y (~4.53%) is the single number that governs the AI multiple this week. If it stabilises or eases, the equity flush can base and dip-buyers get paid. If it grinds toward 4.65%+ into the June 16–17 FOMC, the long-duration unwind extends and the short-yield trade (MM-2026-004) stops out. Watch the long end before you watch the chips.</div>
-</div>
+</div>"""
 
+CAT_CAL = """
 <div class="section-label">Week Ahead — Catalyst Calendar</div>
 <table class="cal-table">
 <thead><tr><th>Day</th><th>Date</th><th>Event</th><th>Consensus</th><th>View</th><th>Asymmetry</th></tr></thead>
@@ -390,8 +545,9 @@ and we were long the wrong side of that asymmetry into the print.
   <td class="asym-dn">Hike dot: SPX −3–5%, 10Y +, gold −; neutral hold: risk relief, DXY −</td>
 </tr>
 </tbody>
-</table>
+</table>"""
 
+MIND = """
 <div class="section-label">What Changes My Mind</div>
 <div class="mind-item"><strong>MM-2026-006 · AVGO — CLOSED (stopped −16%):</strong> Lesson logged. Re-entry only after the stock bases and hyperscaler capex commentary holds; no rush to catch the knife into the FOMC. The discipline (hard stop) is exactly why one bad call didn't become a portfolio event.</div>
 <div class="mind-item"><strong>MM-2026-008 · SPX put spread (35 → 70, +100%):</strong> The hedge paid. With VIX backwardated, consider monetising part of the gain into the spike; keep a residual hedge through the June 16–17 FOMC. Don't round-trip the whole thing if the market stabilises.</div>
@@ -400,8 +556,9 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="mind-item"><strong>MM-2026-005 · Long gold ($4,328):</strong> Min-hold rules apply; stop $4,250 (~1.8% below). Sold in the liquidation, not on a thesis break — Howell's debasement case is intact. Hold to the stop; the dip is for adding, not panicking, once forced selling clears.</div>
 <div class="mind-item"><strong>MM-2026-002 · Long Brent ($93.09, +2.3%):</strong> Gave back most of the gain with the risk selloff. Trailing stop $90. Energy is a follower this week; hold unless $90 breaks on a close.</div>
 <div class="mind-item"><strong>MM-2026-007 · Short USDJPY (160.27):</strong> Losing as the dollar firmed on jobs; stop 163.00. BoJ-divergence thesis intact but the rate impulse favours the dollar near-term — hold small, respect the stop.</div>
-<div class="mind-item"><strong>MM-2026-003 · Brent/WTI spread (2.55) &amp; MM-2026-001 · Short EURAUD (1.615):</strong> Both quiet through the equity rout. Spread edge has narrowed (watch &lt;2.00); EURAUD still targeting 1.610. No changes.</div>
+<div class="mind-item"><strong>MM-2026-003 · Brent/WTI spread (2.55) &amp; MM-2026-001 · Short EURAUD (1.615):</strong> Both quiet through the equity rout. Spread edge has narrowed (watch &lt;2.00); EURAUD still targeting 1.610. No changes.</div>"""
 
+CLIENT_AMMO = """
 <div class="section-label">Talking Points This Week</div>
 <div class="ammo">
   <div class="ammo-q">What actually caused the selloff — is the AI trade over?</div>
@@ -414,8 +571,9 @@ and we were long the wrong side of that asymmetry into the print.
 <div class="ammo">
   <div class="ammo-q">What do I watch this week?</div>
   <div class="ammo-a">Three things, in order: (1) the US 10-year yield — equities can't base until the long end stops rising; (2) hyperscaler/chip capex commentary — air-pocket vs downgrade-cycle; (3) the June 16–17 FOMC dot plot — a hike dot reprices everything lower, a neutral hold is the relief that lets the dip-buy work. CPI mid-week is the swing factor in between.</div>
-</div>
+</div>"""
 
+CITATIONS = """
 <div class="section-label">Citations</div>
 <div class="citation">
 Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:<br>
@@ -427,8 +585,9 @@ Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:
 · CNBC — hot jobs report puts Fed cuts further out of reach; hike odds rising into year-end (cnbc.com, Jun 5)<br>
 · TradingKey — gold falls (below ~$4,400) as NFP overturns rate-cut hopes; DXY/yields up (tradingkey.com, Jun 5)<br>
 · Live cross-asset levels (AVGO ~$386, SOX, VIX ~21.5, 10Y ~4.53%, 30Y &gt; 5%, gold ~$4,328, USDJPY ~160) via TradingView, 2026-06-07
-</div>
+</div>"""
 
+STALENESS = """
 <div class="section-label">Staleness Check</div>
 <table class="stale-tbl">
 <thead><tr><th>Datum</th><th>Source</th><th>As of</th><th>Status</th></tr></thead>
@@ -444,16 +603,108 @@ Sources beyond Reuters / Bloomberg / FT / WSJ / AP / central banks / CME / Cboe:
 <tr><td>CPI date / FOMC Jun 16–17 specifics</td><td>Calendar (consensus)</td><td>upcoming</td><td class="stale-flag">Verify exact prints/times live</td></tr>
 <tr><td>Bund, Gilt, USDCNH, MOVE, credit spreads</td><td>Not sourced this refresh</td><td>unavailable</td><td class="stale-flag">Unavailable</td></tr>
 </tbody>
-</table></div>
-    <div class="rhs"><div class="section-label">The Open</div>
-<div class="dash-grid"><div class="dash-tile"><div class="dlabel">S&amp;P 500</div><div class="dval">~7,384 <span class="chg-dn">−2.6% on the print</span></div></div><div class="dash-tile"><div class="dlabel">Nasdaq 100</div><div class="dval">~28,958 <span class="chg-dn">−4.8%</span></div></div><div class="dash-tile"><div class="dlabel">SOX (semis)</div><div class="dval">~12,221 <span class="chg-dn">−10% (2 sessions)</span></div></div><div class="dash-tile"><div class="dlabel">VIX</div><div class="dval">~21.5 <span class="chg-up">+40%, backwardated</span></div></div><div class="dash-tile"><div class="dlabel">FTSE 100</div><div class="dval">~10,368 <span class="chg-flat">+0.1% (relative haven)</span></div></div><div class="dash-tile"><div class="dlabel">Nikkei 225</div><div class="dval">~66,588 <span class="chg-dn">−1.3%</span></div></div><div class="dash-tile"><div class="dlabel">DXY</div><div class="dval">~100.1 <span class="chg-up">+0.6% on hot jobs</span></div></div><div class="dash-tile"><div class="dlabel">EURUSD</div><div class="dval">~1.152 <span class="chg-dn">−0.8%</span></div></div><div class="dash-tile"><div class="dlabel">USDJPY</div><div class="dval">~160.3 <span class="chg-up">dollar firm</span></div></div><div class="dash-tile"><div class="dlabel">US 2Y</div><div class="dval">4.15% <span class="chg-flat">anchored</span></div></div><div class="dash-tile"><div class="dlabel">US 10Y</div><div class="dval">4.53% <span class="chg-up">&gt;4.5% on +172k</span></div></div><div class="dash-tile"><div class="dlabel">US 30Y</div><div class="dval">&gt;5.0% <span class="chg-up">term premium</span></div></div><div class="dash-tile"><div class="dlabel">2s10s</div><div class="dval">~+38bp <span class="chg-up">steepening</span></div></div><div class="dash-tile"><div class="dlabel">WTI Crude</div><div class="dval">~$90.5 <span class="chg-dn">sold with risk</span></div></div><div class="dash-tile"><div class="dlabel">Brent Crude</div><div class="dval">~$93.1 <span class="chg-dn">off the highs</span></div></div><div class="dash-tile"><div class="dlabel">Gold (XAU)</div><div class="dval">~$4,328 <span class="chg-dn">−3.3% (liquidation)</span></div></div><div class="dash-tile"><div class="dlabel">Silver</div><div class="dval">~$67.7 <span class="chg-dn">−8.3%</span></div></div><div class="dash-tile"><div class="dlabel">Bitcoin</div><div class="dval">~$62.5k <span class="chg-up">+2.6% (held up)</span></div></div><div class="dash-tile"><div class="dlabel">AVGO</div><div class="dval">~$386 <span class="chg-dn">−14% on the guide</span></div></div><div class="dash-tile"><div class="dlabel">May Payrolls</div><div class="dval">+172k <span class="chg-up">vs ~80k expected</span></div></div></div>
-<div class="theme-line">Last 24h: one soft Broadcom AI guide + a hot +172k jobs print took the SOX −10% and sent the 10Y above 4.5%. Week ahead: watch the long end, hyperscaler capex commentary, CPI, and the June 16–17 FOMC dot plot.</div>
-<div class="section-label" style="margin-top:1.5rem">New Trade Ideas</div>
-<div class="trade-card"><div class="tc-top"><div><div class="tc-name">Buy SPX Jun-27 7300/7000 put spread (hedge)</div><div class="tc-class">reactive · Derivatives</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Derivatives</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">put spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">35.0</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">0.0</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">265.0</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">26 days</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(2/2) · confirm(0/2) · stop(1/1)</span></div><div class="tc-thesis">VIX at 15.3 is cheap for 4 non-trivial events in 15 days: AVGO Jun 3, payrolls Jun 5, ECB Jun 11, FOMC Jun 16-17. 0.5% notional cost; 7x payoff if SPX draws down 6%. Insurance on a portfolio long AI equities.</div></div><div class="trade-card"><div class="tc-top"><div><div class="tc-name">2s10s UST curve steepener</div><div class="tc-class">pre-position · Rates</div></div><div class="conv-badge">7/10</div></div><div class="tc-row"><span class="tc-k">Asset</span><span class="tc-v">Rates</span></div><div class="tc-row"><span class="tc-k">Structure</span><span class="tc-v">spread</span></div><div class="tc-row"><span class="tc-k">Entry</span><span class="tc-v">0.15</span></div><div class="tc-row"><span class="tc-k">Stop</span><span class="tc-v">-0.1</span></div><div class="tc-row"><span class="tc-k">Target</span><span class="tc-v">0.6</span></div><div class="tc-row"><span class="tc-k">Horizon</span><span class="tc-v">3 months</span></div><div class="tc-row"><span class="tc-k">Min hold</span><span class="tc-v">45d</span></div><div class="conv-bar"><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip  on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><span class="conv-detail">gap(2/3) · catalyst(2/2) · pos(1/2) · confirm(1/2) · stop(1/1)</span></div><div class="tc-thesis">2s10s at +15bp after 18-month inversion. Buy 2Y (own cut optionality) vs short 10Y (short fiscal supply risk). June 5 payrolls at 89k + Fed pause re-prices front-end. ECB hiking cycle lifts global long rates. Steepener delivers whether Fed cuts or back-end sells off on supply. Late-cycle steepeners outperform after prolonged inversions.</div></div>
-<div class="section-label" style="margin-top:1.5rem">Live Book + Scoreboard</div>
-<div class="score-row"><div class="score-tile"><div class="sval">1</div><div class="slabel">Closed</div></div><div class="score-tile"><div class="sval">0%</div><div class="slabel">Hit rate</div></div><div class="score-tile"><div class="sval neg">-16.1%</div><div class="slabel">Sum P&L</div></div><div class="score-tile"><div class="sval pos">MM-2026-006</div><div class="slabel">Best</div></div></div><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Opened</th><th>Current</th><th>P&L</th><th>Window</th><th>&rarr; Target</th></tr></thead><tbody><tr><td><span class="pill">MM-2026-001</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short EURAUD spot</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">1.615</td><td><span class="pnl-pos">+1.82%</span></td><td><span style="color:var(--ink-mute)">7d</span></td><td><div class="prog-bar"><span style="width:85%"></span></div></td></tr><tr><td><span class="pill">MM-2026-002</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent crude</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">93.09</td><td><span class="pnl-pos">+2.30%</span></td><td><span style="color:var(--ink-mute)">7d</span></td><td><div class="prog-bar"><span style="width:16%"></span></div></td></tr><tr><td><span class="pill">MM-2026-003</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent vs short WTI (spread)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">2.55</td><td><span class="pnl-neg">-22.73%</span></td><td><span style="color:var(--ink-mute)">7d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-004</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short US 10Y yield (long duration)</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4.53</td><td><span class="pnl-neg">-2.03%</span></td><td><span style="color:var(--ink-mute)">7d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-005</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long gold into the June Fed window</td><td>2026-05-31</td><td style="font-variant-numeric:tabular-nums">4328.0</td><td><span class="pnl-neg">-4.31%</span></td><td><span style="color:var(--ink-mute)">83d</span></td><td><div class="prog-bar"><span style="width:0%"></span></div></td></tr><tr><td><span class="pill">MM-2026-008</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Buy SPX Jun-27 7300/7000 put spread (hedge)</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">70.0</td><td><span class="pnl-pos">+100.00%</span></td><td><span style="color:var(--ink-mute)">20d</span></td><td><div class="prog-bar"><span style="width:15%"></span></div></td></tr><tr><td><span class="pill">MM-2026-009</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">2s10s UST curve steepener</td><td>2026-06-01</td><td style="font-variant-numeric:tabular-nums">0.38</td><td><span class="pnl-pos">+153.33%</span></td><td><span style="color:var(--ink-mute)">84d</span></td><td><div class="prog-bar"><span style="width:51%"></span></div></td></tr></tbody></table><div class="section-label" style="margin-top:1rem">Closed ledger</div><table class="live-table"><thead><tr><th>ID</th><th>Trade</th><th>Result</th><th>P&L</th><th>Held</th></tr></thead><tbody><tr><td><span class="pill">MM-2026-006</span></td><td>Long Broadcom (AVGO) into Q2 earnings</td><td>STOPPED</td><td><span class="pnl-neg">-16.15%</span></td><td style="color:var(--ink-mute)">6d</td></tr></tbody></table>
-<div class="section-label" style="margin-top:1.5rem">Charts</div><div style="margin-bottom:8px"><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">EQUITY CURVE  ·  CUMULATIVE P&amp;L (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">-17.4</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">-12.8</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">-8.1</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">-3.4</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">+1.3</text><line x1="52" y1="43.5" x2="622" y2="43.5" stroke="#8a8378" stroke-width="1" stroke-dasharray="2 3"/><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">06-07</text><polyline points="52.0,262.5" fill="none" stroke="#8a8378" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3"/><circle cx="52.0" cy="262.5" r="2.6" fill="#8a8378"/><polyline points="52.0,218.7" fill="none" stroke="#cc785c" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="218.7" r="2.6" fill="#cc785c"/><line x1="52" y1="310" x2="70" y2="310" stroke="#cc785c" stroke-width="2.4"/><text x="76" y="314" font-size="11" fill="#5c574f">conviction-weighted</text><line x1="207.39999999999998" y1="310" x2="225.39999999999998" y2="310" stroke="#8a8378" stroke-width="2.4" stroke-dasharray="4 3"/><text x="231.39999999999998" y="314" font-size="11" fill="#5c574f">equal-weight</text></svg></div><div style="margin-bottom:8px"><svg viewBox="0 0 640 140" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><rect x="0" y="0" width="640" height="140" fill="#fbfaf6" rx="6"/><text x="320.0" y="70.0" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#8a8378" font-style="italic">calibration: 9 more closed trade(s) needed</text></svg></div><div style="margin-bottom:8px"><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">VIX TERM STRUCTURE  ·  BACKWARDATION</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">19.8</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">20.9</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">21.9</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">23.0</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">24.1</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX9D</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX3M</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX6M</text><polyline points="52.0,59.6 242.0,180.1 432.0,222.3 622.0,246.4" fill="none" stroke="#bf4a3c" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="59.6" r="2.6" fill="#bf4a3c"/><circle cx="242.0" cy="180.1" r="2.6" fill="#bf4a3c"/><circle cx="432.0" cy="222.3" r="2.6" fill="#bf4a3c"/><circle cx="622.0" cy="246.4" r="2.6" fill="#bf4a3c"/></svg></div><div><svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">UST YIELD CURVE  ·  2S / 5S / 10S / 30S (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">3.96</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">4.27</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">4.58</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">4.90</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">5.21</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">2Y</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">5Y</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">10Y</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">30Y</text><polyline points="52.0,241.2 242.0,202.7 432.0,164.2 622.0,64.8" fill="none" stroke="#191917" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="241.2" r="2.6" fill="#191917"/><circle cx="242.0" cy="202.7" r="2.6" fill="#191917"/><circle cx="432.0" cy="164.2" r="2.6" fill="#191917"/><circle cx="622.0" cy="64.8" r="2.6" fill="#191917"/></svg></div></div>
+</table>"""
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+DASH = [
+    ("S&P 500",      "~7,384",    "−2.6% on the print","down"),
+    ("Nasdaq 100",   "~28,958",   "−4.8%",            "down"),
+    ("SOX (semis)",  "~12,221",   "−10% (2 sessions)","down"),
+    ("VIX",          "~21.5",     "+40%, backwardated","up"),
+    ("FTSE 100",     "~10,368",   "+0.1% (relative haven)","flat"),
+    ("Nikkei 225",   "~66,588",   "−1.3%",            "down"),
+    ("DXY",          "~100.1",    "+0.6% on hot jobs","up"),
+    ("EURUSD",       "~1.152",    "−0.8%",            "down"),
+    ("USDJPY",       "~160.3",    "dollar firm",      "up"),
+    ("US 2Y",        "4.15%",     "anchored",         "flat"),
+    ("US 10Y",       "4.53%",     ">4.5% on +172k",   "up"),
+    ("US 30Y",       ">5.0%",     "term premium",     "up"),
+    ("2s10s",        "~+38bp",    "steepening",       "up"),
+    ("WTI Crude",    "~$90.5",    "sold with risk",   "down"),
+    ("Brent Crude",  "~$93.1",    "off the highs",    "down"),
+    ("Gold (XAU)",   "~$4,328",   "−3.3% (liquidation)","down"),
+    ("Silver",       "~$67.7",    "−8.3%",            "down"),
+    ("Bitcoin",      "~$62.5k",   "+2.6% (held up)",  "up"),
+    ("AVGO",         "~$386",     "−14% on the guide","down"),
+    ("May Payrolls", "+172k",     "vs ~80k expected", "up"),
+]
+
+def dash_tile(name, val, chg, d):
+    if d == "unverified" or val == "—":
+        body = '<span style="color:var(--ink-mute)">unverified</span>'
+    else:
+        cls = {"up": "chg-up", "down": "chg-dn", "flat": "chg-flat"}.get(d, "chg-flat")
+        body = f'{e(val)} <span class="{cls}">{e(chg)}</span>'
+    return f'<div class="dash-tile"><div class="dlabel">{e(name)}</div><div class="dval">{body}</div></div>'
+
+dashboard_html = '<div class="dash-grid">' + "".join(dash_tile(*r) for r in DASH) + '</div>'
+
+theme_line = (
+    '<div class="theme-line">Last 24h: one soft Broadcom AI guide + a hot +172k jobs print '
+    'took the SOX −10% and sent the 10Y above 4.5%. Week ahead: watch the long end, '
+    'hyperscaler capex commentary, CPI, and the June 16–17 FOMC dot plot.</div>'
+)
+
+new_today = [t for t in trades["open"] if t["id"] in
+             ("MM-2026-006","MM-2026-007","MM-2026-008","MM-2026-009")]
+idea_cards = "".join(trade_card(t) for t in new_today) or (
+    '<p style="font-size:12px;color:var(--ink-mute)">No new ideas — existing positions cover the key themes.</p>'
+)
+
+charts_html = (
+    '<div class="section-label" style="margin-top:1.5rem">Charts</div>'
+    f'<div style="margin-bottom:8px">{eq_svg}</div>'
+    f'<div style="margin-bottom:8px">{cal_svg}</div>'
+    f'<div style="margin-bottom:8px">{vix_svg}</div>'
+    f'<div>{yc_svg}</div>'
+)
+
+LHS = "\n".join([
+    YESTERDAY, AVGO_SECTION, WRAP,
+    CORRELATION, VOL_SKEW, SECTOR_RV, POSITIONING, FUNDING,
+    TAPE_MISSING, CONSENSUS, ONE_CHART, CAT_CAL,
+    MIND, CLIENT_AMMO, CITATIONS, STALENESS,
+])
+
+RHS = "\n".join([
+    '<div class="section-label">The Open</div>',
+    dashboard_html, theme_line,
+    '<div class="section-label" style="margin-top:1.5rem">New Trade Ideas</div>',
+    idea_cards,
+    '<div class="section-label" style="margin-top:1.5rem">Live Book + Scoreboard</div>',
+    live_book(trades),
+    charts_html,
+])
+
+HTML = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Market Map &middot; {TODAY}</title>
+  <style>{CSS}</style>
+</head>
+<body>
+<div class="page">
+  {MASTHEAD}
+  <div class="two-col">
+    <div class="lhs">{LHS}</div>
+    <div class="rhs">{RHS}</div>
   </div>
 </div>
 </body>
-</html>
+</html>"""
+
+out = os.path.join(HERE, "output.html")
+with open(out, "w", encoding="utf-8") as f:
+    f.write(HTML)
+book.save_json(book.TRADES_PATH, trades)
+book.save_json(book.REGIME_PATH, regime_log)
+
+print(f"output.html: {len(HTML):,} bytes")
+print(f"Open: {len(trades['open'])} | Closed: {len(trades['closed'])}")
+for t in trades["open"]:
+    print(f"  {t['id']} | {t['trade'][:38]:38} | pnl {t.get('current_pnl_pct',0):+.2f}%")
+
+import subprocess
+subprocess.Popen(["start", out], shell=True)
