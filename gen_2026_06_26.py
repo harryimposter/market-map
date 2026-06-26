@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Map 2026-06-26 — The Hormuz Unwind</title>
-<style>
+#!/usr/bin/env python3
+"""Market Map — June 26, 2026.
+The Hormuz Unwind: Iran MoU signed, oil -19%, two stops hit, Warsh signals October hike.
+Fresh marks + Shark Tank two-column format (render_v2.py).
+"""
+import os, sys, json, html as _html
+from datetime import date, datetime
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import book, charts
+
+TODAY = "2026-06-26"
+NOW   = "08:45"
+HERE  = os.path.dirname(os.path.abspath(__file__))
+
+def e(s):
+    return _html.escape(str(s)) if s is not None else ""
+
+# ── CSS — Shark Tank / render_v2.py flat-white spec ──────────────────────────
+CSS = """
 :root {
   --bg:#ffffff; --surface:#f7f7f5; --ink:#1a1a1a; --ink-soft:#6b6b6b;
   --ink-mute:#9a9a9a; --gold:#b8960c; --red:#c0392b; --green:#1a7a45;
@@ -94,20 +107,170 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
 .wrap-body strong{font-weight:600}
 .alert-banner{background:#fff8f8;border:0.5px solid rgba(192,57,43,0.3);border-left:3px solid var(--red);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:0.6rem 0.85rem;margin:1rem 0;font-size:13px;color:var(--red);line-height:1.5}
 .info-banner{background:#f7f7f5;border:0.5px solid var(--line);border-left:3px solid var(--gold);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:0.6rem 0.85rem;margin:1rem 0;font-size:12px;color:var(--ink-soft);line-height:1.5}
-</style>
-</head>
-<body>
-<div class="page">
-  
+"""
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+def pips(conviction, cb):
+    n = int(conviction)
+    dots = "".join(
+        f'<div class="pip{"  on" if i < n else ""}"></div>' for i in range(10)
+    )
+    detail = (
+        f'gap({cb.get("gap",0)}/3) · '
+        f'catalyst({cb.get("catalyst",0)}/2) · '
+        f'pos({cb.get("positioning",0)}/2) · '
+        f'confirm({cb.get("confirmation",0)}/2) · '
+        f'stop({cb.get("stop_quality",0)}/1)'
+    )
+    return f'<div class="conv-bar">{dots}<span class="conv-detail">{e(detail)}</span></div>'
+
+def pnl_span(p):
+    if p is None:
+        return '<span style="color:var(--ink-mute)">--</span>'
+    cls = "pnl-pos" if p > 0 else ("pnl-neg" if p < 0 else "")
+    return f'<span class="{cls}">{p:+.2f}%</span>'
+
+def progress_pct(t, level):
+    entry, target = t.get("entry"), t.get("target")
+    if entry is None or target is None or target == entry:
+        return 0
+    d = 1 if target >= entry else -1
+    p = d * (level - entry) / abs(target - entry)
+    return max(0, min(100, int(p * 100)))
+
+# Marks applied to trades before writing output
+def apply_marks(trades):
+    marks = {
+        "MM-2026-001": {"level": 1.6504, "pnl": -0.33},
+        "MM-2026-003": {"level": 3.63,   "pnl": 10.0},
+        "MM-2026-004": {"level": 4.45,   "pnl": -0.23},
+        "MM-2026-008": {"level": 3.0,    "pnl": -91.4},
+        "MM-2026-009": {"level": 0.29,   "pnl": 93.3},
+    }
+    stops = {
+        "MM-2026-002": {"level": 84.0,   "pnl": -7.69, "date": "2026-06-16", "days": 16},
+        "MM-2026-005": {"level": 4250.0, "pnl": -6.04, "date": "2026-06-19", "days": 19},
+    }
+    new_open = []
+    new_closed = list(trades.get("closed", []))
+    for t in trades.get("open", []):
+        tid = t["id"]
+        if tid in stops:
+            s = stops[tid]
+            entry = {"date": s["date"], "level": s["level"], "pnl_pct": s["pnl"], "status": "stopped"}
+            t["history"].append(entry)
+            t["current"] = s["level"]
+            t["current_pnl_pct"] = s["pnl"]
+            t["exit"] = {"date": s["date"], "level": s["level"],
+                         "result": "STOPPED", "pnl_pct": s["pnl"], "days_held": s["days"]}
+            new_closed.append(t)
+        elif tid in marks:
+            m = marks[tid]
+            t["history"].append({"date": TODAY, "level": m["level"], "pnl_pct": m["pnl"], "status": "open"})
+            t["current"] = m["level"]
+            t["current_pnl_pct"] = m["pnl"]
+            new_open.append(t)
+        else:
+            new_open.append(t)
+    return {"open": new_open, "closed": new_closed}
+
+trades_raw = book.load_trades()
+trades = apply_marks(trades_raw)
+
+# Save updated trades.json
+with open(os.path.join(HERE, "trades.json"), "w") as f:
+    json.dump(trades, f, indent=2)
+
+# ── Charts ────────────────────────────────────────────────────────────────────
+eq_svg  = charts.equity_curve(trades["closed"])
+cal_svg = charts.calibration(trades["closed"])
+vix_svg = charts.vix_term_structure([
+    {"label": "VIX9D", "value": 15.2},
+    {"label": "VIX",   "value": 18.44},
+    {"label": "VIX3M", "value": 19.8},
+    {"label": "VIX6M", "value": 20.5},
+])
+yc_svg  = charts.yield_curve([
+    {"label": "2Y",  "value": 4.16},
+    {"label": "5Y",  "value": 4.28},
+    {"label": "10Y", "value": 4.45},
+    {"label": "30Y", "value": 4.72},
+])
+
+# ── Trade book HTML ───────────────────────────────────────────────────────────
+def live_book_html(trades):
+    closed = trades.get("closed", [])
+    open_t = trades.get("open", [])
+    graded = [t for t in closed if "exit" in t and "pnl_pct" in t["exit"]]
+    if graded:
+        pnls = [t["exit"]["pnl_pct"] for t in graded]
+        wins  = [p for p in pnls if p > 0]
+        hr    = 100 * len(wins) / len(graded)
+        best  = max(graded, key=lambda t: t["exit"]["pnl_pct"])
+        worst = min(graded, key=lambda t: t["exit"]["pnl_pct"])
+        score = f"""
+<div class="score-row">
+  <div class="score-tile"><div class="sval">{len(graded)}</div><div class="slabel">Closed</div></div>
+  <div class="score-tile"><div class="sval {'pos' if hr>=50 else 'neg'}">{hr:.0f}%</div><div class="slabel">Hit rate</div></div>
+  <div class="score-tile"><div class="sval {'pos' if sum(pnls)>=0 else 'neg'}">{sum(pnls):+.1f}%</div><div class="slabel">Sum P&amp;L</div></div>
+  <div class="score-tile"><div class="sval neg">{worst['id']}</div><div class="slabel">Worst</div></div>
+</div>"""
+    else:
+        score = '<p style="font-size:12px;color:var(--ink-mute);margin-bottom:0.75rem">Scoreboard builds as trades close.</p>'
+
+    open_rows = []
+    for t in open_t:
+        cur = t.get("current", t.get("entry"))
+        pl  = t.get("current_pnl_pct")
+        prog = progress_pct(t, cur) if cur is not None else 0
+        warn = ""
+        # Flag MM-2026-001 as near-stop, MM-2026-008 as expiring
+        if t["id"] == "MM-2026-001":
+            warn = ' style="color:var(--red)"'
+        elif t["id"] == "MM-2026-008":
+            warn = ' style="color:var(--red)"'
+        open_rows.append(f"""<tr>
+  <td><span class="pill">{e(t.get('id',''))}</span></td>
+  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"{warn}>{e(t.get('trade',''))}</td>
+  <td style="font-variant-numeric:tabular-nums">{e(cur)}</td>
+  <td>{pnl_span(pl)}</td>
+  <td><div class="prog-bar"><span style="width:{prog}%"></span></div></td>
+</tr>""")
+
+    open_tbl = f"""
+<table class="live-table">
+  <thead><tr><th>ID</th><th>Trade</th><th>Mark</th><th>P&L</th><th>To target</th></tr></thead>
+  <tbody>{"".join(open_rows) or '<tr><td colspan="5" style="color:var(--ink-mute)">no open trades</td></tr>'}</tbody>
+</table>"""
+
+    closed_rows = "".join(f"""<tr>
+  <td><span class="pill">{e(t.get('id',''))}</span></td>
+  <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{e(t.get('trade',''))}</td>
+  <td>{e(t.get('exit',{}).get('result',''))}</td>
+  <td>{pnl_span(t.get('exit',{}).get('pnl_pct'))}</td>
+  <td style="color:var(--ink-mute)">{e(t.get('exit',{}).get('days_held',''))}d</td>
+</tr>""" for t in closed) if closed else ""
+
+    closed_tbl = f"""
+<div class="section-label" style="margin-top:1rem">Closed ledger</div>
+<table class="live-table">
+  <thead><tr><th>ID</th><th>Trade</th><th>Result</th><th>P&L</th><th>Held</th></tr></thead>
+  <tbody>{closed_rows or '<tr><td colspan="5" style="color:var(--ink-mute)">none yet</td></tr>'}</tbody>
+</table>""" if closed else ""
+
+    return score + open_tbl + closed_tbl
+
+
+# ── HTML sections ─────────────────────────────────────────────────────────────
+MASTHEAD = f"""
 <div class="masthead">
   <div class="regime-tag">Ceasefire Unwind &middot; Brent -19% &middot; Two Stops Hit</div>
   <h1 class="article-title">The Hormuz Unwind</h1>
-  <p class="meta">Pre-market intelligence brief &middot; 2026-06-26 &middot; 08:45 local &middot; self-graded book</p>
+  <p class="meta">Pre-market intelligence brief &middot; {TODAY} &middot; {NOW} local &middot; self-graded book</p>
   <hr class="gold-rule">
-</div>
-  <div class="two-col">
-    <div class="lhs">
-      
+</div>"""
+
+ARTICLE = """
 <div class="section-label">The view</div>
 <div class="wrap-body">
 <p>Three weeks have passed since the June 7 brief, and the macro landscape has
@@ -167,8 +330,9 @@ in that it provided positive carry into the post-payrolls dip; the May 172k prin
 reversed that move and the market held above 7,300 into expiry. Maximum loss is
 the original $35 premium paid.</p>
 </div>
+"""
 
-      
+SINCE_LAST = """
 <div class="section-label">Since the June 7 brief</div>
 <div class="yesterday">
   <div class="yest-item">
@@ -200,8 +364,9 @@ the original $35 premium paid.</p>
     <span><strong>Today — Brent $74.43, WTI $70.80</strong>. Brent-WTI spread $3.63. Gold $4,007. 10Y 4.45%. 2s10s +29bp.</span>
   </div>
 </div>
+"""
 
-      
+OPEN_TRADES_LHS = """
 <div class="section-label">Open positions — updated marks</div>
 
 <div class="alert-banner">
@@ -211,8 +376,10 @@ the original $35 premium paid.</p>
 <div class="alert-banner">
   <strong>MM-2026-008 expires tomorrow (Jun 27)</strong> — SPX Jun-27 7300/7000 put spread. SPX at 7,358 means the 7300 put is out-of-the-money. Current value ~$3. Full premium at risk; max loss = $35 original cost.
 </div>
+"""
 
-      
+# Detailed trade analysis per open position
+OPEN_DETAIL = """
 <div class="section-label" style="margin-top:1.5rem">Position-by-position</div>
 
 <div class="tile tile-red">
@@ -262,8 +429,9 @@ the original $35 premium paid.</p>
   post-inversion, Fed pause + fiscal supply pressure at the long end) remains intact. Stop at -10bp is
   comfortable; the next inflection is the FOMC July 28-29 meeting.</div>
 </div>
+"""
 
-      
+CANARY_WATCH = """
 <div class="section-label">Canary watch</div>
 <div class="canary">
   <div class="cdot"></div>
@@ -289,8 +457,9 @@ the original $35 premium paid.</p>
   If payrolls decelerate toward 100k or below, the October hike gets pushed; steepener and duration
   longs come alive.</div>
 </div>
+"""
 
-      
+AMMO = """
 <div class="section-label">Talking points</div>
 <div class="ammo">
   <div class="ammo-q">Why did the Brent long stop out but not the spread trade?</div>
@@ -315,8 +484,9 @@ the original $35 premium paid.</p>
   if the hike is credibly delivered AND the long end sells off on fiscal supply at the same time —
   a bear steepen within a hike cycle. That is a secondary risk, but it is the risk to monitor.</div>
 </div>
+"""
 
-      
+WEEK_AHEAD = """
 <div class="section-label">Week ahead</div>
 <table class="cal-table">
   <thead><tr><th>Date</th><th>Event</th><th>Asymmetry</th></tr></thead>
@@ -328,10 +498,10 @@ the original $35 premium paid.</p>
     <tr><td>Jul 28-29</td><td class="cal-event">FOMC</td><td>Unlikely to hike July; language around October is the tell</td></tr>
   </tbody>
 </table>
+"""
 
-    </div>
-    <div class="rhs">
-      
+# ── Dashboard tiles ───────────────────────────────────────────────────────────
+DASH = """
 <div class="section-label">Live levels — Jun 26</div>
 <div class="dash-grid">
   <div class="dash-tile"><div class="dlabel">Brent crude</div>
@@ -366,85 +536,9 @@ the original $35 premium paid.</p>
   MM-2026-006 Long AVGO hit stop $422 (Jun 7, -16.2%).
   AVGO stopped below $422 at $385.73 — stop level breached on the post-earnings gap-down.
 </div>
+"""
 
-      
-<div class="section-label">VIX term structure</div>
-<svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">VIX TERM STRUCTURE  ·  CONTANGO</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">14.2</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">16.0</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">17.9</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">19.7</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">21.5</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX9D</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX3M</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">VIX6M</text><polyline points="52.0,246.4 242.0,132.2 432.0,84.3 622.0,59.6" fill="none" stroke="#1a7a45" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="246.4" r="2.6" fill="#1a7a45"/><circle cx="242.0" cy="132.2" r="2.6" fill="#1a7a45"/><circle cx="432.0" cy="84.3" r="2.6" fill="#1a7a45"/><circle cx="622.0" cy="59.6" r="2.6" fill="#1a7a45"/></svg>
-<div style="font-size:11px;color:var(--ink-mute);margin-top:4px">VIX 18.44 — elevated vs pre-crisis but off the conflict peak. Contango signals short-vol supply returning.</div>
-
-      
-<div class="section-label">Yield curve</div>
-<svg viewBox="0 0 640 320" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Georgia, serif" role="img" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block"><text x="52" y="16" font-size="12" letter-spacing="1.5" fill="#8a8378">UST YIELD CURVE  ·  2S / 5S / 10S / 30S (%)</text><line x1="52" y1="280.0" x2="622" y2="280.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="284.0" text-anchor="end" font-size="11" fill="#8a8378">4.04</text><line x1="52" y1="216.5" x2="622" y2="216.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="220.5" text-anchor="end" font-size="11" fill="#8a8378">4.24</text><line x1="52" y1="153.0" x2="622" y2="153.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="157.0" text-anchor="end" font-size="11" fill="#8a8378">4.44</text><line x1="52" y1="89.5" x2="622" y2="89.5" stroke="#e2dccf" stroke-width="1"/><text x="45" y="93.5" text-anchor="end" font-size="11" fill="#8a8378">4.64</text><line x1="52" y1="26.0" x2="622" y2="26.0" stroke="#e2dccf" stroke-width="1"/><text x="45" y="30.0" text-anchor="end" font-size="11" fill="#8a8378">4.84</text><text x="52.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">2Y</text><text x="242.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">5Y</text><text x="432.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">10Y</text><text x="622.0" y="298" text-anchor="middle" font-size="11" fill="#8a8378">30Y</text><polyline points="52.0,241.2 242.0,203.4 432.0,149.9 622.0,64.8" fill="none" stroke="#191917" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="52.0" cy="241.2" r="2.6" fill="#191917"/><circle cx="242.0" cy="203.4" r="2.6" fill="#191917"/><circle cx="432.0" cy="149.9" r="2.6" fill="#191917"/><circle cx="622.0" cy="64.8" r="2.6" fill="#191917"/></svg>
-<div style="font-size:11px;color:var(--ink-mute);margin-top:4px">2s10s +29bp (entry +15bp). 2Y anchored by Oct-hike pricing; 10Y held by fiscal supply + disinflation cross-current.</div>
-
-      
-<div class="section-label">Trade book</div>
-
-<div class="score-row">
-  <div class="score-tile"><div class="sval">3</div><div class="slabel">Closed</div></div>
-  <div class="score-tile"><div class="sval neg">0%</div><div class="slabel">Hit rate</div></div>
-  <div class="score-tile"><div class="sval neg">-29.9%</div><div class="slabel">Sum P&amp;L</div></div>
-  <div class="score-tile"><div class="sval neg">MM-2026-006</div><div class="slabel">Worst</div></div>
-</div>
-<table class="live-table">
-  <thead><tr><th>ID</th><th>Trade</th><th>Mark</th><th>P&L</th><th>To target</th></tr></thead>
-  <tbody><tr>
-  <td><span class="pill">MM-2026-001</span></td>
-  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" style="color:var(--red)">Short EURAUD spot</td>
-  <td style="font-variant-numeric:tabular-nums">1.6504</td>
-  <td><span class="pnl-neg">-0.33%</span></td>
-  <td><div class="prog-bar"><span style="width:0%"></span></div></td>
-</tr><tr>
-  <td><span class="pill">MM-2026-003</span></td>
-  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent vs short WTI (spread)</td>
-  <td style="font-variant-numeric:tabular-nums">3.63</td>
-  <td><span class="pnl-pos">+10.00%</span></td>
-  <td><div class="prog-bar"><span style="width:10%"></span></div></td>
-</tr><tr>
-  <td><span class="pill">MM-2026-004</span></td>
-  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Short US 10Y yield (long duration)</td>
-  <td style="font-variant-numeric:tabular-nums">4.45</td>
-  <td><span class="pnl-neg">-0.23%</span></td>
-  <td><div class="prog-bar"><span style="width:0%"></span></div></td>
-</tr><tr>
-  <td><span class="pill">MM-2026-008</span></td>
-  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" style="color:var(--red)">Buy SPX Jun-27 7300/7000 put spread (hedge)</td>
-  <td style="font-variant-numeric:tabular-nums">3.0</td>
-  <td><span class="pnl-neg">-91.40%</span></td>
-  <td><div class="prog-bar"><span style="width:0%"></span></div></td>
-</tr><tr>
-  <td><span class="pill">MM-2026-009</span></td>
-  <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">2s10s UST curve steepener</td>
-  <td style="font-variant-numeric:tabular-nums">0.29</td>
-  <td><span class="pnl-pos">+93.30%</span></td>
-  <td><div class="prog-bar"><span style="width:31%"></span></div></td>
-</tr></tbody>
-</table>
-<div class="section-label" style="margin-top:1rem">Closed ledger</div>
-<table class="live-table">
-  <thead><tr><th>ID</th><th>Trade</th><th>Result</th><th>P&L</th><th>Held</th></tr></thead>
-  <tbody><tr>
-  <td><span class="pill">MM-2026-006</span></td>
-  <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Broadcom (AVGO) into Q2 earnings</td>
-  <td>STOPPED</td>
-  <td><span class="pnl-neg">-16.15%</span></td>
-  <td style="color:var(--ink-mute)">6d</td>
-</tr><tr>
-  <td><span class="pill">MM-2026-002</span></td>
-  <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long Brent crude</td>
-  <td>STOPPED</td>
-  <td><span class="pnl-neg">-7.69%</span></td>
-  <td style="color:var(--ink-mute)">16d</td>
-</tr><tr>
-  <td><span class="pill">MM-2026-005</span></td>
-  <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Long gold into the June Fed window</td>
-  <td>STOPPED</td>
-  <td><span class="pnl-neg">-6.04%</span></td>
-  <td style="color:var(--ink-mute)">19d</td>
-</tr></tbody>
-</table>
-
-      
+REGIME_LOG = """
 <div class="section-label">Regime log</div>
 <table class="cal-table">
   <thead><tr><th>Date</th><th>Regime</th></tr></thead>
@@ -459,9 +553,60 @@ the original $35 premium paid.</p>
     <tr><td>2026-06-26</td><td>Hormuz unwind; Brent $74; Gold $4,007; EURAUD near stop; put spread expires tomorrow</td></tr>
   </tbody>
 </table>
+"""
 
+VIX_SECTION = f"""
+<div class="section-label">VIX term structure</div>
+{vix_svg}
+<div style="font-size:11px;color:var(--ink-mute);margin-top:4px">VIX 18.44 — elevated vs pre-crisis but off the conflict peak. Contango signals short-vol supply returning.</div>
+"""
+
+YC_SECTION = f"""
+<div class="section-label">Yield curve</div>
+{yc_svg}
+<div style="font-size:11px;color:var(--ink-mute);margin-top:4px">2s10s +29bp (entry +15bp). 2Y anchored by Oct-hike pricing; 10Y held by fiscal supply + disinflation cross-current.</div>
+"""
+
+BOOK_SECTION = f"""
+<div class="section-label">Trade book</div>
+{live_book_html(trades)}
+"""
+
+# ── Final HTML ────────────────────────────────────────────────────────────────
+HTML = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Map {TODAY} — The Hormuz Unwind</title>
+<style>{CSS}</style>
+</head>
+<body>
+<div class="page">
+  {MASTHEAD}
+  <div class="two-col">
+    <div class="lhs">
+      {ARTICLE}
+      {SINCE_LAST}
+      {OPEN_TRADES_LHS}
+      {OPEN_DETAIL}
+      {CANARY_WATCH}
+      {AMMO}
+      {WEEK_AHEAD}
+    </div>
+    <div class="rhs">
+      {DASH}
+      {VIX_SECTION}
+      {YC_SECTION}
+      {BOOK_SECTION}
+      {REGIME_LOG}
     </div>
   </div>
 </div>
 </body>
-</html>
+</html>"""
+
+out = os.path.join(HERE, "output.html")
+with open(out, "w", encoding="utf-8") as f:
+    f.write(HTML)
+print(f"Wrote {len(HTML):,} bytes to {out}")

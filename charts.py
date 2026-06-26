@@ -8,15 +8,15 @@ on a fixed user-space viewBox and scaled to 100% width by the container.
 from datetime import datetime
 
 PALETTE = {
-    "bg": "#fff",
-    "paper": "#f7f7f5",
-    "ink": "#1a1a1a",
-    "ink_soft": "#6b6b6b",
-    "ink_mute": "#9a9a9a",
-    "gold": "#b8960c",
-    "red": "#c0392b",
-    "green": "#27864a",
-    "line": "#e5e5e3",
+    "bg": "#f0eee6",
+    "paper": "#fbfaf6",
+    "ink": "#191917",
+    "ink_soft": "#5c574f",
+    "ink_mute": "#8a8378",
+    "gold": "#cc785c",
+    "red": "#bf4a3c",
+    "green": "#1a7a45",
+    "line": "#e2dccf",
 }
 
 # Default plotting box (user-space units; rendered responsive via width:100%).
