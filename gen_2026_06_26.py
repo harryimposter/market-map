@@ -107,6 +107,20 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15p
 .wrap-body strong{font-weight:600}
 .alert-banner{background:#fff8f8;border:0.5px solid rgba(192,57,43,0.3);border-left:3px solid var(--red);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:0.6rem 0.85rem;margin:1rem 0;font-size:13px;color:var(--red);line-height:1.5}
 .info-banner{background:#f7f7f5;border:0.5px solid var(--line);border-left:3px solid var(--gold);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:0.6rem 0.85rem;margin:1rem 0;font-size:12px;color:var(--ink-soft);line-height:1.5}
+
+/* ── Dark theme ────────────────────────────────────────────── */
+[data-theme="dark"]{
+  --bg:#0d0f14;--surface:#161921;--ink:#e4dfd8;--ink-soft:#9e9990;
+  --ink-mute:#5f5c58;--gold:#c9a830;--red:#e06060;--green:#45c47a;
+  --line:rgba(255,255,255,0.1);
+}
+[data-theme="dark"] .alert-banner{background:rgba(224,96,96,0.12);border-color:rgba(224,96,96,0.3)}
+[data-theme="dark"] .info-banner{background:rgba(255,255,255,0.05)}
+[data-theme="dark"] .trade-card.warn{background:rgba(224,96,96,0.08);border-color:rgba(224,96,96,0.25)}
+
+/* ── Theme toggle ──────────────────────────────────────────── */
+#theme-toggle{position:absolute;top:0;right:0;background:var(--surface);border:0.5px solid var(--line);color:var(--ink-mute);font-size:11px;letter-spacing:0.06em;padding:5px 12px;border-radius:20px;cursor:pointer;font-family:var(--font);transition:color .15s,border-color .15s,background .15s}
+#theme-toggle:hover{color:var(--ink);border-color:var(--gold)}
 """
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -263,7 +277,8 @@ def live_book_html(trades):
 
 # ── HTML sections ─────────────────────────────────────────────────────────────
 MASTHEAD = f"""
-<div class="masthead">
+<div class="masthead" style="position:relative">
+  <button id="theme-toggle">&#9790; Dark</button>
   <div class="regime-tag">Ceasefire Unwind &middot; Brent -19% &middot; Two Stops Hit</div>
   <h1 class="article-title">The Hormuz Unwind</h1>
   <p class="meta">Pre-market intelligence brief &middot; {TODAY} &middot; {NOW} local &middot; self-graded book</p>
@@ -579,6 +594,7 @@ HTML = f"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Market Map {TODAY} — The Hormuz Unwind</title>
+<script>(function(){{var t=localStorage.getItem('mm-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <style>{CSS}</style>
 </head>
 <body>
@@ -603,6 +619,20 @@ HTML = f"""<!DOCTYPE html>
     </div>
   </div>
 </div>
+<script>
+(function(){{
+  var btn=document.getElementById('theme-toggle');
+  function sync(){{btn.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'☀ Light':'☾ Dark';}}
+  sync();
+  btn.addEventListener('click',function(){{
+    var d=document.documentElement;
+    var t=d.getAttribute('data-theme')==='dark'?'light':'dark';
+    d.setAttribute('data-theme',t);
+    try{{localStorage.setItem('mm-theme',t);}}catch(e){{}}
+    sync();
+  }});
+}})();
+</script>
 </body>
 </html>"""
 

@@ -1,22 +1,24 @@
 """Pure-Python inline SVG chart generators for Market Map.
 
 No external chart libraries, no JavaScript, no CDN. Every function returns a
-self-contained <svg> string that inherits the page palette. Charts are drawn
-on a fixed user-space viewBox and scaled to 100% width by the container.
+self-contained <svg> string that inherits the page palette. Colors are set via
+CSS custom properties (var(--token)) in style= attributes so the charts adapt
+automatically to light/dark theme.
 """
 
 from datetime import datetime
 
+# CSS var refs — no hardcoded hex values so themes cascade in automatically.
 PALETTE = {
-    "bg": "#f0eee6",
-    "paper": "#fbfaf6",
-    "ink": "#191917",
-    "ink_soft": "#5c574f",
-    "ink_mute": "#8a8378",
-    "gold": "#cc785c",
-    "red": "#bf4a3c",
-    "green": "#1a7a45",
-    "line": "#e2dccf",
+    "bg":       "var(--bg)",
+    "paper":    "var(--surface)",
+    "ink":      "var(--ink)",
+    "ink_soft": "var(--ink-soft)",
+    "ink_mute": "var(--ink-mute)",
+    "gold":     "var(--gold)",
+    "red":      "var(--red)",
+    "green":    "var(--green)",
+    "line":     "var(--line)",
 }
 
 # Default plotting box (user-space units; rendered responsive via width:100%).
@@ -38,7 +40,7 @@ def _open(w=_W, h=_H) -> str:
     return (
         f'<svg viewBox="0 0 {w} {h}" width="100%" '
         f'preserveAspectRatio="xMidYMid meet" '
-        f'font-family="Georgia, serif" '
+        f'font-family="-apple-system,\'Helvetica Neue\',sans-serif" '
         f'role="img" xmlns="http://www.w3.org/2000/svg" '
         f'style="max-width:100%;height:auto;display:block">'
     )
@@ -47,11 +49,10 @@ def _open(w=_W, h=_H) -> str:
 def _placeholder(msg, w=_W, h=140) -> str:
     return (
         _open(w, h)
-        + f'<rect x="0" y="0" width="{w}" height="{h}" fill="{PALETTE["paper"]}" '
-        f'rx="6"/>'
+        + f'<rect x="0" y="0" width="{w}" height="{h}" style="fill:{PALETTE["paper"]}" rx="6"/>'
         + f'<text x="{w/2}" y="{h/2}" text-anchor="middle" '
         f'dominant-baseline="middle" font-size="15" '
-        f'fill="{PALETTE["ink_mute"]}" font-style="italic">{_esc(msg)}</text>'
+        f'style="fill:{PALETTE["ink_mute"]}" font-style="italic">{_esc(msg)}</text>'
         + "</svg>"
     )
 
@@ -59,7 +60,7 @@ def _placeholder(msg, w=_W, h=140) -> str:
 def _title(text, w=_W) -> str:
     return (
         f'<text x="{_PAD_L}" y="16" font-size="12" letter-spacing="1.5" '
-        f'fill="{PALETTE["ink_mute"]}">{_esc(text.upper())}</text>'
+        f'style="fill:{PALETTE["ink_mute"]}">{_esc(text.upper())}</text>'
     )
 
 
@@ -86,11 +87,11 @@ def _grid_and_yaxis(vmin, vmax, fmt="{:.1f}", w=_W, h=_H, ticks=4):
         y = _scale(val, vmin, vmax, px_bot, px_top)
         out.append(
             f'<line x1="{_PAD_L}" y1="{y:.1f}" x2="{w-_PAD_R}" y2="{y:.1f}" '
-            f'stroke="{PALETTE["line"]}" stroke-width="1"/>'
+            f'style="stroke:{PALETTE["line"]}" stroke-width="1"/>'
         )
         out.append(
             f'<text x="{_PAD_L-7}" y="{y+4:.1f}" text-anchor="end" '
-            f'font-size="11" fill="{PALETTE["ink_mute"]}">{_esc(fmt.format(val))}</text>'
+            f'font-size="11" style="fill:{PALETTE["ink_mute"]}">{_esc(fmt.format(val))}</text>'
         )
     return "".join(out)
 
@@ -103,7 +104,7 @@ def _xlabels(labels, w=_W, h=_H):
         x = px_l if n == 1 else _scale(i, 0, n - 1, px_l, px_r)
         out.append(
             f'<text x="{x:.1f}" y="{h-_PAD_B+18}" text-anchor="middle" '
-            f'font-size="11" fill="{PALETTE["ink_mute"]}">{_esc(lab)}</text>'
+            f'font-size="11" style="fill:{PALETTE["ink_mute"]}">{_esc(lab)}</text>'
         )
     return "".join(out)
 
@@ -119,12 +120,12 @@ def _polyline(values, vmin, vmax, color, w=_W, h=_H, width=2.2, dash=None):
         pts.append(f"{x:.1f},{y:.1f}")
     d = f' stroke-dasharray="{dash}"' if dash else ""
     line = (
-        f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
+        f'<polyline points="{" ".join(pts)}" fill="none" style="stroke:{color}" '
         f'stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"{d}/>'
     )
     dots = "".join(
         f'<circle cx="{p.split(",")[0]}" cy="{p.split(",")[1]}" r="2.6" '
-        f'fill="{color}"/>'
+        f'style="fill:{color}"/>'
         for p in pts
     )
     return line + dots
@@ -138,12 +139,12 @@ def _legend(items, w=_W):
     for label, color, dashed in items:
         dash = ' stroke-dasharray="4 3"' if dashed else ""
         out.append(
-            f'<line x1="{x}" y1="{y-4}" x2="{x+18}" y2="{y-4}" stroke="{color}" '
+            f'<line x1="{x}" y1="{y-4}" x2="{x+18}" y2="{y-4}" style="stroke:{color}" '
             f'stroke-width="2.4"{dash}/>'
         )
         out.append(
             f'<text x="{x+24}" y="{y}" font-size="11" '
-            f'fill="{PALETTE["ink_soft"]}">{_esc(label)}</text>'
+            f'style="fill:{PALETTE["ink_soft"]}">{_esc(label)}</text>'
         )
         x += 30 + len(label) * 6.6
     return "".join(out)
@@ -180,7 +181,7 @@ def equity_curve(closed):
     zy = _scale(0, vmin, vmax, _H - _PAD_B, _PAD_T)
     svg.append(
         f'<line x1="{_PAD_L}" y1="{zy:.1f}" x2="{_W-_PAD_R}" y2="{zy:.1f}" '
-        f'stroke="{PALETTE["ink_mute"]}" stroke-width="1" stroke-dasharray="2 3"/>'
+        f'style="stroke:{PALETTE["ink_mute"]}" stroke-width="1" stroke-dasharray="2 3"/>'
     )
     svg.append(_xlabels(labels))
     svg.append(_polyline(equal, vmin, vmax, PALETTE["ink_mute"], width=1.6, dash="4 3"))
@@ -195,7 +196,7 @@ def equity_curve(closed):
 # 13b -- CALIBRATION
 # --------------------------------------------------------------------------
 def calibration(closed, min_trades=10):
-    """Stated conviction bucket (x) vs realised hit-rate (y), with 45° diagonal.
+    """Stated conviction bucket (x) vs realised hit-rate (y), with 45 diagonal.
     A trade is a 'hit' if its realised P&L was positive."""
     graded = [t for t in closed if "pnl_pct" in t.get("exit", {}) and t.get("conviction")]
     if len(graded) < min_trades:
@@ -225,22 +226,22 @@ def calibration(closed, min_trades=10):
         y = cy(r)
         svg.append(
             f'<line x1="{px_l}" y1="{y:.1f}" x2="{px_r}" y2="{y:.1f}" '
-            f'stroke="{PALETTE["line"]}"/>'
+            f'style="stroke:{PALETTE["line"]}"/>'
         )
         svg.append(
             f'<text x="{px_l-7}" y="{y+4:.1f}" text-anchor="end" font-size="11" '
-            f'fill="{PALETTE["ink_mute"]}">{int(r*100)}%</text>'
+            f'style="fill:{PALETTE["ink_mute"]}">{int(r*100)}%</text>'
         )
     # x labels 1..10
     for c in range(1, 11):
         svg.append(
             f'<text x="{cx(c):.1f}" y="{px_b+18}" text-anchor="middle" '
-            f'font-size="11" fill="{PALETTE["ink_mute"]}">{c}</text>'
+            f'font-size="11" style="fill:{PALETTE["ink_mute"]}">{c}</text>'
         )
-    # 45 degree diagonal: conviction c implies expected hit-rate c/10
+    # 45 degree diagonal
     svg.append(
         f'<line x1="{cx(1):.1f}" y1="{cy(0.1):.1f}" x2="{cx(10):.1f}" '
-        f'y2="{cy(1.0):.1f}" stroke="{PALETTE["ink_mute"]}" stroke-width="1.4" '
+        f'y2="{cy(1.0):.1f}" style="stroke:{PALETTE["ink_mute"]}" stroke-width="1.4" '
         f'stroke-dasharray="5 4"/>'
     )
     # realised points (radius ~ sample size)
@@ -251,17 +252,17 @@ def calibration(closed, min_trades=10):
         r = 3 + min(8, len(vals))
         svg.append(
             f'<circle cx="{cx(c):.1f}" cy="{cy(rate):.1f}" r="{r:.1f}" '
-            f'fill="{PALETTE["gold"]}" fill-opacity="0.85"/>'
+            f'style="fill:{PALETTE["gold"]};fill-opacity:0.85"/>'
         )
         svg.append(
             f'<text x="{cx(c):.1f}" y="{cy(rate)-r-4:.1f}" text-anchor="middle" '
-            f'font-size="10" fill="{PALETTE["ink_soft"]}">n={len(vals)}</text>'
+            f'font-size="10" style="fill:{PALETTE["ink_soft"]}">n={len(vals)}</text>'
         )
         pts.append((cx(c), cy(rate)))
     if len(pts) > 1:
         path = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
         svg.append(
-            f'<polyline points="{path}" fill="none" stroke="{PALETTE["gold"]}" '
+            f'<polyline points="{path}" fill="none" style="stroke:{PALETTE["gold"]}" '
             f'stroke-width="1.6"/>'
         )
     svg.append(_legend([("realised", PALETTE["gold"], False),
